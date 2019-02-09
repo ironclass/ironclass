@@ -1,0 +1,25 @@
+{{!-- /********************** 
+******** TO DO ********
+**********************/
+// list populated teacher and TAs
+// This is not yet possible, because they are not directly linked to users, when created--}}
+
+<h1>Show Classes</h1>
+
+{{#each classes}}
+<strong>Name: {{name}}</strong>
+<p>City: {{city}}</p>
+<p>Teacher: {{__teacher}}</p>
+<p>TAs: {{_TA}}</p>
+<a href="/classes/edit/{{_id}}">Edit</a>
+
+<br><br>
+{{/each}}
+
+{{#if message }}
+  <div class="error-message">{{ message }}</div>
+{{/if}}
+
+
+<a href="/classes/create">Create</a>
+<a href="/">Home</a>

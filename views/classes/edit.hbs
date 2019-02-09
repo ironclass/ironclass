@@ -1,0 +1,27 @@
+<h1>Edit Class</h1>
+
+<h3>Add a student to this class</h3>
+  <form>
+    <div class="form-row">
+      <div class="col">
+        <input name="firstName" type="text" class="form-control" placeholder="First name">
+      </div>
+      <div class="col">
+        <input name="lastName" type="text" class="form-control" placeholder="Last name">
+      </div>
+      <div class="col">
+        <input name="birthday" type="date" class="form-control" placeholder="Birthday">
+      </div>
+      <button id="btn_addStudent" type="button" class="btn btn-primary">Add Student</button>
+    </div>
+  </form>
+
+
+
+{{#if message }}
+  <div class="error-message">{{ message }}</div>
+{{/if}}
+
+<a href="/classes">Classes</a>
+<a href="/">Home</a>
+

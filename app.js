@@ -86,5 +86,6 @@ app.use((req, res, next) => {
 // MOUNTPOINT FOR THE ROUTES: if URL is "/..." look for routes in "./routes/..."
 app.use("/", require("./routes/index"));
 app.use("/auth", require("./routes/auth"));
+app.use("/classes", require("./routes/classes"));
 
 module.exports = app;

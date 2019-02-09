@@ -1,0 +1,38 @@
+{{!-- /********************** 
+******** TO DO ********
+**********************/
+// Upload Picture Button 
+// --}}
+
+
+<h2>Create Classes</h2>
+
+<form action="/classes/createclass" method="POST">
+  <div class="form-group">
+    <input type="text" name="name" class="form-control" id="classname" placeholder="Class Name">
+    <input type="password" name="password" class="form-control" id="password" placeholder="Password for Students">
+  </div>
+  <select name="city" class="form-control form-control-lg">
+  <option>Berlin</option>
+  <option>Barcelona</option>
+  <option>Amsterdam</option>
+  <option>Bogotá</option>
+  <option>Lisbon</option>
+  <option>Madrid</option>
+  <option>Mexico City</option>
+  <option>Miami</option>
+  <option>Munich</option>
+  <option>Paris</option>
+  <option>São Paulo</option>
+  </select>
+  <br>
+  <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+
+
+  {{#if message }}
+  <div class="error-message">{{ message }}</div>
+  {{/if}}
+
+  <a href="/classes"></a>

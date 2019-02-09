@@ -5,6 +5,7 @@ const classSchema = new Schema(
   {
     name: { type: String, required: true },
     city: { type: String, required: true },
+    password: { type: String, required: true },
     currentCourse: { type: String },
     _teacher: { type: Schema.Types.ObjectId, ref: "User" },
     _TA: [{ type: Schema.Types.ObjectId, ref: "User" }]

@@ -18,9 +18,10 @@
     <a href="/auth/login">Login</a>
     {{/if}}
     {{#if isConnected}}
-    <a href="/private/secret">Secret page</a>
-    <a href="/private/user/all">All users</a>
-    <a href="/private/user/page">User page</a>
+      {{#if isTA}}
+        <a href="/classes/">Classes</a>
+      {{/if}}
+    <a href="/classroom/">Classroom</a>
     <a href="/auth/logout">Logout</a>
     {{/if}}
   </nav>
