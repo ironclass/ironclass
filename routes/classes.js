@@ -1,3 +1,7 @@
+// TODO: Avoid double Names when editing
+// TODO: Avoid clearing form, wen re-render page with error message
+// TODO: check if password has changed 
+
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
@@ -15,13 +19,13 @@ router.post("/createclass", (req, res, next) => {
   const { name, city, password } = req.body;
 
   // DATA VALIDATION AND AFTER SUCCESS USER CREATION
-  if (name === "" || city === "" || password === "") {
+  if (name === "" || city === "Choose city..." || password === "") {
     res.render("classes/create", { message: "Indicate name, city and password" });
     return;
   }
 
-  Class.findOne({ name }, "name", (err, user) => {
-    if (user !== null) {
+  Class.findOne({ name }, "name", (err, oneClass) => {
+    if (oneClass !== null ) {
       res.render("classes/create", { message: "The Classname already exists" });
       return;
     }
@@ -60,7 +64,32 @@ router.get("/", isConnected, (req, res, next) => {
 // E D I T
 
 router.get("/edit/:id", (req, res, next) => {
-  res.render("classes/edit");
+  Class.findById(req.params.id)
+  .then(oneClass => {
+		console.log('TCL: oneClass', oneClass)
+    res.render("classes/edit", {oneClass});
+  })
+  .catch(err => console.log(err));
+});
+
+router.post("/edit/:id", (req, res, next) => {
+  const { name, city, password } = req.body;
+
+  if (name === "" || city === "Choose city...") {
+    res.render("classes/edit", { message: "Indicate name and city" });
+    return;
+  }
+
+  Class.findByIdAndUpdate(req.params.id, {
+    name: name,
+    city: city
+  })
+  .then((updatedClass) => {
+    res.redirect("/classes");
+  })
+  .catch(err => {
+    res.render("classes/create", { message: "Something went wrong" });
+  });
 });
 
 // D E L E T E
