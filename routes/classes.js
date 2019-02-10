@@ -2,8 +2,6 @@
 // TODO: Avoid clearing form, wen re-render page with error message
 // TODO: check if password has changed, when editing
 // TODO: Redirect with error messages?
-// TODO: pass all Users to redirect after creation of new user or just render page?
-
 
 const express = require("express");
 const router = express.Router();
@@ -32,8 +30,9 @@ router.post("/createclass", isConnected, isTA, (req, res, next) => {
     return;
   }
 
-  Class.findOne({ name }, "name", (err, oneClass) => {
+  Class.findOne({ name }, (err, oneClass) => {
     if (oneClass !== null ) {
+      console.log(oneClass.name + " already exists");
       res.render("classes/create", { message: "The Classname already exists" });
       return;
     }
@@ -76,17 +75,17 @@ router.post("/createStudent/:classId", isConnected, isTA, (req, res, next) => {
 
   // data validatopn and after success user creation
     if (firstName === "") {
-      // res.render("classes/edit", { message: "Indicate first name" });
-      // TODO: Redirect with error messages?
+      req.flash("message", "Indicate first name");
       res.redirect("/classes/edit/"+classId);
       return;
     }
   
     User.findOne({ username }, (err, user) => {
       if (user !== null ) {
-        // res.render("classes/create", { message: "The Classname already exists" });
-        // return;
         console.log(username + " alread exists!");
+        req.flash("message", "The User already exists");
+        res.redirect("/classes/edit/"+classId);
+        return;
       } 
     })
     .then(() => {
@@ -135,6 +134,7 @@ router.get("/edit/:id", isConnected, isTA, (req, res, next) => {
   ])
   .then(values => {
     res.render("classes/edit", {
+      message: req.flash("message"),
       oneClass: values[0], // the class with this ID
       students: values[1]  // all students in it
     });
@@ -143,23 +143,36 @@ router.get("/edit/:id", isConnected, isTA, (req, res, next) => {
 });
 
 router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
-  const { name, city, password } = req.body;
+    // get ID of current Class
+    const classId = req.params.id;
+
+    const { name, city, password } = req.body;
 
   if (name === "" || city === "Choose city...") {
     res.render("classes/edit", { message: "Indicate name and city" });
     return;
   }
 
-  Class.findByIdAndUpdate(req.params.id, {
-    name: name,
-    city: city
+  // check if Classname alread exists, if not update
+  Class.findOne({ name }, (err, oneClass) => {
+    if (oneClass !== null ) {
+      req.flash("message", "The Class already exists");
+      res.redirect("/classes/edit/"+classId);
+      return;
+    } else {
+      Class.findByIdAndUpdate(classId, {
+        name,
+        city
+      })
+      .then (newClass => {
+        console.log("Updated Class: " + newClass);
+        res.redirect("/classes/edit/"+classId);
+      })
+      .catch(err => console.log(err));
+    }
   })
-  .then((updatedClass) => {
-    res.redirect("/classes");
-  })
-  .catch(err => {
-    res.render("classes/create", { message: "Something went wrong" });
-  });
+  .catch(err => console.log(err));
+
 });
 
 // ###########
