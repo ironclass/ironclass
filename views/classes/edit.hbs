@@ -41,6 +41,12 @@
     </div>
   </form>
 
+<h4>Students in this class</h4>
+{{#each students}}
+  <p>{{firstName}}</p>
+{{/each}}
+
+
 {{#if message }}
   <div class="error-message">{{ message }}</div>
 {{/if}}

@@ -1,6 +1,6 @@
 // TODO: Avoid double Names when editing
 // TODO: Avoid clearing form, wen re-render page with error message
-// TODO: check if password has changed 
+// TODO: check if password has changed, when editing
 // TODO: Redirect with error messages?
 // TODO: pass all Users to redirect after creation of new user or just render page?
 
@@ -8,6 +8,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
+const mongoose = require('mongoose');
 const passport = require("passport"); // TO USE PROTECED ROUTES
 const User = require("../models/User");
 const Class = require("../models/Class");
@@ -21,7 +22,7 @@ router.get("/create", isConnected, isTA, (req, res, next) => {
   res.render("classes/create");
 });
 
-// ------ C l a s s e s ------
+// ------ C r e a t e   C l a s s e s ------
 router.post("/createclass", isConnected, isTA, (req, res, next) => {
   const { name, city, password } = req.body;
 
@@ -55,7 +56,7 @@ router.post("/createclass", isConnected, isTA, (req, res, next) => {
   });
 });
 
-// ------ S t u d e n t s  ------
+// ------ C r e a t e   S t u d e n t s  ------
 
 router.post("/createStudent/:classId", isConnected, isTA, (req, res, next) => {
   // get ID of current Class
@@ -127,9 +128,16 @@ router.get("/", isConnected, isTA, (req, res, next) => {
 // ###########
 
 router.get("/edit/:id", isConnected, isTA, (req, res, next) => {
-  Class.findById(req.params.id)
-  .then(oneClass => {
-    res.render("classes/edit", {oneClass});
+// find current Class and all students in it 
+  Promise.all([
+    Class.findById(req.params.id), 
+    User.find({ _class: mongoose.Types.ObjectId(req.params.id)})
+  ])
+  .then(values => {
+    res.render("classes/edit", {
+      oneClass: values[0], // the class with this ID
+      students: values[1]  // all students in it
+    });
   })
   .catch(err => console.log(err));
 });
