@@ -1,7 +1,7 @@
 // EVERY ROUTES FILE MUST END WITH module.exports = router;
 const express = require("express");
 const router = express.Router();
-const {isConnected, checkRole } = require('../middlewares')
+const {isConnected } = require('../middlewares')
 
 // HOME PAGE
 router.get("/", (req, res, next) => {

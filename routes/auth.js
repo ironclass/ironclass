@@ -22,7 +22,7 @@ router.post(
 
 // A D M I N   P A G E
 
-router.get("/admin", (req, res, next) => {
+router.get("/admin", isConnected, isAdmin, (req, res, next) => {
   // Find all users & classes
   Promise.all([User.find(), Class.find()])
   .then(values => {
