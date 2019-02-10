@@ -94,8 +94,16 @@ router.post("/edit/:id", (req, res, next) => {
 
 // D E L E T E
 
-router.get("/delete", (req, res, next) => {
-  res.render("classes/delete");
+router.get("/delete/:id", (req, res, next) => {
+  let backURL=req.header('Referer') || '/';
+  Class.findByIdAndDelete(req.params.id)
+  .then(() => {
+    res.redirect("/classes");
+  })
+  .catch(err => {
+    console.log(err);
+    next();
+  });
 });
 
 module.exports = router;
