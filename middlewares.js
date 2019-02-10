@@ -10,10 +10,11 @@ module.exports = {
   },
   checkRole: function(role) {
     return function(req, res, next) {
+      let backURL=req.header('Referer') || '/';
       if (req.user && req.user.role === role) {
         next();
       } else {
-        res.redirect("/");
+        res.redirect(backURL);
       }
     };
   }
