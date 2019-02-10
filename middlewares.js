@@ -11,7 +11,7 @@ module.exports = {
   checkRole: function(role) {
     return function(req, res, next) {
       let backURL=req.header('Referer') || '/';
-      if (req.user && req.user.role === role) {
+      if (req.user && (req.user.role === role || req.user.admin === true)) {
         next();
       } else {
         res.redirect(backURL);

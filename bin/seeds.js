@@ -39,6 +39,15 @@ let users = [
     admin: true
   },
   {
+    firstName: "Julia",
+    lastName: "Miller",
+    // birthday: new Date("November 26 1990").setHours(24,0,0,0),
+    birthday: new Date(1990, 4, 3).setHours(24,0,0,0),
+    username: ("Julia" + "Miller").toLowerCase(),
+    password: bcrypt.hashSync("julia", bcrypt.genSaltSync(bcryptSalt)),
+    role: "Student",
+  },
+  {
     firstName: "Maxence",
     lastName: "Teacher",
     // birthday: new Date("January 1 1970").setHours(24,0,0,0),

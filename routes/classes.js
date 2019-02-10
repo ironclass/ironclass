@@ -15,7 +15,7 @@ router.get("/create", isConnected, checkRole("TA"), (req, res, next) => {
   res.render("classes/create");
 });
 
-router.post("/createclass", isConnected, (req, res, next) => {
+router.post("/createclass", isConnected, checkRole("TA"), (req, res, next) => {
   const { name, city, password } = req.body;
 
   // DATA VALIDATION AND AFTER SUCCESS USER CREATION
@@ -51,7 +51,7 @@ router.post("/createclass", isConnected, (req, res, next) => {
 
 // S H O W
 
-router.get("/", isConnected, (req, res, next) => {
+router.get("/", isConnected, checkRole("TA"), (req, res, next) => {
   Class.find()
   .populate('_teacher')
   .populate('_TA')
@@ -63,7 +63,7 @@ router.get("/", isConnected, (req, res, next) => {
 
 // E D I T
 
-router.get("/edit/:id", isConnected,  (req, res, next) => {
+router.get("/edit/:id", isConnected, checkRole("TA"), (req, res, next) => {
   Class.findById(req.params.id)
   .then(oneClass => {
 		console.log('TCL: oneClass', oneClass)
@@ -72,7 +72,7 @@ router.get("/edit/:id", isConnected,  (req, res, next) => {
   .catch(err => console.log(err));
 });
 
-router.post("/edit/:id", isConnected,  (req, res, next) => {
+router.post("/edit/:id", isConnected, checkRole("TA"), (req, res, next) => {
   const { name, city, password } = req.body;
 
   if (name === "" || city === "Choose city...") {
@@ -94,7 +94,7 @@ router.post("/edit/:id", isConnected,  (req, res, next) => {
 
 // D E L E T E
 
-router.get("/delete/:id", isConnected,  (req, res, next) => {
+router.get("/delete/:id", isConnected, checkRole("TA"), (req, res, next) => {
   Class.findByIdAndDelete(req.params.id)
   .then(() => {
     res.redirect("/classes");
