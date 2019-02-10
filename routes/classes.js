@@ -11,18 +11,18 @@ const bcrypt = require("bcryptjs");
 const passport = require("passport"); // TO USE PROTECED ROUTES
 const User = require("../models/User");
 const Class = require("../models/Class");
-const {isConnected, checkRole } = require('../middlewares')
+const {isConnected, isTA, checkRole } = require('../middlewares')
 
 // ###########
 // C R E A T E 
 // ###########
 
-router.get("/create", isConnected, checkRole("TA"), (req, res, next) => {
+router.get("/create", isConnected, isTA, (req, res, next) => {
   res.render("classes/create");
 });
 
 // ------ C l a s s e s ------
-router.post("/createclass", isConnected, checkRole("TA"), (req, res, next) => {
+router.post("/createclass", isConnected, isTA, (req, res, next) => {
   const { name, city, password } = req.body;
 
   // DATA VALIDATION AND AFTER SUCCESS CLASS CREATION
@@ -57,7 +57,7 @@ router.post("/createclass", isConnected, checkRole("TA"), (req, res, next) => {
 
 // ------ S t u d e n t s  ------
 
-router.post("/createStudent/:classId", isConnected, checkRole("TA"), (req, res, next) => {
+router.post("/createStudent/:classId", isConnected, isTA, (req, res, next) => {
   // get ID of current Class
     const classId = req.params.classId;
 
@@ -112,7 +112,7 @@ router.post("/createStudent/:classId", isConnected, checkRole("TA"), (req, res, 
 //   S H O W
 // ###########
 
-router.get("/", isConnected, checkRole("TA"), (req, res, next) => {
+router.get("/", isConnected, isTA, (req, res, next) => {
   Class.find()
   .populate('_teacher')
   .populate('_TA')
@@ -126,7 +126,7 @@ router.get("/", isConnected, checkRole("TA"), (req, res, next) => {
 //   E D I T
 // ###########
 
-router.get("/edit/:id", isConnected, checkRole("TA"), (req, res, next) => {
+router.get("/edit/:id", isConnected, isTA, (req, res, next) => {
   Class.findById(req.params.id)
   .then(oneClass => {
     res.render("classes/edit", {oneClass});
@@ -134,7 +134,7 @@ router.get("/edit/:id", isConnected, checkRole("TA"), (req, res, next) => {
   .catch(err => console.log(err));
 });
 
-router.post("/edit/:id", isConnected, checkRole("TA"), (req, res, next) => {
+router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
   const { name, city, password } = req.body;
 
   if (name === "" || city === "Choose city...") {
@@ -158,7 +158,7 @@ router.post("/edit/:id", isConnected, checkRole("TA"), (req, res, next) => {
 // D E L E T E
 // ###########
 
-router.get("/delete/:id", isConnected, checkRole("TA"), (req, res, next) => {
+router.get("/delete/:id", isConnected, isTA, (req, res, next) => {
   Class.findByIdAndDelete(req.params.id)
   .then(() => {
     res.redirect("/classes");
