@@ -10,7 +10,8 @@ const mongoose = require('mongoose');
 const passport = require("passport"); // TO USE PROTECED ROUTES
 const User = require("../models/User");
 const Class = require("../models/Class");
-const {isConnected, isTA } = require('../middlewares')
+const {isConnected, isTA } = require('../middlewares');
+const bcryptRounds = 10;
 
 // ###########
 // C R E A T E 
@@ -37,7 +38,6 @@ router.post("/createclass", isConnected, isTA, (req, res, next) => {
       return;
     }
 
-    const bcryptRounds = 10;
     const salt = bcrypt.genSaltSync(bcryptRounds);
     const hashPass = bcrypt.hashSync(password, salt);
 
@@ -60,18 +60,13 @@ router.post("/createclass", isConnected, isTA, (req, res, next) => {
 router.post("/createStudent/:classId", isConnected, isTA, (req, res, next) => {
   // get ID of current Class
     const classId = req.params.classId;
-
-  // Find the current Class-Password
-    let classPassword;
-    Class.findById(classId)
-    .then(oneClass => 
-      classPassword = oneClass.password
-    )  
-    .catch(err => console.log(err));
+		console.log('TCL: classId', classId)
 
   // get Data from form
     const { firstName, lastName, birthday } = req.body;
     let username = (firstName + lastName).toLowerCase();
+
+    let classPassword;
 
   // data validatopn and after success user creation
     if (firstName === "") {
@@ -89,22 +84,30 @@ router.post("/createStudent/:classId", isConnected, isTA, (req, res, next) => {
       } 
     })
     .then(() => {
-      User.create({
-        firstName, 
-        lastName,
-        username,
-        birthday,
-        password: classPassword,
-        _class: classId
+      // Find the current Class-Password
+      Class.findById(classId)
+      .then(oneClass => {
+        classPassword = oneClass.password;
       })
-      .then (user => {
-        console.log("Created User: " + user);
-        // TODO: pass all Users to redirect after creation of new user or just render page?
-        res.redirect("/classes/edit/"+classId);
+      .then(() => {
+        User.create({
+          firstName, 
+          lastName,
+          username,
+          birthday,
+          password: classPassword,
+          _class: classId
+        })
+        .then (user => {
+          console.log("Created User: " + user);
+          // TODO: pass all Users to redirect after creation of new user or just render page?
+          res.redirect("/classes/edit/"+classId);
+        })
+        .catch(err => console.log(err));
       })
       .catch(err => console.log(err));
     })
-    .catch(err => console.log(err));
+    .catch(err => console.log(err));    
 });
 
 
@@ -143,15 +146,35 @@ router.get("/edit/:id", isConnected, isTA, (req, res, next) => {
 });
 
 router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
-    // get ID of current Class
-    const classId = req.params.id;
+  // get ID of current Class
+  const classId = req.params.id;
+  // get Info from Post-Body
+  const { name, city, password } = req.body;
 
-    const { name, city, password } = req.body;
-
+  // check if minimum credentials are provided
   if (name === "" || city === "Choose city...") {
     res.render("classes/edit", { message: "Indicate name and city" });
     return;
   }
+
+  // Update password, if new one is provided
+  if (password !== "") {
+    console.log("Called Passwordchange");
+    const salt = bcrypt.genSaltSync(bcryptRounds);
+    const hashPass = bcrypt.hashSync(password, salt);
+    Class.findByIdAndUpdate(classId, {
+      password: hashPass
+    })
+    .then(() => {
+      User.updateMany({ // Update all Students in this class
+      _class: mongoose.Types.ObjectId(classId)
+      },{
+        password: hashPass // give new Password to them
+      })
+      .catch(err => console.log(err));
+    })
+    .catch(err => console.log(err));
+  } // End of Update Password
 
   // check if Classname alread exists, if not update
   Class.findOne({ name }, (err, oneClass) => {
@@ -165,15 +188,13 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
         city
       })
       .then (newClass => {
-        console.log("Updated Class: " + newClass);
         res.redirect("/classes/edit/"+classId);
-      })
+      }) // end of find and update
       .catch(err => console.log(err));
-    }
+    } // end of IF not exist ELSE update class
   })
   .catch(err => console.log(err));
-
-});
+}); // end of router.post("/edit/:id")
 
 // ###########
 // D E L E T E
