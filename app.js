@@ -76,6 +76,7 @@ app.use((req, res, next) => {
     res.locals.isTeacher = req.user.role === "Teacher" || req.user.admin === true;
     res.locals.isTA      = req.user.role === "TA" || req.user.role === "Teacher" || req.user.admin === true;
     res.locals.isStudent = req.user.role === "Student" || req.user.admin === true;
+    res.locals.isAdmin   = req.user.admin === true;
   }
 
   next();

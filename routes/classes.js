@@ -1,6 +1,9 @@
 // TODO: Avoid double Names when editing
 // TODO: Avoid clearing form, wen re-render page with error message
 // TODO: check if password has changed 
+// TODO: Redirect with error messages?
+// TODO: pass all Users to redirect after creation of new user or just render page?
+
 
 const express = require("express");
 const router = express.Router();
@@ -10,15 +13,19 @@ const User = require("../models/User");
 const Class = require("../models/Class");
 const {isConnected, checkRole } = require('../middlewares')
 
+// ###########
 // C R E A T E 
+// ###########
+
 router.get("/create", isConnected, checkRole("TA"), (req, res, next) => {
   res.render("classes/create");
 });
 
+// ------ C l a s s e s ------
 router.post("/createclass", isConnected, checkRole("TA"), (req, res, next) => {
   const { name, city, password } = req.body;
 
-  // DATA VALIDATION AND AFTER SUCCESS USER CREATION
+  // DATA VALIDATION AND AFTER SUCCESS CLASS CREATION
   if (name === "" || city === "Choose city..." || password === "") {
     res.render("classes/create", { message: "Indicate name, city and password" });
     return;
@@ -40,7 +47,6 @@ router.post("/createclass", isConnected, checkRole("TA"), (req, res, next) => {
       password: hashPass
     })
     .then((newClass) => {
-			console.log('TCL: newClass', newClass)
       res.redirect("/classes/edit/"+newClass._id);
     })
     .catch(err => {
@@ -49,7 +55,62 @@ router.post("/createclass", isConnected, checkRole("TA"), (req, res, next) => {
   });
 });
 
-// S H O W
+// ------ S t u d e n t s  ------
+
+router.post("/createStudent/:classId", isConnected, checkRole("TA"), (req, res, next) => {
+  // get ID of current Class
+    const classId = req.params.classId;
+
+  // Find the current Class-Password
+    let classPassword;
+    Class.findById(classId)
+    .then(oneClass => 
+      classPassword = oneClass.password
+    )  
+    .catch(err => console.log(err));
+
+  // get Data from form
+    const { firstName, lastName, birthday } = req.body;
+    let username = (firstName + lastName).toLowerCase();
+
+  // data validatopn and after success user creation
+    if (firstName === "") {
+      // res.render("classes/edit", { message: "Indicate first name" });
+      // TODO: Redirect with error messages?
+      res.redirect("/classes/edit/"+classId);
+      return;
+    }
+  
+    User.findOne({ username }, (err, user) => {
+      if (user !== null ) {
+        // res.render("classes/create", { message: "The Classname already exists" });
+        // return;
+        console.log(username + " alread exists!");
+      } 
+    })
+    .then(() => {
+      User.create({
+        firstName, 
+        lastName,
+        username,
+        birthday,
+        password: classPassword,
+        _class: classId
+      })
+      .then (user => {
+        console.log("Created User: " + user);
+        // TODO: pass all Users to redirect after creation of new user or just render page?
+        res.redirect("/classes/edit/"+classId);
+      })
+      .catch(err => console.log(err));
+    })
+    .catch(err => console.log(err));
+});
+
+
+// ###########
+//   S H O W
+// ###########
 
 router.get("/", isConnected, checkRole("TA"), (req, res, next) => {
   Class.find()
@@ -61,12 +122,13 @@ router.get("/", isConnected, checkRole("TA"), (req, res, next) => {
   .catch(err => console.log(err));
 });
 
-// E D I T
+// ###########
+//   E D I T
+// ###########
 
 router.get("/edit/:id", isConnected, checkRole("TA"), (req, res, next) => {
   Class.findById(req.params.id)
   .then(oneClass => {
-		console.log('TCL: oneClass', oneClass)
     res.render("classes/edit", {oneClass});
   })
   .catch(err => console.log(err));
@@ -92,7 +154,9 @@ router.post("/edit/:id", isConnected, checkRole("TA"), (req, res, next) => {
   });
 });
 
+// ###########
 // D E L E T E
+// ###########
 
 router.get("/delete/:id", isConnected, checkRole("TA"), (req, res, next) => {
   Class.findByIdAndDelete(req.params.id)
