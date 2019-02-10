@@ -11,7 +11,7 @@ const bcrypt = require("bcryptjs");
 const passport = require("passport"); // TO USE PROTECED ROUTES
 const User = require("../models/User");
 const Class = require("../models/Class");
-const {isConnected, isTA, checkRole } = require('../middlewares')
+const {isConnected, isTA } = require('../middlewares')
 
 // ###########
 // C R E A T E 

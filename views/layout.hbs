@@ -17,9 +17,13 @@
     {{#if isNotConnected}}
     <a href="/auth/login">Login</a>
     {{/if}}
+
     {{#if isConnected}}
       {{#if isTA}}
         <a href="/classes/">Classes</a>
+        {{#if isAdmin}}
+          <a href="/auth/admin">Admin</a>
+        {{/if}}
       {{/if}}
     <a href="/classroom/">Classroom</a>
     <a href="/auth/logout">Logout</a>

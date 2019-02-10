@@ -14,4 +14,11 @@ module.exports = {
       res.redirect("/");
     }
   },
+  isAdmin: function(req, res, next) {
+    if (req.user && res.locals.isAdmin) {
+      next();
+    } else {
+      res.redirect("/");
+    }
+  },
 };
