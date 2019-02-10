@@ -69,7 +69,6 @@ require("./passport")(app);
 
 //
 app.use((req, res, next) => {
-  // !! converts: truthy into true; falsy into false
   res.locals.isConnected = !!req.user;
   res.locals.isNotConnected = !!!req.user;
 
