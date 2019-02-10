@@ -68,13 +68,14 @@ router.post("/createStudent/:classId", isConnected, isTA, (req, res, next) => {
 
     let classPassword;
 
-  // data validatopn and after success user creation
+    // data validation and after success: user creation
     if (firstName === "") {
       req.flash("message", "Indicate first name");
       res.redirect("/classes/edit/"+classId);
       return;
     }
   
+    // check if user alread exists
     User.findOne({ username }, (err, user) => {
       if (user !== null ) {
         console.log(username + " alread exists!");
@@ -84,12 +85,13 @@ router.post("/createStudent/:classId", isConnected, isTA, (req, res, next) => {
       } 
     })
     .then(() => {
-      // Find the current Class-Password
+      // if user does not exist, find the current Class-Password
       Class.findById(classId)
       .then(oneClass => {
         classPassword = oneClass.password;
       })
       .then(() => {
+        // Create user
         User.create({
           firstName, 
           lastName,
@@ -100,14 +102,13 @@ router.post("/createStudent/:classId", isConnected, isTA, (req, res, next) => {
         })
         .then (user => {
           console.log("Created User: " + user);
-          // TODO: pass all Users to redirect after creation of new user or just render page?
           res.redirect("/classes/edit/"+classId);
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err)); // End user create
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err)); // End find Class
     })
-    .catch(err => console.log(err));    
+    .catch(err => console.log(err)); // End find user
 });
 
 
