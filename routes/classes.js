@@ -139,12 +139,8 @@ router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('ph
               _class: classId
             })
             .then((createdUser) => {
-              if (createdUser.role === "Teacher") {
-                Class.findByIdAndUpdate(classId, {
-                    _teacher: mongoose.Types.ObjectId(createdUser._id)
-                  })
-                  .catch(err => console.log(err));
-              }
+              if (createdUser.role === "Teacher") addTeacherToClass (classId, createdUser._id);
+              else if (createdUser.role === "TA") addTAToClass (classId, createdUser._id);
             })
             .then(user => {
               console.log("Created User: " + user);
@@ -278,7 +274,7 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
 }); // end of router.post("/edit/:id")
 
 // ------ E d i t  S t u d e n t  ------
-router.get("/student/edit/:id", isConnected, isTA, (req, res, next) => {
+router.get("/user/edit/:id", isConnected, isTA, (req, res, next) => {
   User.findById(req.params.id)
     .then(user => {
       let birthday;
@@ -295,7 +291,7 @@ router.get("/student/edit/:id", isConnected, isTA, (req, res, next) => {
     .catch(err => console.log(err));
 });
 
-router.post("/student/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
+router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
   const {
     firstName,
     lastName,
@@ -339,13 +335,8 @@ router.post("/student/edit/:id", isConnected, isTA, uploadCloud.single('photo'),
       .then(() => {
         User.findById(req.params.id)
           .then(user => {
-            if (user.role === "Teacher") {
-              console.log("User is Teacher");
-              Class.findByIdAndUpdate(user._class, {
-                  _teacher: mongoose.Types.ObjectId(user._id)
-                })
-                .catch(err => console.log(err));
-            }
+            if (user.role === "Teacher") addTeacherToClass (user._class, user._id);
+            else if (user.role === "TA") addTAToClass (user._class, user._id);
           })
           .catch(err => console.log(err));
       })
@@ -382,7 +373,7 @@ router.get("/delete/:id", isConnected, isTA, (req, res, next) => {
 });
 
 // ------ D e l e t e   S t u d e n t s  ------
-router.get("/delete/student/:id", isConnected, isTA, (req, res, next) => {
+router.get("/delete/user/:id", isConnected, isTA, (req, res, next) => {
   backURL = req.header("Referer") || "/";
   User.findByIdAndDelete(req.params.id)
     .then(() => {
@@ -414,6 +405,20 @@ function changePassword(password, classId) {
       }).catch(err => console.log(err));
     })
     .catch(err => console.log(err));
+}
+
+function addTeacherToClass (classId, userId) {
+  Class.findByIdAndUpdate(classId, {
+    _teacher: mongoose.Types.ObjectId(userId)
+  })
+  .catch(err => console.log(err));
+}
+
+function addTAToClass (classId, userId) {
+  Class.findByIdAndUpdate(classId, {
+    $push: { _TA: mongoose.Types.ObjectId(userId) }
+  })
+  .catch(err => console.log(err));
 }
 
 module.exports = router;
