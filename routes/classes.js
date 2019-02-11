@@ -256,10 +256,6 @@ router.post("/student/edit/:id", isConnected, isTA, (req, res, next) => {
   }
 });
 
-
-
-
-
 // ###########
 // D E L E T E
 // ###########
@@ -267,7 +263,12 @@ router.post("/student/edit/:id", isConnected, isTA, (req, res, next) => {
 // ------ D e l e t e   C l a s s e s  ------
 router.get("/delete/:id", isConnected, isTA, (req, res, next) => {
   backURL=req.header('Referer') || '/';
-  Class.findByIdAndDelete(req.params.id)
+  Promise.all([
+    User.remove({
+      _class: mongoose.Types.ObjectId(req.params.id)
+    }),
+    Class.findByIdAndDelete(req.params.id)
+  ])
   .then(() => {
     res.redirect(backURL);
   })
