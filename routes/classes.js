@@ -140,12 +140,8 @@ router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('ph
               _class: classId
             })
             .then((createdUser) => {
-              if (createdUser.role === "Teacher") {
-                Class.findByIdAndUpdate(classId, {
-                    _teacher: mongoose.Types.ObjectId(createdUser._id)
-                  })
-                  .catch(err => console.log(err));
-              }
+              if (createdUser.role === "Teacher") addTeacherToClass (classId, createdUser._id);
+              else if (createdUser.role === "TA") addTAToClass (classId, createdUser._id);
             })
             .then(user => {
               console.log("Created User: " + user);
@@ -340,13 +336,8 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
       .then(() => {
         User.findById(req.params.id)
           .then(user => {
-            if (user.role === "Teacher") {
-              console.log("User is Teacher");
-              Class.findByIdAndUpdate(user._class, {
-                  _teacher: mongoose.Types.ObjectId(user._id)
-                })
-                .catch(err => console.log(err));
-            }
+            if (user.role === "Teacher") addTeacherToClass (user._class, user._id);
+            else if (user.role === "TA") addTAToClass (user._class, user._id);
           })
           .catch(err => console.log(err));
       })
@@ -415,6 +406,20 @@ function changePassword(password, classId) {
       }).catch(err => console.log(err));
     })
     .catch(err => console.log(err));
+}
+
+function addTeacherToClass (classId, userId) {
+  Class.findByIdAndUpdate(classId, {
+    _teacher: mongoose.Types.ObjectId(userId)
+  })
+  .catch(err => console.log(err));
+}
+
+function addTAToClass (classId, userId) {
+  Class.findByIdAndUpdate(classId, {
+    $push: { _TA: mongoose.Types.ObjectId(userId) }
+  })
+  .catch(err => console.log(err));
 }
 
 module.exports = router;

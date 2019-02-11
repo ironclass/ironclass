@@ -10,7 +10,11 @@
 <strong>Name: {{name}}</strong>
 <p>City: {{city}}</p>
 <p>Teacher: {{_teacher.firstName}} {{_teacher.lastName}}</p>
-<p>TAs: {{_TA.0.firstName}} {{_TA.0.lastName}}</p>
+<p>TAs:
+{{#each _TA}}
+{{firstName}} {{lastName}}, 
+{{/each}}
+</p>
 <a href="/classes/edit/{{_id}}">Edit</a>
 <a href="/classes/delete/{{_id}}">Delete</a>
 <br><br>
