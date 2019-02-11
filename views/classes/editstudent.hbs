@@ -9,7 +9,7 @@
         <input name="lastName" type="text" class="form-control" value="{{user.lastName}}">
       </div>
       <div class="col">
-        <input id="datefield" name="birthday" type="date" class="form-control" value="{{birthday}}">
+        <input id="datefield" name="birthday" type="date" class="form-control" min="1930-01-01" max="2000-01-01" value="{{birthday}}">
       </div>
       <button id="btn_addStudent" type="submit" class="btn btn-primary">Change</button>
     </div>
@@ -19,4 +19,4 @@
   <div class="error-message">{{ message }}</div>
 {{/if}}
 
-<script src="javascript/setCurrentDate.js"></script>
+<script src="/javascripts/setCurrentDate.js"></script>

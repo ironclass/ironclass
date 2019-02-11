@@ -35,7 +35,7 @@
         <input name="lastName" type="text" class="form-control" placeholder="Last name">
       </div>
       <div class="col">
-        <input name="birthday" type="date" class="form-control" placeholder="Birthday">
+        <input id="datefield" name="birthday" type="date" class="form-control" min="1930-01-01" max="2000-01-01" placeholder="Birthday">
       </div>
       <button id="btn_addStudent" type="submit" class="btn btn-primary">Add Student</button>
     </div>
@@ -56,3 +56,4 @@
 <a href="/classes">Classes</a>
 <a href="/">Home</a>
 
+<script src="/javascripts/setCurrentDate.js"></script>
