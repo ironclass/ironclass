@@ -26,7 +26,7 @@
 </form>
 
 <h3>Add a student to this class</h3>
-  <form action="/classes/createStudent/{{oneClass._id}}" method="POST">
+  <form action="/classes/createStudent/{{oneClass._id}}" method="POST" enctype="multipart/form-data">
     <div class="form-row">
       <div class="col">
         <input name="firstName" type="text" class="form-control" placeholder="First name">
@@ -37,7 +37,12 @@
       <div class="col">
         <input id="datefield" name="birthday" type="date" class="form-control" min="1930-01-01" max="2000-01-01" placeholder="Birthday">
       </div>
-      <button id="btn_addStudent" type="submit" class="btn btn-primary">Add Student</button>
+
+      <div class="col">
+          <input type="file" name="photo">
+      </div>   
+
+      <button id="btn_addStudent" type="submit" class="btn btn-primary" value="SAVE">Add Student</button>
     </div>
   </form>
 
@@ -55,5 +60,3 @@
 
 <a href="/classes">Classes</a>
 <a href="/">Home</a>
-
-<script src="/javascripts/setCurrentDate.js"></script>

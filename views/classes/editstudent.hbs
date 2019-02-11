@@ -11,6 +11,13 @@
       <div class="col">
         <input id="datefield" name="birthday" type="date" class="form-control" min="1930-01-01" max="2000-01-01" value="{{birthday}}">
       </div>
+      <div class="col">
+        <select name="role" class="form-control">
+          <option value="Student" selected >Student</option>
+          <option value="TA">TA</option>
+          <option value="Teacher">Teacher</option>
+        </select>
+      </div>
       <button id="btn_addStudent" type="submit" class="btn btn-primary">Change</button>
     </div>
   </form>
@@ -18,5 +25,3 @@
 {{#if message }}
   <div class="error-message">{{ message }}</div>
 {{/if}}
-
-<script src="/javascripts/setCurrentDate.js"></script>

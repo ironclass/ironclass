@@ -11,6 +11,7 @@ const userSchema = new Schema(
       default:
         "https://www.axiumradonmitigations.com/wp-content/uploads/2015/01/icon-user-default.png"
     },
+    imgName: String,
     username: { type: String, unique: true },
     password: String,
     role: { type: String, enum: ["Teacher", "TA", "Student"], default: "Student" },

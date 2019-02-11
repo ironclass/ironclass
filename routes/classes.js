@@ -7,6 +7,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const mongoose = require('mongoose');
+const uploadCloud = require('../config/cloudinary.js');
 const passport = require("passport"); // TO USE PROTECED ROUTES
 const User = require("../models/User");
 const Class = require("../models/Class");
@@ -57,10 +58,13 @@ router.post("/createclass", isConnected, isTA, (req, res, next) => {
 
 // ------ C r e a t e   S t u d e n t s  ------
 
-router.post("/createStudent/:classId", isConnected, isTA, (req, res, next) => {
+router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
+  // configure Cloudinary
+    const imgPath = req.file.url;
+    const imgName = req.file.originalname;
+  
   // get ID of current Class
     const classId = req.params.classId;
-		console.log('TCL: classId', classId)
 
   // get Data from form
     const { firstName, lastName, birthday } = req.body;
@@ -97,6 +101,8 @@ router.post("/createStudent/:classId", isConnected, isTA, (req, res, next) => {
           lastName,
           username,
           birthday,
+          imgName,
+          imgUrl: imgPath,
           password: classPassword,
           _class: classId
         })
