@@ -1,62 +1,74 @@
 // model data for testing the logic, just left the needed fields
 let users = [
   {
-    workedWith: [],
+    _workedWith: [],
+    _id: "3",
     username: "Andre".toLowerCase(),
     role: "Student"
   },
   {
-    workedWith: [],
+    _workedWith: [],
+    _id: "4",
     username: "Malte".toLowerCase(),
     role: "Student"
   },
   {
-    workedWith: [],
+    _workedWith: [],
+    _id: "5",
     username: "Stefanie".toLowerCase(),
     role: "Student"
   },
   {
-    workedWith: [],
+    _workedWith: [],
+    _id: "6",
     username: "Min".toLowerCase(),
     role: "Student"
   },
   {
-    workedWith: [],
+    _workedWith: [],
+    _id: "7",
     username: "Franzi".toLowerCase(),
     role: "Student"
   },
   {
-    workedWith: [],
+    _workedWith: [],
+    _id: "8",
     username: "Amelia".toLowerCase(),
     role: "Student"
   },
   {
-    workedWith: [],
+    _workedWith: [],
+    _id: "9",
     username: "Marvin".toLowerCase(),
     role: "Student"
   },
   {
-    workedWith: [],
+    _workedWith: [],
+    _id: "10",
     username: "Ksenia".toLowerCase(),
     role: "Student"
   },
   {
-    workedWith: [],
+    _workedWith: [],
+    _id: "11",
     username: "Felix".toLowerCase(),
     role: "Student"
   },
   {
-    workedWith: [],
+    _workedWith: [],
+    _id: "12",
     username: "Julia".toLowerCase(),
     role: "Student"
   },
   {
-    workedWith: [],
+    _workedWith: [],
+    _id: "13",
     username: ("Maxence" + "Teacher").toLowerCase(),
     role: "Teacher"
   },
   {
-    workedWith: [],
+    _workedWith: [],
+    _id: "14",
     username: ("Thor" + "TA").toLowerCase(),
     role: "TA"
   }
@@ -68,7 +80,7 @@ class MixMyClass {
     this.students = this.users.filter(user => user.role === "Student");
   }
 
-  // standard fisher-yates shuffle, if groupPartner = repeat
+  // standard fisher-yates shuffle, if option = repeat
   shuffle(students) {
     for (let i = students.length - 1; i > 0; i--) {
       // generate random index j
@@ -77,7 +89,7 @@ class MixMyClass {
       [students[i], students[j]] = [students[j], students[i]];
     }
   }
-  // shuffle, that takes the workedWith property into account
+  // shuffle, that takes the _workedWith property into account
   shuffleWithSequence(students) {
     function oneIteration() {
       times++;
@@ -89,7 +101,7 @@ class MixMyClass {
         let j = Math.floor(Math.random() * (i + 1));
 
         // if second last student already worked together with student at random index j, regenerate random index
-        while (students[i - 1].workedWith.includes(students[j].username)) {
+        while (students[i - 1]._workedWith.includes(students[j]._id.toString())) {
           // console.log(
           //   `${students[i - 1].username} already worked with ${
           //     students[j].username
@@ -103,8 +115,10 @@ class MixMyClass {
         [students[i], students[j]] = [students[j], students[i]];
       }
       // to solve this issue, repeat the whole process again, try for max 99 times
-      if (students[0].workedWith.includes(students[1].username) && times < 100) {
-        console.log(`${times}: I'll do it again for ${students[0].username} and ${students[1].username}`);
+      if (students[0]._workedWith.includes(students[1]._id.toString()) && times < 100) {
+        console.log(
+          `${times}: I'll do it again for ${students[0].username} and ${students[1].username}`
+        );
         that.shuffle(students);
         oneIteration();
       }
@@ -115,17 +129,19 @@ class MixMyClass {
   }
 
   // main method to create groups of different sizes, taking the present students into account with opt for not repeating group partners in groups of two
-  createGroups(size = 2, notPresent = [], groupPartner = "noRepeat") {
-    let presentStudents = this.students.filter(student => !notPresent.includes(student.username));
+  createGroups(size = 2, notPresent = [], option = "noRepeat") {
+    let presentStudents = this.students.filter(
+      student => !notPresent.includes(student._id.toString())
+    );
 
     let groups = [];
 
-    // checking, that groupPartner is set to repeat, if group size is different than 2
-    if (size !== 2) {
-      groupPartner = "repeat";
+    // checking, that option is set to repeat, if group size is not equal to 2
+    if (size != 2) {
+      option = "repeat";
     }
 
-    switch (groupPartner) {
+    switch (option) {
       case "repeat":
         // shuffle all present students and divide in groups of "size"
         this.shuffle(presentStudents);
@@ -134,53 +150,67 @@ class MixMyClass {
           groups.push(presentStudents.splice(0, size));
         }
 
-        return groups;
+        // return groups;
+        break;
 
       case "noRepeat":
-        // shuffle all present students respecting workedWith property
+        // shuffle all present students respecting _workedWith property
         this.shuffleWithSequence(presentStudents);
-        console.log(`This is round ${round}`); // TESTING
-        round++; // TESTING
+        // console.log(`This is round ${round}`); // TESTING
+        // round++; // TESTING
 
         while (presentStudents.length > 0) {
           groups.push(presentStudents.splice(0, size));
         }
 
-        // pushing usernames of buddies in students workedWith array
+        // pushing usernames of buddies in students _workedWith array
         groups.forEach(group => {
           group.forEach(student => {
             let currentStudent = student;
             let buddies = group.filter(student => student !== currentStudent);
-            buddies.forEach(buddy => student.workedWith.push(buddy.username)); // username for TESTING, must be replaced with _id
+            buddies.forEach(buddy => student._workedWith.push(buddy._id.toString()));
           });
         });
 
-        return groups;
+        // return groups;
+        break;
     }
+    return groups;
   }
 }
 
+module.exports = MixMyClass;
+
 // // TESTING
+// let round = 0; // TESTING
 // let newClass = new MixMyClass(users);
 
-// // TESTING PAIR PROGRAMMING FEATURE
-let round = 0; // TESTING
-// newClass.createGroups(2, ["ksenia", "felix", "marvin", "julia"]);
-// newClass.createGroups(2, ["ksenia", "felix", "marvin", "julia"]);
-// newClass.createGroups(2, ["ksenia", "felix", "marvin", "julia"]);
-// newClass.createGroups(2, ["ksenia", "felix", "marvin", "julia"]);
-// newClass.createGroups(2, ["ksenia", "felix", "marvin", "julia"]);
-// newClass.createGroups(2, ["ksenia", "felix", "marvin", "julia"]);
-// console.log(newClass.students[0].username, newClass.students[0].workedWith);
-// console.log(newClass.students[1].username, newClass.students[1].workedWith);
-// console.log(newClass.students[2].username, newClass.students[2].workedWith);
-// console.log(newClass.students[3].username, newClass.students[3].workedWith);
-// console.log(newClass.students[4].username, newClass.students[4].workedWith);
-// console.log(newClass.students[5].username, newClass.students[5].workedWith);
-// console.log(newClass.students[6].username, newClass.students[6].workedWith);
-// console.log(newClass.students[7].username, newClass.students[7].workedWith);
-// console.log(newClass.students[8].username, newClass.students[8].workedWith);
-// console.log(newClass.students[9].username, newClass.students[9].workedWith);
+// newClass.createGroups(2, ["9", "10", "11", "12"]);
+// newClass.createGroups(2, ["9", "10", "11", "12"]);
+// newClass.createGroups(2, ["9", "10", "11", "12"]);
+// newClass.createGroups(2, ["9", "10", "11", "12"]);
+// newClass.createGroups(2, ["9", "10", "11", "12"]);
+// newClass.createGroups(2, ["9", "10", "11", "12"]);
+
+// console.log(
+//   'TCL: newClass.createGroups(2, ["9", "10", "11", "12"]);',
+//   newClass.createGroups(2, ["9", "10", "11", "12"])
+// );
+// console.log(
+//   'TCL: newClass.createGroups(2, ["9", "10", "11", "12"]);',
+//   newClass.createGroups(2, ["9", "10", "11", "12"])[0][0]
+// );
+
+// console.log(newClass.students[0]._id, newClass.students[0]._workedWith);
+// console.log(newClass.students[1]._id, newClass.students[1]._workedWith);
+// console.log(newClass.students[2]._id, newClass.students[2]._workedWith);
+// console.log(newClass.students[3]._id, newClass.students[3]._workedWith);
+// console.log(newClass.students[4]._id, newClass.students[4]._workedWith);
+// console.log(newClass.students[5]._id, newClass.students[5]._workedWith);
+// console.log(newClass.students[6]._id, newClass.students[6]._workedWith);
+// console.log(newClass.students[7]._id, newClass.students[7]._workedWith);
+// console.log(newClass.students[8]._id, newClass.students[8]._workedWith);
+// console.log(newClass.students[9]._id, newClass.students[9]._workedWith);
 
 // // TESTING GROUPS WITH DIFFERENT SIZES
 // let groupsOfThree = newClass.createGroups(3, ["ksenia"]);
