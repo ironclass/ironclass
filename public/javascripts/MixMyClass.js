@@ -64,55 +64,54 @@ let users = [
 
 class MixMyClass {
   constructor(users) {
-    this.users = users; // it might even not be neccesary to store all users
+    this.users = users; // might not be necessary
     this.students = this.users.filter(user => user.role === "Student");
   }
 
   // standard fisher-yates shuffle, if groupPartner = repeat
-  shuffle(students, groupPartner = "repeat") {
-    switch (groupPartner) {
-      case "repeat":
-        for (let i = students.length - 1; i > 0; i--) {
-          // generate random index j
-          const j = Math.floor(Math.random() * (i + 1));
-          // swap last element with element at random index j
-          [students[i], students[j]] = [students[j], students[i]];
-        }
-
-      case "noRepeat":
-        for (let i = students.length - 1; i > 0; i -= 2) {
-          if (i - 1 < 0) {
-            return students;
-          }
-
-          let j = Math.floor(Math.random() * (i + 1));
-
-          // if second last student already worked together with student at random index j, regenerate random index
-          while (students[i - 1].workedWith.includes(students[j].username)) {
-            console.log(
-              `${students[i - 1].username} already worked with ${
-                students[j].username
-              }, dice again...`
-            );
-            j = Math.floor(Math.random() * (i + 1));
-          }
-
-          // swap last student with student at random index j -> this will create group of two, therfore decrease i by 2
-          // hence it can happen, that the two remaining students already worked togther
-          [students[i], students[j]] = [students[j], students[i]];
-        }
-        // first approach to solve this issue
-        // check, if first and second last student already worked together, if not, swap
-        if (
-          students[0].workedWith.includes(students[1].username) &&
-          !students[0].workedWith.includes(students[students.length - 2].username)
-        ) {
-          [students[0], students[students.length - 1]] = [
-            students[students.length - 1],
-            students[0]
-          ];
-        }
+  shuffle(students) {
+    for (let i = students.length - 1; i > 0; i--) {
+      // generate random index j
+      const j = Math.floor(Math.random() * (i + 1));
+      // swap last element with element at random index j
+      [students[i], students[j]] = [students[j], students[i]];
     }
+  }
+  // shuffle, that takes the workedWith property into account
+  shuffleWithSequence(students) {
+    function oneIteration() {
+      times++;
+      for (let i = students.length - 1; i > 0; i -= 2) {
+        if (i - 1 < 0) {
+          return students;
+        }
+
+        let j = Math.floor(Math.random() * (i + 1));
+
+        // if second last student already worked together with student at random index j, regenerate random index
+        while (students[i - 1].workedWith.includes(students[j].username)) {
+          // console.log(
+          //   `${students[i - 1].username} already worked with ${
+          //     students[j].username
+          //   }, dice again...`
+          // );
+          j = Math.floor(Math.random() * (i + 1));
+        }
+
+        // swap last student with student at random index j -> this will create group of two, therfore decrease i by 2
+        // hence it can happen, that the two remaining students already worked togther
+        [students[i], students[j]] = [students[j], students[i]];
+      }
+      // to solve this issue, repeat the whole process again, try for max 99 times
+      if (students[0].workedWith.includes(students[1].username) && times < 100) {
+        console.log(`${times}: I'll do it again for ${students[0].username} and ${students[1].username}`);
+        that.shuffle(students);
+        oneIteration();
+      }
+    }
+    let times = 0;
+    let that = this;
+    oneIteration();
   }
 
   // main method to create groups of different sizes, taking the present students into account with opt for not repeating group partners in groups of two
@@ -129,7 +128,7 @@ class MixMyClass {
     switch (groupPartner) {
       case "repeat":
         // shuffle all present students and divide in groups of "size"
-        this.shuffle(presentStudents, "repeat");
+        this.shuffle(presentStudents);
 
         while (presentStudents.length > 0) {
           groups.push(presentStudents.splice(0, size));
@@ -139,7 +138,9 @@ class MixMyClass {
 
       case "noRepeat":
         // shuffle all present students respecting workedWith property
-        this.shuffle(presentStudents, "noRepeat");
+        this.shuffleWithSequence(presentStudents);
+        console.log(`This is round ${round}`); // TESTING
+        round++; // TESTING
 
         while (presentStudents.length > 0) {
           groups.push(presentStudents.splice(0, size));
@@ -159,9 +160,12 @@ class MixMyClass {
   }
 }
 
-let newClass = new MixMyClass(users);
+// // TESTING
+// let newClass = new MixMyClass(users);
 
 // // TESTING PAIR PROGRAMMING FEATURE
+let round = 0; // TESTING
+// newClass.createGroups(2, ["ksenia", "felix", "marvin", "julia"]);
 // newClass.createGroups(2, ["ksenia", "felix", "marvin", "julia"]);
 // newClass.createGroups(2, ["ksenia", "felix", "marvin", "julia"]);
 // newClass.createGroups(2, ["ksenia", "felix", "marvin", "julia"]);
