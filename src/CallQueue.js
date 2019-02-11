@@ -3,70 +3,83 @@ let users = [
   {
     waving: false,
     username: "Andre".toLowerCase(),
+    _id: "1",
     role: "Student"
   },
   {
     waving: false,
     username: "Malte".toLowerCase(),
+    _id: "2",
     role: "Student"
   },
   {
     waving: false,
     username: "Stefanie".toLowerCase(),
+    _id: "3",
     role: "Student"
   },
   {
     waving: false,
     username: "Min".toLowerCase(),
+    _id: "4",
     role: "Student"
   },
   {
     waving: false,
     username: "Franzi".toLowerCase(),
+    _id: "5",
     role: "Student"
   },
   {
     waving: false,
     username: "Amelia".toLowerCase(),
+    _id: "6",
     role: "Student"
   },
   {
     waving: false,
     username: "Marvin".toLowerCase(),
+    _id: "7",
     role: "Student"
   },
   {
     waving: false,
     username: "Ksenia".toLowerCase(),
+    _id: "8",
     role: "Student"
   },
   {
     waving: false,
     username: "Felix".toLowerCase(),
+    _id: "9",
     role: "Student"
   },
   {
     waving: false,
     username: "Julia".toLowerCase(),
+    _id: "10",
     role: "Student"
   },
   {
     waving: false,
     username: ("Maxence" + "Teacher").toLowerCase(),
+    _id: "11",
     role: "Teacher"
   },
   {
     waving: false,
     username: ("Thor" + "TA").toLowerCase(),
+    _id: "12",
     role: "TA"
   }
 ];
 
 class CallQueue {
-  constructor(users) {
+  constructor(users, classObj) {
     this.users = users;
     this.students = this.users.filter(user => user.role === "Student");
-    this.queue = [];
+    this.classObj = classObj;
+    this.queue = classObj._callQueue;
   }
 
   isEmpty() {
@@ -77,35 +90,43 @@ class CallQueue {
     return this.queue;
   }
   dequeue() {
-    if (this.isEmpty()) return "Queue empty";
+    if (this.isEmpty()) {
+      return console.log("Queue empty");
+    }
     return this.queue.pop();
   }
 
-  // only students can enqueue
+  // only students can wave/enqueue
   wave(user) {
     if (user.role === "Student") {
-      user.waving = true;
-      this.enqueue(user);
+      // user.waving = true;
+      this.enqueue(user._id);
     }
   }
 
-  // only teachers and ta's can dequeue
+  // only teachers and ta's can tick/dequeue
   tick(user) {
     if (user.role === "Teacher" || user.role === "TA") {
-      this.queue[this.queue.length - 1].waving = false;
+      let userId = this.queue[this.queue.length - 1];
+			console.log('TCL: CallQueue -> tick -> userId', userId)
+      // this.user.userId.waving = false;
       this.dequeue();
     }
   }
-  
+
   // option, to tick a specific student
   sudoTick(user, tickedStudent) {
     if (user.role === "Teacher" || user.role === "TA") {
-      let indexInQueue = this.queue.findIndex(student => student.username === tickedStudent.username)
+      let indexInQueue = this.queue.findIndex(
+        student => student._id.toString() === tickedStudent._id.toString()
+      );
       this.queue[indexInQueue].waving = false;
-      this.queue.splice(indexInQueue, 1)
+      this.queue.splice(indexInQueue, 1);
     }
   }
 }
+
+module.exports = CallQueue;
 
 // // TESTING
 // let newQueue = new CallQueue(users);

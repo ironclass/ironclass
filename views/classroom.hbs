@@ -1,59 +1,69 @@
-{{!-- 
-    - get data from imput to route -> MixMyClass
-    - get data from db to input
-    - get data from MixMyClass to view
- --}}
-
 <h1>Classroom</h1>
 
-<div class="mix-my-class">
-  <form action="/classroom" method="POST">
-    <div class="form-group">
-      <label for="groupSize">Group size</label>
-      <input type="number" class="form-control" name="groupSize" value="2" placeholder="Number of people">
-    </div>
+<div class="d-flex">
+  <div class="create-groups">
+    <h2>Create groups</h2>
+    {{!-- input form to set parameters for createGroups --}}
+    <form action="/classroom/create-groups" method="POST">
+      <div class="form-group">
+        <label for="groupSize">Group size</label>
+        <input type="number" class="form-control" name="groupSize" value="2" placeholder="Number of people">
+      </div>
 
-    <div class="form-group">
-      <label for="notPresent">Students, that are not present</label>
-      {{#each students}}
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="{{_id}}" name="notPresent" id="{{_id}}">
-        <label class="form-check-label" for="{{_id}}">
-          {{firstName}} {{lastName}}
-        </label>
+      <div class="form-group">
+        <label for="notPresent">Students, that are not present</label>
+        {{#each students}}
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="{{_id}}" name="notPresent" id="{{_id}}">
+          <label class="form-check-label" for="{{_id}}">
+            {{firstName}} {{lastName}}
+          </label>
+        </div>
+        {{/each}}
+      </div>
+
+      <div class="form-group">
+        <label for="option">Option</label>
+        <select class="custom-select" name="option">
+          <option value="noRepeat" selected>Avoid same group partners</option>
+          <option value="repeat">Mix randomly</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Create groups</button>
+      <a href="/classroom/reset-worked-with" class="btn btn-danger">Reset former group partners</a>
+    </form>
+
+    {{!-- output to show groups --}}
+    <div class="groups d-flex flex-wrap justify-content-around">
+      {{#each groups as |item|}}
+      <div class="card" style="width: 18rem;">
+        {{#each item}}
+        <img src="{{imgUrl}}" class="card-img-top" alt="{{username}}">
+        {{/each}}
+        <div class="card-body">
+          <h5 class="card-title">Group x</h5>
+          <ul>
+            {{#each item}}
+            <li>{{firstName}} {{lastName}}</li>
+            {{/each}}
+          </ul>
+          <p class="card-text">
+
+          </p>
+        </div>
       </div>
       {{/each}}
     </div>
-
-    <div class="form-group">
-      <label for="option">Option</label>
-      <select class="custom-select" name="option">
-        <option value="noRepeat" selected>Avoid same group partners</option>
-        <option value="repeat">Mix randomly</option>
-      </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
-</div>
-
-
-<div class="groups d-flex flex-wrap justify-content-around">
-  {{#each groups as |item|}}
-  <div class="card" style="width: 18rem;">
-    {{#each item}}
-    <img src="{{imgUrl}}" class="card-img-top" alt="{{username}}">
-    {{/each}}
-    <div class="card-body">
-      <h5 class="card-title">Group x</h5>
-      <ul>
-        {{#each item}}
-        <li>{{firstName}} {{lastName}}</li>
-        {{/each}}
-      </ul>
-      <p class="card-text">
-
-      </p>
-    </div>
   </div>
-  {{/each}}
+
+  <div class="call-queue">
+    <h2>CallQueue</h2>
+    <ul class="list-group">
+      {{#each queueObj}}
+      <li class="list-group-item">{{firstName}} {{lastName}}</li>
+      {{/each}}
+    </ul>
+    <a href="/classroom/queue-wave" class="btn btn-primary">Wave</a>
+    <a href="/classroom/queue-tick" class="btn btn-secondary">Tick</a>
+  </div>
 </div>

@@ -76,7 +76,6 @@ router.post("/createclass", isConnected, isTA, (req, res, next) => {
 });
 
 // ------ C r e a t e   S t u d e n t s  ------
-
 router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
   // configure Cloudinary
   let imgPath, imgName;
