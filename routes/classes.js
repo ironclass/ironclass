@@ -222,10 +222,24 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
 // D E L E T E
 // ###########
 
+// ------ D e l e t e   C l a s s e s  ------
 router.get("/delete/:id", isConnected, isTA, (req, res, next) => {
   Class.findByIdAndDelete(req.params.id)
   .then(() => {
     res.redirect("/classes");
+  })
+  .catch(err => {
+    console.log(err);
+    next();
+  });
+});
+
+// ------ D e l e t e   S t u d e n t s  ------
+router.get("/delete/student/:id", isConnected, isTA, (req, res, next) => {
+  backURL=req.header('Referer') || '/';
+  User.findByIdAndDelete(req.params.id)
+  .then(() => {
+    res.redirect(backURL);
   })
   .catch(err => {
     console.log(err);
