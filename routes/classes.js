@@ -279,7 +279,7 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
 }); // end of router.post("/edit/:id")
 
 // ------ E d i t  S t u d e n t  ------
-router.get("/student/edit/:id", isConnected, isTA, (req, res, next) => {
+router.get("/user/edit/:id", isConnected, isTA, (req, res, next) => {
   User.findById(req.params.id)
     .then(user => {
       let birthday;
@@ -296,7 +296,7 @@ router.get("/student/edit/:id", isConnected, isTA, (req, res, next) => {
     .catch(err => console.log(err));
 });
 
-router.post("/student/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
+router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
   const {
     firstName,
     lastName,
@@ -383,7 +383,7 @@ router.get("/delete/:id", isConnected, isTA, (req, res, next) => {
 });
 
 // ------ D e l e t e   S t u d e n t s  ------
-router.get("/delete/student/:id", isConnected, isTA, (req, res, next) => {
+router.get("/delete/user/:id", isConnected, isTA, (req, res, next) => {
   backURL = req.header("Referer") || "/";
   User.findByIdAndDelete(req.params.id)
     .then(() => {
