@@ -60,8 +60,14 @@ router.post("/createclass", isConnected, isTA, (req, res, next) => {
 
 router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
   // configure Cloudinary
-    const imgPath = req.file.url;
-    const imgName = req.file.originalname;
+  let imgPath, imgName;
+  if (req.file) {
+     imgPath = req.file.url;
+     imgName = req.file.originalname;
+  } else {
+     imgPath = "https://www.axiumradonmitigations.com/wp-content/uploads/2015/01/icon-user-default.png";
+     imgName = "default";
+  }
   
   // get ID of current Class
     const classId = req.params.classId;
@@ -241,9 +247,20 @@ router.get("/student/edit/:id", isConnected, isTA, (req, res, next) => {
   .catch(err => console.log(err));
 });
 
-router.post("/student/edit/:id", isConnected, isTA, (req, res, next) => {
+router.post("/student/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
   const { firstName, lastName, birthday } = req.body;  
   backURL=req.header('Referer') || '/';  
+
+  // configure Cloudinary
+  let imgPath, imgName;
+  if (req.file) {
+     imgPath = req.file.url;
+     imgName = req.file.originalname;
+  } else {
+     imgPath = "https://www.axiumradonmitigations.com/wp-content/uploads/2015/01/icon-user-default.png";
+     imgName = "default";
+  }
+
   // data validation and after success: user update
   if (firstName === "" || lastName === "" || birthday === null || birthday === "") {
     User.findById(req.params.id)
@@ -258,7 +275,9 @@ router.post("/student/edit/:id", isConnected, isTA, (req, res, next) => {
       firstName,
       lastName,
       birthday,
-      username
+      username, 
+      imgUrl: imgPath,
+      imgName
     }) 
     .then (user => {
       res.redirect(backURL);

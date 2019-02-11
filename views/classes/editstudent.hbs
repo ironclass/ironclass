@@ -1,6 +1,6 @@
 <h1>Edit Student {{user.firstName}} {{user.lastName}}</h1>
 
-<form action="/classes/student/edit/{{user._id}}" method="POST">
+<form action="/classes/student/edit/{{user._id}}" method="POST" enctype="multipart/form-data">
     <div class="form-row">
       <div class="col">
         <input name="firstName" type="text" class="form-control" value="{{user.firstName}}">
@@ -18,6 +18,9 @@
           <option value="Teacher">Teacher</option>
         </select>
       </div>
+      <div class="col">
+          <input type="file" name="photo">
+      </div>   
       <button id="btn_addStudent" type="submit" class="btn btn-primary">Change</button>
     </div>
   </form>
