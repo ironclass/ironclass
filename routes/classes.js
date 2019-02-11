@@ -31,7 +31,7 @@ router.post("/createclass", isConnected, isTA, (req, res, next) => {
     return;
   }
 
-  Class.findOne({ name }, (err, oneClass) => {
+  Class.findOne({ $and: [{name}, {city}] }, (err, oneClass) => {
     if (oneClass !== null ) {
       console.log(oneClass.name + " already exists");
       res.render("classes/create", { message: "The Classname already exists" });
@@ -148,53 +148,105 @@ router.get("/edit/:id", isConnected, isTA, (req, res, next) => {
 
 router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
   // get ID of current Class
-  const classId = req.params.id;
+   const classId = req.params.id;
+
   // get Info from Post-Body
   const { name, city, password } = req.body;
-
+    
   // check if minimum credentials are provided
   if (name === "" || city === "Choose city...") {
     res.render("classes/edit", { message: "Indicate name and city" });
     return;
   }
 
-  // Update password, if new one is provided
-  if (password !== "") {
-    console.log("Called Passwordchange");
-    const salt = bcrypt.genSaltSync(bcryptRounds);
-    const hashPass = bcrypt.hashSync(password, salt);
-    Class.findByIdAndUpdate(classId, {
-      password: hashPass
-    })
-    .then(() => {
-      User.updateMany({ // Update all Students in this class
-      _class: mongoose.Types.ObjectId(classId)
-      },{
-        password: hashPass // give new Password to them
-      })
-      .catch(err => console.log(err));
-    })
-    .catch(err => console.log(err));
-  } // End of Update Password
+  // get Name of current Class
+  Class.findById(classId)
+  .then (oneClass => {
+    let currentClassName = oneClass.name;
+    console.log('TCL: currentClassName', currentClassName)
+    // Wenn CurrentClassName in der aktuellen Stadt nicht mit
+    // dem eingegebenen Namen übereinstimmt, prüfe, ob
+    // diese in der selben Stadt schon existiert. Wenn ja, 
+    // Fehlermeldung "Existiert bereits". Wenn nicht kriegt die Klasse
+    // ein Update
 
-  // check if Classname alread exists, if not update
-  Class.findOne({ name }, (err, oneClass) => {
-    if (oneClass !== null ) {
-      req.flash("message", "The Class already exists");
-      res.redirect("/classes/edit/"+classId);
+    // Wenn CurrentClassName in der aktuellen Stadt mit
+    // dem eingegebenen Namen übereinstimmt, dann hat sich 
+    // nichts geändert und die Klasse kriegt Update.
+    if (currentClassName !== name) {
+      Class.findOne({ $and: [{name}, {city}] }, (err, oneClass) => {
+        if (oneClass !== null) {
+          console.log("Name existiert bereits in der Stadt");
+          req.flash("message", "The Classname already exists in this City");
+          res.redirect("/classes/edit/"+classId);
       return;
-    } else {
-      Class.findByIdAndUpdate(classId, {
-        name,
-        city
+        } else {
+          console.log("Name existiert nicht in der Stadt, bekommt daher Update");
+          
+          // Update password, if new one is provided
+          if (password !== "") {
+            console.log("Called Passwordchange");
+            const salt = bcrypt.genSaltSync(bcryptRounds);
+            const hashPass = bcrypt.hashSync(password, salt);
+            Class.findByIdAndUpdate(classId, {
+              password: hashPass
+            })
+            .then(() => {
+              User.updateMany({ // Update all Students in this class
+              _class: mongoose.Types.ObjectId(classId)
+              },{
+                password: hashPass // give new Password to them
+              })
+              .catch(err => console.log(err));
+            })
+            .catch(err => console.log(err));
+          } // End of Update Password
+          
+          Class.findByIdAndUpdate(classId, {
+            name,
+            city
+          })
+          .then (newClass => {
+            res.redirect("/classes/edit/"+classId);
+          }) 
+          .catch(err => console.log(err));
+        }
       })
-      .then (newClass => {
-        res.redirect("/classes/edit/"+classId);
-      }) // end of find and update
       .catch(err => console.log(err));
-    } // end of IF not exist ELSE update class
-  })
+    } else {
+      console.log("Name ist der gleiche, daher Update");
+
+      // Update password, if new one is provided
+      if (password !== "") {
+        console.log("Called Passwordchange");
+        const salt = bcrypt.genSaltSync(bcryptRounds);
+        const hashPass = bcrypt.hashSync(password, salt);
+        Class.findByIdAndUpdate(classId, {
+          password: hashPass
+        })
+        .then(() => {
+          User.updateMany({ // Update all Students in this class
+          _class: mongoose.Types.ObjectId(classId)
+          },{
+            password: hashPass // give new Password to them
+          })
+          .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
+      } // End of Update Password
+
+      Class.findByIdAndUpdate(classId, {
+            name,
+            city
+          })
+          .then (newClass => {
+            res.redirect("/classes/edit/"+classId);
+          }) 
+          .catch(err => console.log(err));
+        }
+      })
   .catch(err => console.log(err));
+
 }); // end of router.post("/edit/:id")
 
 // ###########

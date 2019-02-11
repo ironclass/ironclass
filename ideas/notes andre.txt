@@ -1,0 +1,41 @@
+Class.findOne({ name }, (err, oneClass) => {
+		console.log('TCL: oneClass', oneClass);
+    if (oneClass !== null) {
+      if (oneClass.name !== name) req.flash("message", "The Class already exists");
+      res.redirect("/classes/edit/"+classId);
+      return;
+    } else {
+      Class.findByIdAndUpdate(classId, {
+        name,
+        city
+      })
+      .then (newClass => {
+        res.redirect("/classes/edit/"+classId);
+      }) // end of find and update
+      .catch(err => console.log(err));
+    } // end of IF not exist ELSE update class
+  })
+  .catch(err => console.log(err));
+
+
+    Class.findOne({ name }, (err, oneClass) => {
+    // $and: [{name}, {city}]
+    console.log('TCL: oneClass', oneClass);
+    if (oneClass !== null) {
+      if (oneClass.name !== name) {
+        req.flash("message", "The Class already exists")
+      }
+      res.redirect("/classes/edit/"+classId);
+      return;
+    } else {
+      Class.findByIdAndUpdate(classId, {
+        name,
+        city
+      })
+      .then (newClass => {
+        res.redirect("/classes/edit/"+classId);
+      }) // end of find and update
+      .catch(err => console.log(err));
+    } // end of IF not exist ELSE update class
+  })
+  .catch(err => console.log(err));
