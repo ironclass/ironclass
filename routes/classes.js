@@ -113,6 +113,14 @@ router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('ph
           password: classPassword,
           _class: classId
         })
+        .then((createdUser) => {
+          if (createdUser.role === "Teacher") {
+            Class.findByIdAndUpdate(classId, {
+              _teacher: mongoose.Types.ObjectId(createdUser._id)
+            })
+            .catch(err => console.log(err));
+          }
+        })
         .then (user => {
           console.log("Created User: " + user);
           res.redirect("/classes/edit/"+classId);
@@ -248,7 +256,8 @@ router.get("/student/edit/:id", isConnected, isTA, (req, res, next) => {
 });
 
 router.post("/student/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
-  const { firstName, lastName, birthday, role } = req.body;  
+  const { firstName, lastName, birthday, role } = req.body;
+  console.log("Role zu beginn der Seite: "+role)  
   backURL=req.header('Referer') || '/';  
 
   // configure Cloudinary
@@ -280,6 +289,19 @@ router.post("/student/edit/:id", isConnected, isTA, uploadCloud.single('photo'),
       imgUrl: imgPath,
       imgName
     }) 
+    .then(() => {
+      User.findById(req.params.id)
+      .then(user => {
+        if (user.role === "Teacher") {
+          console.log("User is Teacher");
+          Class.findByIdAndUpdate(user._class, {
+            _teacher: mongoose.Types.ObjectId(user._id)
+          })
+          .catch(err => console.log(err));
+        }
+      })
+      .catch(err => console.log(err));
+    })
     .then (user => {
       res.redirect(backURL);
     })

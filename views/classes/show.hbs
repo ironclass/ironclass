@@ -9,8 +9,8 @@
 {{#each classes}}
 <strong>Name: {{name}}</strong>
 <p>City: {{city}}</p>
-<p>Teacher: {{__teacher}}</p>
-<p>TAs: {{_TA}}</p>
+<p>Teacher: {{_teacher.firstName}} {{_teacher.lastName}}</p>
+<p>TAs: {{_TA.0.firstName}} {{_TA.0.lastName}}</p>
 <a href="/classes/edit/{{_id}}">Edit</a>
 <a href="/classes/delete/{{_id}}">Delete</a>
 <br><br>
