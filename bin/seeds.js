@@ -70,11 +70,13 @@ let classes = [
   {
     name: "WebDev FT, Jan 19",
     city: "Berlin",
+    password: "123",
     currentCourse: "Second Project"
   },
   {
     name: "UX/UI FT, Jan 19",
     city: "Berlin",
+    password: "123",    
     currentCourse: "Advanced User Interface Development"
   }
 ];
