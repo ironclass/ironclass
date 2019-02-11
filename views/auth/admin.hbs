@@ -3,6 +3,8 @@
 <h2>Courses</h2>
 {{#each classes}}
   <p>{{name}}</p>
+    <a href="/classes/edit/{{_id}}"><button>Edit</button></a>
+    <a href="/classes/delete/{{_id}}"><button>Delete</button></a>
 {{/each}}
 
 <h2>Users</h2>
@@ -10,5 +12,5 @@
 {{#each users}}
   <p>{{firstName}}</p>
     <a href="/classes/delete/student/{{_id}}"><button>Delete</button></a>
-  <p>{{_id}}</p>
+    <a href="/classes/student/edit/{{_id}}"><button>Edit</button></a>
 {{/each}}

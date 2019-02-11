@@ -130,6 +130,7 @@ router.get("/", isConnected, isTA, (req, res, next) => {
 //   E D I T
 // ###########
 
+// ------ E d i t  C l a s s e s  ------
 router.get("/edit/:id", isConnected, isTA, (req, res, next) => {
 // find current Class and all students in it 
   Promise.all([
@@ -218,15 +219,57 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
   .catch(err => console.log(err)); // end of Class.findById
 }); // end of router.post("/edit/:id")
 
+// ------ E d i t  S t u d e n t  ------
+router.get("/student/edit/:id", isConnected, isTA, (req, res, next) => {
+  User.findById(req.params.id) 
+  .then (user => {
+    let birthday = user.birthday.toISOString().substr(0, 10);
+		console.log('TCL: birthday', birthday)
+    res.render("classes/editstudent", {user, birthday});
+  })
+  .catch(err => console.log(err));
+});
+
+router.post("/student/edit/:id", isConnected, isTA, (req, res, next) => {
+  const { firstName, lastName, birthday } = req.body;  
+  backURL=req.header('Referer') || '/';  
+  // data validation and after success: user update
+  if (firstName === "" || lastName === "" || birthday === "") {
+    User.findById(req.params.id)
+    .then (user => {
+      res.render("classes/editstudent", { user, message: "Indicate full name and birthday" });
+      return;
+    })
+    .catch(err => console.log(err));
+  } else {
+    let username = (firstName + lastName).toLowerCase();
+    User.findByIdAndUpdate(req.params.id, {
+      firstName,
+      lastName,
+      birthday,
+      username
+    }) 
+    .then (user => {
+      res.redirect(backURL);
+    })
+    .catch(err => console.log(err));
+  }
+});
+
+
+
+
+
 // ###########
 // D E L E T E
 // ###########
 
 // ------ D e l e t e   C l a s s e s  ------
 router.get("/delete/:id", isConnected, isTA, (req, res, next) => {
+  backURL=req.header('Referer') || '/';
   Class.findByIdAndDelete(req.params.id)
   .then(() => {
-    res.redirect("/classes");
+    res.redirect(backURL);
   })
   .catch(err => {
     console.log(err);

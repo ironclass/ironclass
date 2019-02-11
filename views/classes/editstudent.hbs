@@ -1,0 +1,20 @@
+<h1>Edit Student {{user.firstName}} {{user.lastName}}</h1>
+
+<form action="/classes/student/edit/{{user._id}}" method="POST">
+    <div class="form-row">
+      <div class="col">
+        <input name="firstName" type="text" class="form-control" value="{{user.firstName}}">
+      </div>
+      <div class="col">
+        <input name="lastName" type="text" class="form-control" value="{{user.lastName}}">
+      </div>
+      <div class="col">
+        <input name="birthday" type="date" class="form-control" value="{{birthday}}">
+      </div>
+      <button id="btn_addStudent" type="submit" class="btn btn-primary">Change</button>
+    </div>
+  </form>
+
+{{#if message }}
+  <div class="error-message">{{ message }}</div>
+{{/if}}
