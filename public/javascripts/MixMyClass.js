@@ -64,7 +64,7 @@ let users = [
 
 class MixMyClass {
   constructor(users) {
-    this.users = users; // it might even not be neccesary to store all users
+    this.users = users; // might not be necessary
     this.students = this.users.filter(user => user.role === "Student");
   }
 
@@ -77,7 +77,7 @@ class MixMyClass {
       [students[i], students[j]] = [students[j], students[i]];
     }
   }
-
+  // shuffle, that takes the workedWith property into account
   shuffleWithSequence(students) {
     function oneIteration() {
       times++;
@@ -160,7 +160,8 @@ class MixMyClass {
   }
 }
 
-let newClass = new MixMyClass(users);
+// // TESTING
+// let newClass = new MixMyClass(users);
 
 // // TESTING PAIR PROGRAMMING FEATURE
 let round = 0; // TESTING
