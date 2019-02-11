@@ -73,7 +73,7 @@ router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('ph
     const classId = req.params.classId;
 
   // get Data from form
-    const { firstName, lastName, birthday } = req.body;
+    const { firstName, lastName, birthday, role } = req.body;
     let username = (firstName + lastName).toLowerCase();
 
     let classPassword;
@@ -107,6 +107,7 @@ router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('ph
           lastName,
           username,
           birthday,
+          role,
           imgName,
           imgUrl: imgPath,
           password: classPassword,
@@ -238,7 +239,6 @@ router.get("/student/edit/:id", isConnected, isTA, (req, res, next) => {
     let birthday;
     if (user.birthday !== null) {
       birthday = user.birthday.toISOString().substr(0, 10);
-      console.log('TCL: birthday', birthday)
     } else {
       birthday = new Date().toISOString().substr(0, 10);
     }
@@ -248,7 +248,7 @@ router.get("/student/edit/:id", isConnected, isTA, (req, res, next) => {
 });
 
 router.post("/student/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
-  const { firstName, lastName, birthday } = req.body;  
+  const { firstName, lastName, birthday, role } = req.body;  
   backURL=req.header('Referer') || '/';  
 
   // configure Cloudinary
@@ -275,6 +275,7 @@ router.post("/student/edit/:id", isConnected, isTA, uploadCloud.single('photo'),
       firstName,
       lastName,
       birthday,
+      role,
       username, 
       imgUrl: imgPath,
       imgName

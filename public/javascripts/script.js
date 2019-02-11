@@ -1,3 +1,5 @@
+console.log("Hello from the script.js");
+
 // set current date as max value for all date input forms
 
 var today = new Date();

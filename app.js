@@ -87,4 +87,10 @@ app.use("/", require("./routes/index"));
 app.use("/auth", require("./routes/auth"));
 app.use("/classes", require("./routes/classes"));
 
+hbs.registerHelper('select', function(value, options) {
+  return options.fn(this).replace(
+      new RegExp(' value=\"' + value + '\"'),
+      '$& selected="selected"');
+});
+
 module.exports = app;
