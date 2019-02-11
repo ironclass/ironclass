@@ -223,8 +223,13 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
 router.get("/student/edit/:id", isConnected, isTA, (req, res, next) => {
   User.findById(req.params.id) 
   .then (user => {
-    let birthday = user.birthday.toISOString().substr(0, 10);
-		console.log('TCL: birthday', birthday)
+    let birthday;
+    if (user.birthday !== null) {
+      birthday = user.birthday.toISOString().substr(0, 10);
+      console.log('TCL: birthday', birthday)
+    } else {
+      birthday = new Date().toISOString().substr(0, 10);
+    }
     res.render("classes/editstudent", {user, birthday});
   })
   .catch(err => console.log(err));
@@ -234,7 +239,7 @@ router.post("/student/edit/:id", isConnected, isTA, (req, res, next) => {
   const { firstName, lastName, birthday } = req.body;  
   backURL=req.header('Referer') || '/';  
   // data validation and after success: user update
-  if (firstName === "" || lastName === "" || birthday === "") {
+  if (firstName === "" || lastName === "" || birthday === null || birthday === "") {
     User.findById(req.params.id)
     .then (user => {
       res.render("classes/editstudent", { user, message: "Indicate full name and birthday" });
