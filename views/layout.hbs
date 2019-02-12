@@ -7,6 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>{{title}}</title>
   <link href="https://fonts.googleapis.com/css?family=Abel|Biryani:900" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
     integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <link rel="stylesheet" href="/stylesheets/style.css" />
@@ -23,26 +24,26 @@
     </li>
     {{#if isNotConnected}}
     <li class="nav-item">
-      <a class="nav-link active" href="/auth/login">Login</a>
+      <a class="nav-link active" href="/auth/login"><i class="far fa-user"></i>  Login</a>
     </li>
     {{/if}}
     {{#if isConnected}}
       {{#if isTA}}
+        <li class="nav-item">
+        <a class="nav-link active" href="/classes/">Classes</a>
+        </li>
+      {{/if}}
       <li class="nav-item">
-      <a class="nav-link active" href="/classes/">Classes</a>
+        <a class="nav-link" href="/classroom/">Classroom</a>
       </li>
-        {{#if isAdmin}}    
+      {{#if isAdmin}}    
         <li class="nav-item">
           <a class="nav-link" href="/auth/admin">Admin</a>
         </li>
-        {{/if}}
       {{/if}}
-    <li class="nav-item">
-      <a class="nav-link" href="/classroom/">Classroom</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/auth/logout">Logout</a>
-    </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/auth/logout"><i class="fas fa-sign-out-alt"></i>  Logout</a>
+      </li>
     {{/if}}
   </ul>
 </nav>
