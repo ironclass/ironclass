@@ -108,8 +108,10 @@ router.get("/classroom/queue-tick", isConnected, (req, res, next) => {
       let queue = newCallQueue.queue;
       Class.findByIdAndUpdate(_class, { _callQueue: queue })
         .then(() => {
-          dequeueStudent();
           console.log("Classes _callQueue updated");
+          if (req.user.role != "Student") {
+            dequeueStudent();
+          }
           res.redirect("/classroom");
         })
         .catch(next);
