@@ -86,6 +86,7 @@ app.use((req, res, next) => {
 app.use("/", require("./routes/index"));
 app.use("/auth", require("./routes/auth"));
 app.use("/classes", require("./routes/classes"));
+app.use("/users", require("./routes/users"));
 
 hbs.registerHelper('select', function(value, options) {
   return options.fn(this).replace(

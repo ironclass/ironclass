@@ -26,7 +26,7 @@
 </form>
 
 <h3>Add a student to this class</h3>
-  <form action="/classes/createStudent/{{oneClass._id}}" method="POST" enctype="multipart/form-data">
+  <form action="/users/createStudent/{{oneClass._id}}" method="POST" enctype="multipart/form-data">
     <div class="form-row">
       <div class="col">
         <input name="firstName" type="text" class="form-control" placeholder="First name">
@@ -55,8 +55,8 @@
 <h4>Students in this class</h4>
 {{#each students}}
   <p>{{firstName}} {{lastName}}</p> 
-  <a href="/classes/delete/user/{{_id}}"><button>Delete</button></a>
-  <a href="/classes/user/edit/{{_id}}"><button>Edit</button></a>
+  <a href="/users/delete/user/{{_id}}"><button>Delete</button></a>
+  <a href="/users/user/edit/{{_id}}"><button>Edit</button></a>
 {{/each}}
 
 
