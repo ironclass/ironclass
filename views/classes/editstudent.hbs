@@ -1,6 +1,6 @@
 <h1>Edit Student {{user.firstName}} {{user.lastName}}</h1>
 
-<form action="/classes/user/edit/{{user._id}}" method="POST" enctype="multipart/form-data">
+<form action="/users/user/edit/{{user._id}}" method="POST" enctype="multipart/form-data">
     <div class="form-row">
       <div class="col">
         <input name="firstName" type="text" class="form-control" value="{{user.firstName}}">
@@ -30,3 +30,5 @@
 {{#if message }}
   <div class="error-message">{{ message }}</div>
 {{/if}}
+
+<script src="/javascripts/script.js"></script>

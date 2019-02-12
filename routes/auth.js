@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require("passport"); // TO USE PROTECED ROUTES
 const User = require("../models/User");
 const Class = require("../models/Class");
-const {isConnected, isAdmin} = require('../middlewares')
+const {isConnected, isAdmin} = require('../src/middlewares')
 
 // L O G I N
 router.get("/login", (req, res, next) => {

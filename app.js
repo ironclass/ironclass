@@ -53,7 +53,7 @@ app.locals.title = "IronClass";
 // ENABLE AUTHENTICATION USING PASSPORT & SESSION AND FLASH FOR ERROR HANDLING
 app.use(
   session({
-    secret: "andre-malte-flasche-maus",
+    secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
     store: new MongoStore({ mongooseConnection: mongoose.connection })
@@ -81,6 +81,7 @@ app.use((req, res, next) => {
 app.use("/", require("./routes/index"));
 app.use("/auth", require("./routes/auth"));
 app.use("/classes", require("./routes/classes"));
+app.use("/users", require("./routes/users"));
 
 hbs.registerHelper('select', function(value, options) {
   return options.fn(this).replace(

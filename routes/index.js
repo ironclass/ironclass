@@ -3,7 +3,7 @@ const User = require("../models/User");
 const Class = require("../models/Class");
 const MixMyClass = require("../src/MixMyClass");
 const CallQueue = require("../src/CallQueue");
-const { isConnected } = require("../middlewares");
+const { isConnected } = require("../src/middlewares");
 
 // SOCKET.IO
 const { io, sendMessage, queueStudent, dequeueStudent } = require("../src/socketAPI");
