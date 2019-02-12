@@ -1,10 +1,12 @@
-// EVERY ROUTES FILE MUST END WITH module.exports = router;
 const express = require("express");
 const User = require("../models/User");
 const Class = require("../models/Class");
 const MixMyClass = require("../src/MixMyClass");
 const CallQueue = require("../src/CallQueue");
 const { isConnected } = require("../middlewares");
+
+// SOCKET.IO
+const { io, sendMessage, queueStudent, dequeueStudent } = require("../src/socketAPI");
 
 const router = express.Router();
 // HOME PAGE
@@ -20,6 +22,7 @@ router.get("/classroom", isConnected, (req, res, next) => {
       let students = values[0].filter(user => user.role === "Student");
       let newCallQueue = new CallQueue(values[0], values[1][0]);
       let queue = newCallQueue.queue;
+
       Class.findByIdAndUpdate(_class, { _callQueue: queue })
         .populate("_callQueue")
         .then(classes => {
@@ -30,6 +33,13 @@ router.get("/classroom", isConnected, (req, res, next) => {
       // res.send(queue);
     })
     .catch(next);
+});
+// SENDMESSAGE NEEDS TO BE IMPLEMENTED ON CLICK EVENT
+router.post("/classroom", isConnected, (req, res, next) => {
+  let msg = req.body.msg;
+  sendMessage(msg);
+  // res.redirect("/classroom");
+  // setTimeout(() => sendMessage(msg), 500);
 });
 
 // CREATE GROUPS
@@ -70,13 +80,17 @@ router.get("/classroom/queue-wave", isConnected, (req, res, next) => {
   let _class = req.user._class;
   Promise.all([User.find(), Class.find({ _id: _class })])
     .then(values => {
-      let students = values[0].filter(user => user.role === "Student");
+      // let students = values[0].filter(user => user.role === "Student");
       let newCallQueue = new CallQueue(values[0], values[1][0]);
       newCallQueue.wave(req.user);
       let queue = newCallQueue.queue;
       Class.findByIdAndUpdate(_class, { _callQueue: queue })
         .then(() => {
           console.log("Classes _callQueue updated");
+          if (req.user.role === "Student") {
+            let fullName = req.user.firstName + " " + req.user.lastName;
+            queueStudent(fullName);
+          }
           res.redirect("/classroom");
         })
         .catch(next);
@@ -88,12 +102,13 @@ router.get("/classroom/queue-tick", isConnected, (req, res, next) => {
   let _class = req.user._class;
   Promise.all([User.find(), Class.find({ _id: _class })])
     .then(values => {
-      let students = values[0].filter(user => user.role === "Student");
+      // let students = values[0].filter(user => user.role === "Student");
       let newCallQueue = new CallQueue(values[0], values[1][0]);
       newCallQueue.tick(req.user);
       let queue = newCallQueue.queue;
       Class.findByIdAndUpdate(_class, { _callQueue: queue })
         .then(() => {
+          dequeueStudent();
           console.log("Classes _callQueue updated");
           res.redirect("/classroom");
         })
