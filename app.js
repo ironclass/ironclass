@@ -69,9 +69,10 @@ app.use((req, res, next) => {
 
   if (!!req.user) {
     res.locals.isTeacher = req.user.role === "Teacher" || req.user.admin === true;
-    res.locals.isTA      = req.user.role === "TA" || req.user.role === "Teacher" || req.user.admin === true;
+    res.locals.isTA =
+      req.user.role === "TA" || req.user.role === "Teacher" || req.user.admin === true;
     res.locals.isStudent = req.user.role === "Student" || req.user.admin === true;
-    res.locals.isAdmin   = req.user.admin === true;
+    res.locals.isAdmin = req.user.admin === true;
   }
 
   next();
@@ -83,10 +84,26 @@ app.use("/auth", require("./routes/auth"));
 app.use("/classes", require("./routes/classes"));
 app.use("/users", require("./routes/users"));
 
-hbs.registerHelper('select', function(value, options) {
-  return options.fn(this).replace(
-      new RegExp(' value=\"' + value + '\"'),
-      '$& selected="selected"');
+hbs.registerHelper("select", function(value, options) {
+  return options.fn(this).replace(new RegExp(' value="' + value + '"'), '$& selected="selected"');
+});
+
+// helper, for subgrouping items
+hbs.registerHelper("groupedEach", function(every, context, options) {
+  var out = "",
+    subcontext = [],
+    i;
+  if (context && context.length > 0) {
+    for (i = 0; i < context.length; i++) {
+      if (i > 0 && i % every === 0) {
+        out += options.fn(subcontext);
+        subcontext = [];
+      }
+      subcontext.push(context[i]);
+    }
+    out += options.fn(subcontext);
+  }
+  return out;
 });
 
 module.exports = app;

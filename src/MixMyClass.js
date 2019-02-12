@@ -75,9 +75,11 @@ let users = [
 ];
 
 class MixMyClass {
-  constructor(users) {
+  constructor(users, classObj) {
     this.users = users; // might not be necessary
     this.students = this.users.filter(user => user.role === "Student");
+    this.classObj = classObj;
+    this.currentGroups = classObj._currentGroups;
   }
 
   // standard fisher-yates shuffle, if option = repeat
@@ -177,6 +179,7 @@ class MixMyClass {
         // return groups;
         break;
     }
+    this.currentGroups = groups;
     return groups;
   }
 }

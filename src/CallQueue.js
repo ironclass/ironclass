@@ -86,7 +86,10 @@ class CallQueue {
     return this.queue.length === 0 ? true : false;
   }
   enqueue(element) {
-    this.queue.unshift(element);
+    let queueArray = this.queue.map(obj => obj.toString())
+    if (!queueArray.includes(element._id.toString())) {
+      this.queue.unshift(element);
+    }
     return this.queue;
   }
   dequeue() {
@@ -99,7 +102,6 @@ class CallQueue {
   // only students can wave/enqueue
   wave(user) {
     if (user.role === "Student") {
-      // user.waving = true;
       this.enqueue(user._id);
     }
   }
@@ -107,9 +109,6 @@ class CallQueue {
   // only teachers and ta's can tick/dequeue
   tick(user) {
     if (user.role === "Teacher" || user.role === "TA") {
-      let userId = this.queue[this.queue.length - 1];
-			console.log('TCL: CallQueue -> tick -> userId', userId)
-      // this.user.userId.waving = false;
       this.dequeue();
     }
   }
@@ -120,7 +119,6 @@ class CallQueue {
       let indexInQueue = this.queue.findIndex(
         student => student._id.toString() === tickedStudent._id.toString()
       );
-      this.queue[indexInQueue].waving = false;
       this.queue.splice(indexInQueue, 1);
     }
   }
