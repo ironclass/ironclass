@@ -1,70 +1,84 @@
-{{!-- TODO: Possibility to change password --}}
+<div class="container d-flex flex-column align-items-center">
 
-<h1>Edit Class</h1>
 
-<form action="/classes/edit/{{oneClass._id}}" method="POST">
-  <div class="form-group">
-    <input type="text" name="name" class="form-control" id="classname" value="{{oneClass.name}}">
-    <input type="password" name="password" class="form-control" id="password" placeholder="Leave blank if you want to keep the current password.">
+
+  {{!-- Edit Class --}}
+  <div id="jumbo" class="jumbotron container d-flex flex-column align-items-center">
+    <h1>Edit Class</h1>
+    <form action="/classes/edit/{{oneClass._id}}" method="POST">
+      <div class="form-group row">
+        <input type="text" name="name" class="form-control" id="classname" value="{{oneClass.name}}">
+        <input type="password" name="password" class="form-control" id="password" placeholder="Leave blank if you want to keep the current password.">
+      </div>
+      <select name="city" class="form-control form-control-lg" value="Munich">
+      <option selected hidden>{{oneClass.city}}</option>  
+      <option value="Barcelona">Barcelona</option>
+      <option value="Amsterdam">Amsterdam</option>
+      <option value="Berlin">Berlin</option>
+      <option value="Bogotá">Bogotá</option>
+      <option value="Lisbon">Lisbon</option>
+      <option value="Madrid">Madrid</option>
+      <option value="Mexico City">Mexico City</option>
+      <option value="Miami">Miami</option>
+      <option value="Munich">Munich</option>
+      <option value="Paris">Paris</option>
+      <option value="São Paulo">São Paulo</option>
+      </select>
+      <br>
+      {{!-- TODO: Button zentrieren --}}
+      <button type="submit" class="btn btn-lg btn-primary">Change</button>
+
+    </form>
   </div>
-  <select name="city" class="form-control form-control-lg" value="Munich">
-  <option selected hidden>{{oneClass.city}}</option>  
-  <option value="Barcelona">Barcelona</option>
-  <option value="Amsterdam">Amsterdam</option>
-  <option value="Berlin">Berlin</option>
-  <option value="Bogotá">Bogotá</option>
-  <option value="Lisbon">Lisbon</option>
-  <option value="Madrid">Madrid</option>
-  <option value="Mexico City">Mexico City</option>
-  <option value="Miami">Miami</option>
-  <option value="Munich">Munich</option>
-  <option value="Paris">Paris</option>
-  <option value="São Paulo">São Paulo</option>
-  </select>
-  <br>
-  <button type="submit" class="btn btn-primary">Change</button>
-</form>
 
-<h3>Add a student to this class</h3>
-  <form action="/users/createStudent/{{oneClass._id}}" method="POST" enctype="multipart/form-data">
-    <div class="form-row">
-      <div class="col">
-        <input name="firstName" type="text" class="form-control" placeholder="First name">
+
+
+  Add Student
+  <div id="add-student" class="container d-flex flex-wrap flex-column align-items-center">
+    <h3>Add a student to this class</h3>
+    <form action="/users/createStudent/{{oneClass._id}}" class="flex-wrap" method="POST" enctype="multipart/form-data">
+      <div class="row">
+        <div class="col">
+          <input name="firstName" type="text" class="form-control" placeholder="First name">
+        </div>
+        <div class="col">
+          <input name="lastName" type="text" class="form-control" placeholder="Last name">
+        </div>
+        <div class="col">
+          <input id="datefield" name="birthday" type="date" class="form-control" min="1930-01-01" max="2000-01-01" placeholder="Birthday">
+        </div>
+        <div class="col">
+          <select name="role" class="form-control" value="Student">
+            <option value="Student">Student</option>
+            <option value="TA">TA</option>
+            <option value="Teacher">Teacher</option>
+          </select>
+        </div>
+        <div class="col custom-file" id="customFile" lang="de">
+          <input type="file" name="photo" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp">
+          <label class="custom-file-label" for="exampleInputFile">
+            Select file...
+          </label>
+        </div>    
       </div>
-      <div class="col">
-        <input name="lastName" type="text" class="form-control" placeholder="Last name">
-      </div>
-      <div class="col">
-        <input id="datefield" name="birthday" type="date" class="form-control" min="1930-01-01" max="2000-01-01" placeholder="Birthday">
-      </div>
-      <div class="col">
-        <select name="role" class="form-control" value="Student">
-          <option value="Student">Student</option>
-          <option value="TA">TA</option>
-          <option value="Teacher">Teacher</option>
-        </select>
-      </div>
-      <div class="col">
-          <input type="file" name="photo">
-      </div>   
+        <button id="btn_addStudent" type="submit" class="btn btn-primary" value="SAVE"><i class="fas fa-user-plus"></i>  Add Student</button>
+    </form>
+  </div>
+  
 
-      <button id="btn_addStudent" type="submit" class="btn btn-primary" value="SAVE">Add Student</button>
-    </div>
-  </form>
-
-<h4>Students in this class</h4>
-{{#each students}}
-  <p>{{firstName}} {{lastName}}</p> 
-  <a href="/users/delete/user/{{_id}}"><button>Delete</button></a>
-  <a href="/users/user/edit/{{_id}}"><button>Edit</button></a>
-{{/each}}
+  <h4>Students in this class</h4>
+  {{#each students}}
+    <p>{{firstName}} {{lastName}}</p> 
+    <a href="/users/delete/user/{{_id}}"><button>Delete</button></a>
+    <a href="/users/user/edit/{{_id}}"><button>Edit</button></a>
+  {{/each}}
 
 
-{{#if message }}
-  <div class="error-message">{{ message }}</div>
-{{/if}}
+  {{#if message }}
+    <div class="error-message">{{ message }}</div>
+  {{/if}}
 
-<a href="/classes">Classes</a>
-<a href="/">Home</a>
-
+  <a href="/classes">Classes</a>
+  <a href="/">Home</a>
+</div>
 <script src="/javascripts/setDate.js"></script>

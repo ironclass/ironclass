@@ -30,3 +30,13 @@ socket.on("dequeueStudent", () => {
   let ul = document.getElementById("call-list");
   ul.children[0].remove()
 });
+
+// BOOTSTRAP
+// show filename, when selected for upload
+$('#exampleInputFile').on('change',function(){
+  //get the file name
+  var fileName = $(this).val();
+  var cleanFileName = fileName.replace('C:\\fakepath\\', " ")
+  //replace the "Choose a file" label
+  $(this).next('.custom-file-label').html(cleanFileName);
+});

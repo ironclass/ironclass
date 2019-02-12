@@ -55,3 +55,37 @@ function findCurrentRole(userId) {
   })
   .catch(err => console.log(err));
 }
+
+{{!-- Add Student --}}
+  <div id="add-student" class="container d-flex flex-wrap flex-column align-items-center">
+    <h3>Add a student to this class</h3>
+    <form action="/users/createStudent/{{oneClass._id}}" method="POST" enctype="multipart/form-data">
+      <div class="form-row">
+        <div class="col">
+          <input name="firstName" type="text" class="form-control" placeholder="First name">
+        </div>
+        <div class="col">
+          <input name="lastName" type="text" class="form-control" placeholder="Last name">
+        </div>
+        <div class="col">
+          <input id="datefield" name="birthday" type="date" class="form-control" min="1930-01-01" max="2000-01-01" placeholder="Birthday">
+        </div>
+        <div class="col">
+          <select name="role" class="form-control" value="Student">
+            <option value="Student">Student</option>
+            <option value="TA">TA</option>
+            <option value="Teacher">Teacher</option>
+          </select>
+        </div>
+        {{!-- <input type="file" name="photo" class="custom-file"> --}}
+        <div class="custom-file" id="customFile" lang="de">
+          <input type="file" name="photo" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp">
+          <label class="custom-file-label" for="exampleInputFile">
+            Select file...
+          </label>
+        </div>    
+      </div>
+        <button id="btn_addStudent" type="submit" class="btn btn-primary" value="SAVE"><i class="fas fa-user-plus"></i>  Add Student</button>
+
+    </form>
+  </div>

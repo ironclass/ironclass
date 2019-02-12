@@ -8,8 +8,6 @@ $primary: $main-dark;
 $warning: $main-light;
 $danger: #f77754;
 
-
-
 @import "node_modules/bootstrap/scss/bootstrap";
 
 body {
@@ -17,12 +15,25 @@ body {
   font-family: "Abel", Helvetica, Arial;
 }
 
-h1 {
-  font-family: "Biryani";
-}
-
 a {
   color: $main-lighter;
+}
+
+#jumbo {
+  padding: 20px;
+  background-color: $main-lighter;
+}
+
+#classname {
+  font-weight: bold;
+}
+
+#add-student {
+  margin-bottom: 15px;
+}
+
+#add-student input, select {
+  margin: 5px;
 }
 
 .nav {
@@ -47,6 +58,10 @@ a {
 
 .card a {
   color: $main-dark;
+}
+
+.custom-file-input ~ .custom-file-label::after {
+  content: "Upload Picture";
 }
 
 @media screen and (max-width: 1150px) {
