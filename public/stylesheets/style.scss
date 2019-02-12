@@ -1,12 +1,19 @@
-$primary: #203562;
-$warning: #f3f053;
+$main-lighter: #e3e8f8;
+$main-light: #6a99cb;
+$main-dark: #203562;
+$main-darker: #2E3233;
+
+//Bootstrap
+$primary: $main-dark;
+$warning: $main-light;
 $danger: #f77754;
-$main-light: #e3e8f8;
+
+
 
 @import "node_modules/bootstrap/scss/bootstrap";
 
 body {
-  background-color: #6a99cb;
+  background-color: $main-light;
   font-family: "Abel", Helvetica, Arial;
 }
 
@@ -15,11 +22,11 @@ h1 {
 }
 
 a {
-  color: $main-light;
+  color: $main-lighter;
 }
 
 .nav {
-  color: $main-light;
+  color: $main-lighter;
   font-size: 1.2em;
   margin: 10px 0 40px 0;
 }
@@ -29,17 +36,17 @@ a {
   transform: translateY(-50%);
   bottom: initial;
   font-size: 11em;
-  text-shadow: 2px 2px #ff0000;
+  text-shadow: 2px 2px $main-darker;
 }
 
 .card {
   margin: 10px;
   font-size: 1.2em;
-  background-color: $main-light;
+  background-color: $main-lighter;
 }
 
 .card a {
-  color: #203562;
+  color: $main-dark;
 }
 
 @media screen and (max-width: 1150px) {
