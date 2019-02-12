@@ -1,6 +1,12 @@
+{{!-- 
+    - unique queue elements
+    - display current groups
+    - opt for deleting call (students)
+ --}}
+
 <h1>Classroom</h1>
 
-<div class="d-flex">
+<div class="d-flex justify-content-around">
   <div class="create-groups">
     <h2>Create groups</h2>
     {{!-- input form to set parameters for createGroups --}}
@@ -58,12 +64,29 @@
 
   <div class="call-queue">
     <h2>CallQueue</h2>
-    <ul class="list-group">
+    <ul id="call-list" class="list-group">
       {{#each queueObj}}
       <li class="list-group-item">{{firstName}} {{lastName}}</li>
       {{/each}}
     </ul>
     <a href="/classroom/queue-wave" class="btn btn-primary">Wave</a>
     <a href="/classroom/queue-tick" class="btn btn-secondary">Tick</a>
+  </div>
+
+  <div class="socket-chat">
+    <h2>Chat</h2>
+    <ul id="socket-list" class="list-group">
+      {{#each msg}}
+      <li class="list-group-item">{{msg}}</li>
+      {{/each}}
+    </ul>
+    <form action="/classroom" method="POST">
+      <div class="form-group">
+        <label for="msg">Message</label>
+        <textarea class="form-control" name="msg" rows="3"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Send message</button>
+    </form>
   </div>
 </div>

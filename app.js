@@ -1,8 +1,3 @@
-/********************** 
-******** TO DO ********
-**********************/
-// write session secret to .env
-
 require("dotenv").config();
 
 const bodyParser = require("body-parser");
