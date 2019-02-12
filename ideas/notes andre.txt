@@ -39,3 +39,19 @@ Class.findOne({ name }, (err, oneClass) => {
     } // end of IF not exist ELSE update class
   })
   .catch(err => console.log(err));
+
+
+function removeTAfromClass (classId, userId) {
+  Class.findByIdAndUpdate(classId, {
+    $pullAll: { _TA: mongoose.Types.ObjectId(userId) }
+  })
+  .catch(err => console.log(err));
+}
+
+function findCurrentRole(userId) {
+  User.findById(userId)
+  .then (user => {
+    return user.role;
+  })
+  .catch(err => console.log(err));
+}

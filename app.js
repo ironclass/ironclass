@@ -58,7 +58,7 @@ app.locals.title = "IronClass";
 // ENABLE AUTHENTICATION USING PASSPORT & SESSION AND FLASH FOR ERROR HANDLING
 app.use(
   session({
-    secret: "andre-malte-flasche-maus",
+    secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
     store: new MongoStore({ mongooseConnection: mongoose.connection })

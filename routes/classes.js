@@ -324,30 +324,41 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
       .catch(err => console.log(err));
   } else {
     let username = (firstName + lastName).toLowerCase();
-    User.findByIdAndUpdate(req.params.id, {
-        firstName,
-        lastName,
-        birthday,
-        role,
-        username,
-        imgUrl: imgPath,
-        imgName
+    User.findById(req.params.id)
+    .then ((user) => {
+      let oldRole = user.role;
+      User.findByIdAndUpdate(req.params.id, {
+          firstName,
+          lastName,
+          birthday,
+          role,
+          username,
+          imgUrl: imgPath,
+          imgName
       })
       .then(() => {
         User.findById(req.params.id)
           .then(user => {
-            if (user.role === "Teacher") addTeacherToClass (user._class, user._id);
-            else if (user.role === "TA") addTAToClass (user._class, user._id);
+            if (oldRole === "TA" && user.role !== "TA"){
+              removeTAfromClass (user._class, user._id);
+              if (user.role === "Teacher") addTeacherToClass (user._class, user._id);
+            
+            } else if (oldRole === "Teacher" && user.role !== "Teacher") {
+              removeTeacherfromClass (user._class);
+              if (user.role === "TA") addTAToClass (user._class, user._id);
+            } else {
+            if (user.role === "Teacher") {
+              addTeacherToClass (user._class, user._id);
+            } else if (user.role === "TA") addTAToClass (user._class, user._id);
+            }
           })
           .catch(err => console.log(err));
       })
       .then(user => {
         res.redirect(backURL);
       })
-      .then(user => {
-        res.redirect(backURL);
-      })
       .catch(err => console.log(err));
+    }).catch(err => console.log(err));
   }
 });
 
@@ -408,6 +419,8 @@ function changePassword(password, classId) {
     .catch(err => console.log(err));
 }
 
+// {$and: [{"_class": mongoose.Types.ObjectId(classId)},{"role": "Teacher"}] }
+// TODO: Remove all users with teachers role, when new teacher is called
 function addTeacherToClass (classId, userId) {
   Class.findByIdAndUpdate(classId, {
     _teacher: mongoose.Types.ObjectId(userId)
@@ -415,9 +428,31 @@ function addTeacherToClass (classId, userId) {
   .catch(err => console.log(err));
 }
 
+function removeTeacherfromClass (classId) {
+  console.log("Remove Teacher from Class called")
+  User.findOneAndUpdate(
+    {$and: [{"_class": mongoose.Types.ObjectId(classId)},{"role": "Teacher"}] }, // find current Teacher in Class
+    {role: "Student"} // and set back the role to Student
+  )
+  .then(() => {
+    Class.findByIdAndUpdate(classId, {
+      _teacher: undefined
+    })
+    .catch(err => console.log(err));
+  })
+  .catch(err => console.log(err));
+}
+
 function addTAToClass (classId, userId) {
   Class.findByIdAndUpdate(classId, {
     $push: { _TA: mongoose.Types.ObjectId(userId) }
+  })
+  .catch(err => console.log(err));
+}
+
+function removeTAfromClass (classId, userId) {
+  Class.findByIdAndUpdate(classId, {
+    $pullAll: { _TA: [mongoose.Types.ObjectId(userId)] }
   })
   .catch(err => console.log(err));
 }
