@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const uploadCloud = require('../config/cloudinary.js');
-const {addTeacherToClass, removeTeacherfromClass, addTAToClass, removeTAfromClass }  = require("../public/javascripts/helpers");
+const {addTeacherToClass, removeTeacherfromClass, addTAToClass, removeTAfromClass }  = require("../src/helpers");
 const User = require("../models/User");
 const Class = require("../models/Class");
 const {
   isConnected,
   isTA
-} = require("../middlewares");
+} = require("../src/middlewares");
 
 // ###########
 // C R E A T E

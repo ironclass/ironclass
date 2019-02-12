@@ -1,6 +1,6 @@
 const express = require("express");
 const User = require("../models/User");
-const { isConnected, checkRole } = require("../middlewares");
+const { isConnected, checkRole } = require("../src/middlewares");
 
 const router = express.Router();
 

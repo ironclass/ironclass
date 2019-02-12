@@ -1,5 +1,5 @@
-const User = require("../../models/User");
-const Class = require("../../models/Class");
+const User = require("../models/User");
+const Class = require("../models/Class");
 const mongoose = require('mongoose');
 const bcrypt = require("bcryptjs");
 const bcryptRounds = 10;

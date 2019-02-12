@@ -3,13 +3,13 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const mongoose = require('mongoose');
 const passport = require("passport"); // TO USE PROTECED ROUTES
-const {changePassword}  = require("../public/javascripts/helpers");
+const {changePassword}  = require("../src/helpers");
 const User = require("../models/User");
 const Class = require("../models/Class");
 const {
   isConnected,
   isTA
-} = require("../middlewares");
+} = require("../src/middlewares");
 const bcryptRounds = 10;
 
 // ###########
