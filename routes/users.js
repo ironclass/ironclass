@@ -131,6 +131,7 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
     imgName = "default";
   }
 
+  
   // data validation and after success: user update
   if (firstName === "" || lastName === "" || birthday === null || birthday === "") {
     User.findById(req.params.id)
