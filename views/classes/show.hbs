@@ -1,13 +1,45 @@
-{{!-- /********************** 
-******** TO DO ********
-**********************/
-// list populated teacher and TAs
-// This is not yet possible, because they are not directly linked to users, when created--}}
+<div class="container d-flex flex-column align-items-center">
+  <h2>Ironhack Classes</h2>
+  <div class="container d-flex flex-column align-items-center">
+    <a href="/classes/create">
+    <button class="btn btn-lg btn-primary">Create</button>
+    </a>
+  </div>
+  {{#if message }}
+    <div class="error-message">{{ message }}</div>
+  {{/if}}
+ <div class="container d-flex flex-row">
+  {{#each classes}}
+ 
+    <div class="card" style="width: 18rem;">
+      {{!-- <img class="card-img-top" src="..." alt="Card image cap"> --}}
+      <div class="card-body">
+        <h5 class="card-title"><strong>{{name}}</strong></h5>
+        <p class="card-text">{{city}}</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Teacher: {{_teacher.firstName}} {{_teacher.lastName}}</li>
+        <li class="list-group-item">TA: 
+          {{#each _TA}}
+          {{firstName}} {{lastName}}, 
+          {{/each}}
+        </li>
+      </ul>
+      <div class="card-body d-flex justify-content-center flex-wrap">
+        <a href="/classes/edit/{{_id}}" class="card-link">
+          <button class="btn btn-warning">Edit</button>
+        </a>
+        <a href="/classes/delete/{{_id}}" class="card-link">
+          <button class="btn btn-danger">Delete</button>
+        </a>
+      </div>
+    </div>  
+  {{/each}}
+  </div>
+</div>
 
-<h1>Show Classes</h1>
 
-{{#each classes}}
-<strong>Name: {{name}}</strong>
+{{!-- <strong>Name: {{name}}</strong>
 <p>City: {{city}}</p>
 <p>Teacher: {{_teacher.firstName}} {{_teacher.lastName}}</p>
 <p>TAs:
@@ -17,13 +49,6 @@
 </p>
 <a href="/classes/edit/{{_id}}">Edit</a>
 <a href="/classes/delete/{{_id}}">Delete</a>
-<br><br>
-{{/each}}
-
-{{#if message }}
-  <div class="error-message">{{ message }}</div>
-{{/if}}
+<br><br> --}}
 
 
-<a href="/classes/create">Create</a>
-<a href="/">Home</a>

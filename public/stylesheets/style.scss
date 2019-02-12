@@ -1,9 +1,55 @@
+$primary: #203562;
+$warning: #f3f053;
+$danger: #f77754;
+$main-light: #e3e8f8;
+
+@import "node_modules/bootstrap/scss/bootstrap";
+
 body {
-  padding: 50px;
-  // font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #6a99cb;
+  font-family: "Abel", Helvetica, Arial;
+}
+
+h1 {
+  font-family: "Biryani";
 }
 
 a {
-  color: #00B7FF;
+  color: $main-light;
 }
 
+.nav {
+  color: $main-light;
+  font-size: 1.2em;
+  margin: 10px 0 40px 0;
+}
+
+.carousel-caption {
+  top: 50%;
+  transform: translateY(-50%);
+  bottom: initial;
+  font-size: 11em;
+  text-shadow: 2px 2px #ff0000;
+}
+
+.card {
+  margin: 10px;
+  font-size: 1.2em;
+  background-color: $main-light;
+}
+
+.card a {
+  color: #203562;
+}
+
+@media screen and (max-width: 1150px) {
+  .carousel-caption { 
+     font-size: 4em; 
+  }
+}
+
+@media screen and (max-width: 850px) {
+  .carousel-caption { 
+     font-size: 2em; 
+  }
+}

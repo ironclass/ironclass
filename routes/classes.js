@@ -166,7 +166,7 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
                 city
               })
               .then(newClass => {
-                res.redirect("/classes/edit/" + classId);
+                res.redirect("/classes");
               })
               .catch(err => console.log(err));
           }
@@ -184,7 +184,7 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
             city
           })
           .then(newClass => {
-            res.redirect("/classes/edit/" + classId);
+            res.redirect("/classes");
           })
           .catch(err => console.log(err));
       } // end of if (oneClass.name !== name)

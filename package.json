@@ -10,6 +10,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "bootstrap": "^4.3.0",
     "cloudinary": "^1.13.2",
     "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",

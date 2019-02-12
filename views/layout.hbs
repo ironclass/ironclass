@@ -6,13 +6,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>{{title}}</title>
+  <link href="https://fonts.googleapis.com/css?family=Abel|Biryani:900" rel="stylesheet">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
     integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 
 <body>
-  <nav>
+<nav>
+  <ul class="nav justify-content-center">
+    <li class="nav-item">
+      <a href="/"><img src="/images/logo-ironhack.png" width="40px"></a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" href="/">Home</a>
+    </li>
+    {{#if isNotConnected}}
+    <li class="nav-item">
+      <a class="nav-link active" href="/auth/login">Login</a>
+    </li>
+    {{/if}}
+    {{#if isConnected}}
+      {{#if isTA}}
+      <li class="nav-item">
+      <a class="nav-link active" href="/classes/">Classes</a>
+      </li>
+        {{#if isAdmin}}    
+        <li class="nav-item">
+          <a class="nav-link" href="/auth/admin">Admin</a>
+        </li>
+        {{/if}}
+      {{/if}}
+    <li class="nav-item">
+      <a class="nav-link" href="/classroom/">Classroom</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/auth/logout">Logout</a>
+    </li>
+    {{/if}}
+  </ul>
+</nav>
+
+  {{!-- <nav>
     <a href="/">Home</a>
     {{#if isNotConnected}}
     <a href="/auth/login">Login</a>
@@ -28,7 +63,7 @@
     <a href="/classroom/">Classroom</a>
     <a href="/auth/logout">Logout</a>
     {{/if}}
-  </nav>
+  </nav> --}}
 
   {{{body}}}
 
