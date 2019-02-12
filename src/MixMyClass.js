@@ -101,12 +101,13 @@ class MixMyClass {
         let j = Math.floor(Math.random() * (i + 1));
 
         // if second last student already worked together with student at random index j, regenerate random index
-        while (students[i - 1]._workedWith.includes(students[j]._id.toString())) {
-          // console.log(
-          //   `${students[i - 1].username} already worked with ${
-          //     students[j].username
-          //   }, dice again...`
-          // );
+
+        let workedWithArray = students[i - 1]._workedWith.map(obj => obj.toString());
+
+        while (workedWithArray.includes(students[j]._id.toString())) {
+          console.log(
+            `${students[i - 1].username} already worked with ${students[j].username}, dice again...`
+          );
           j = Math.floor(Math.random() * (i + 1));
         }
 
@@ -115,9 +116,10 @@ class MixMyClass {
         [students[i], students[j]] = [students[j], students[i]];
       }
       // to solve this issue, repeat the whole process again, try for max 99 times
-      if (students[0]._workedWith.includes(students[1]._id.toString()) && times < 100) {
+      let workedWithArray = students[0]._workedWith.map(obj => obj.toString());
+      if (workedWithArray.includes(students[1]._id.toString()) && times < 100) {
         console.log(
-          `${times}: I'll do it again for ${students[0].username} and ${students[1].username}`
+          `${times}: ${students[0].username} already worked with  ${students[1].username}, restart`
         );
         that.shuffle(students);
         oneIteration();
@@ -168,7 +170,7 @@ class MixMyClass {
           group.forEach(student => {
             let currentStudent = student;
             let buddies = group.filter(student => student !== currentStudent);
-            buddies.forEach(buddy => student._workedWith.push(buddy._id.toString()));
+            buddies.forEach(buddy => student._workedWith.push(buddy._id));
           });
         });
 
