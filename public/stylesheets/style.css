@@ -7087,9 +7087,6 @@ a {
 .classroom-sidebar--min-vh {
   min-height: 30vh; }
 
-.alert div {
-  margin: 0px; }
-
 .custom-file-input ~ .custom-file-label::after {
   content: "Upload Picture"; }
 
