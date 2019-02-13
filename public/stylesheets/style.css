@@ -7031,14 +7031,26 @@ a {
   padding: 20px;
   background-color: #e3e8f8; }
 
+#jumbo button, input, select {
+  margin: 5px; }
+
 #classname {
   font-weight: bold; }
 
 #add-student {
   margin-bottom: 15px; }
 
-#add-student input, select {
+#add-student input + select {
   margin: 5px; }
+
+#studentslist {
+  margin-top: 30px; }
+
+#studentslist .col {
+  max-width: 20%; }
+
+#studentslist span {
+  font-size: 1.4em; }
 
 .nav {
   color: #e3e8f8;

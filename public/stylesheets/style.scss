@@ -24,6 +24,10 @@ a {
   background-color: $main-lighter;
 }
 
+#jumbo button, input, select{
+  margin: 5px;
+}
+
 #classname {
   font-weight: bold;
 }
@@ -32,8 +36,20 @@ a {
   margin-bottom: 15px;
 }
 
-#add-student input, select {
+#add-student input + select {
   margin: 5px;
+}
+
+#studentslist {
+  margin-top: 30px
+}
+
+#studentslist .col {
+  max-width: 20%;
+}
+
+#studentslist span {
+  font-size: 1.4em;
 }
 
 .nav {
