@@ -67,8 +67,9 @@ require("./passport")(app);
 app.use((req, res, next) => {
   res.locals.isConnected = !!req.user;
   res.locals.isNotConnected = !!!req.user;
-
+ 
   if (!!req.user) {
+    res.locals.firstName = req.user.firstName;
     res.locals.isTeacher = req.user.role === "Teacher" || req.user.admin === true;
     res.locals.isTA =
       req.user.role === "TA" || req.user.role === "Teacher" || req.user.admin === true;

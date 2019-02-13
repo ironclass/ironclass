@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const cloudinary = require('cloudinary');
 const uploadCloud = require('../config/cloudinary.js');
 const {addTeacherToClass, removeTeacherfromClass, addTAToClass, removeTAfromClass }  = require("../src/helpers");
 const User = require("../models/User");
@@ -17,7 +18,8 @@ const {
 
 router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
   // configure Cloudinary
-  let imgPath, imgName;
+
+  let imgPath, imgName, testImg;
   if (req.file) {
     imgPath = req.file.url;
     imgName = req.file.originalname;

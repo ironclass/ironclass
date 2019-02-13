@@ -7034,29 +7034,16 @@ a {
   padding: 20px;
   background-color: #e3e8f8; }
 
-#jumbo button {
-  margin: 5px; }
-
-#jumbo input {
-  margin: 5px; }
-
-#jumbo select {
-  margin: 5px; }
-
 #classname {
   font-weight: bold; }
 
-#add-student {
-  margin-bottom: 15px; }
-
-#studentslist {
-  margin-top: 30px; }
-
-#studentslist .col {
-  max-width: 20%; }
-
 #studentslist span {
   font-size: 1.4em; }
+
+.error-message {
+  color: red;
+  font-size: 2em;
+  text-align: center; }
 
 .--mt {
   margin-top: 10px; }
@@ -7072,6 +7059,10 @@ a {
   bottom: initial;
   font-size: 11em;
   text-shadow: 2px 2px #2E3233; }
+
+.carousel {
+  width: 1050px;
+  height: 700px; }
 
 .card {
   background-color: #e3e8f8; }

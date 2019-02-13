@@ -5,10 +5,10 @@
     <h1>Edit Class</h1>
     <form action="/classes/edit/{{oneClass._id}}" method="POST">
       <div class="form-group row justify-content-center">
-        <input type="text" name="name" class="form-control" id="classname" value="{{oneClass.name}}">
+        <input type="text" name="name" class="form-control my-2" id="classname" value="{{oneClass.name}}">
         <input type="password" name="password" class="form-control" id="password"
           placeholder="Leave blank if you want to keep the current password.">
-        <select name="city" class="form-control form-control-lg" value="Munich">
+        <select name="city" class="form-control form-control-lg my-2" value="Munich">
           <option selected hidden>{{oneClass.city}}</option>
           <option value="Barcelona">Barcelona</option>
           <option value="Amsterdam">Amsterdam</option>
@@ -22,13 +22,13 @@
           <option value="Paris">Paris</option>
           <option value="São Paulo">São Paulo</option>
         </select>
-        <button type="submit" class="btn btn-lg btn-primary">Change</button>
+        <button type="submit" class="btn btn-lg btn-primary mt-2">Change</button>
       </div>
     </form>
   </div>
 
   {{!-- Add Student --}}
-  <div id="add-student" class="container d-flex flex-column align-items-center">
+  <div class="container d-flex flex-column align-items-center">
     <h3>Add a student to this class</h3>
     <form action="/users/createStudent/{{oneClass._id}}" method="POST" enctype="multipart/form-data">
       <div class="row">
@@ -72,34 +72,32 @@
   <div class="error-message">{{ message }}</div>
   {{/if}}
 
-  <div id="studentslist" class="jumbotron container d-flex flex-column align-items-center">
+  <div id="studentslist" class="container jumbotron mt-5">
 
-    <div class="container">
-      <h4><strong>Members of {{oneClass.name}}</strong></h4>
+      <h1 class="text-center"><strong>Members of {{oneClass.name}}</strong></h1>
       <br>
-      {{#each students}}
       <table class="table">
-        <div class="row">
-          <div class="col-4 col-sm-3 col-lg-2">
+      {{#each students}}
+        <div class="row justify-content-center align-items-center">
+          <div class="col-4 col-sm-3 col-md-2 col-lg-2">
             <span><strong>{{firstName}}</strong></span>
           </div>
-          <div class="col-8 col-sm-3 col-lg-2">
+          <div class="col-8 col-sm-3 col-md-2 col-lg-2">
             <span>{{lastName}}</span>
           </div>
-          <div class="col-3 col-sm-2 col-lg-2">
+          <div class="col-4 col-sm-2 col-md-2 col-lg-1">
             <a href="/users/user/edit/{{_id}}"><button class="btn btn-warning"><i class="far fa-edit"></i>
                 Edit</button></a>
           </div>
-          <div class="col-9 col-sm-3 col-lg-2">
+          <div class="col-8 col-sm-2 col-md-1 col-lg-1">
             <a href="/users/delete/user/{{_id}}"><button class="btn btn-danger"><i class="far fa-trash-alt"></i>
                 Delete</button></a>
           </div>
         </div>
-      </table>
       <hr>
       {{/each }}
-    </div>
+      </table>  
   </div>
-
 </div>
+
 <script src="/javascripts/setDate.js"></script>

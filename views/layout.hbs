@@ -16,7 +16,12 @@
 
 <body>
 <nav>
-  <ul class="nav justify-content-center">
+  <ul class="nav justify-content-center ml-auto">
+    {{#if isConnected}}
+    <li class="nav-item">
+      <a class="nav-link" href="/auth/logout">WELCOME {{firstName}}</a>
+    </li>
+    {{/if}}
     <li class="nav-item">
       <a href="/"><img src="/images/logo-ironhack.png" width="40px"></a>
     </li>
@@ -47,6 +52,7 @@
       </li>
     {{/if}}
   </ul>
+
 </nav>
 
   {{!-- <nav>
