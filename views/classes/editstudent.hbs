@@ -1,6 +1,8 @@
-<h1>Edit Student {{user.firstName}} {{user.lastName}}</h1>
+<div class="jumbotron container d-flex flex-column align-items-center">
 
-<form action="/users/user/edit/{{user._id}}" method="POST" enctype="multipart/form-data">
+  <h1>Edit: {{user.firstName}} {{user.lastName}}</h1>
+
+  <form action="/users/user/edit/{{user._id}}" method="POST" enctype="multipart/form-data">
     <div class="form-row">
       <div class="col">
         <input name="firstName" type="text" class="form-control" value="{{user.firstName}}">
@@ -20,15 +22,24 @@
           {{/select}}
         </select>
       </div>
+    </div>
+    <div class="row">
       <div class="col">
-          <input type="file" name="photo">
-      </div>   
+        <div class="col custom-file" id="customFile" lang="de">
+          <input type="file" name="photo" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp">
+          <label class="custom-file-label" for="exampleInputFile">
+            Select file...
+          </label>
+      </div>  
+    </div>
+      
       <button id="btn_addStudent" type="submit" class="btn btn-primary">Change</button>
     </div>
   </form>
+</div>
 
-{{#if message }}
-  <div class="error-message">{{ message }}</div>
-{{/if}}
+  {{#if message }}
+    <div class="error-message">{{ message }}</div>
+  {{/if}}
 
 <script src="/javascripts/setDate.js"></script>
