@@ -15,12 +15,15 @@ io.on("connection", socket => {
   });
 });
 
-socketAPI.queueStudent = function(fullName) {
-  io.sockets.emit("queueStudent", { fullName });
+socketAPI.queueStudent = function(firstName, id) {
+  io.sockets.emit("queueStudent", { firstName, id });
 };
 
 socketAPI.dequeueStudent = function() {
-  io.sockets.emit("dequeueStudent", { });
+  io.sockets.emit("dequeueStudent", {});
+};
+socketAPI.sudoDequeueStudent = function(id) {
+  io.sockets.emit("sudoDequeueStudent", { id });
 };
 
 socketAPI.sendMessage = function(msg) {

@@ -7037,7 +7037,7 @@ a {
 #add-student {
   margin-bottom: 15px; }
 
-#add-student input, select {
+#add-student input + select {
   margin: 5px; }
 
 .nav {
@@ -7058,11 +7058,13 @@ a {
 .card--margin {
   margin: 10px; }
 
+.card--padding {
+  padding: 10px; }
+
 .card--bigger-font {
   font-size: 1.2em; }
 
-.card--margin-rb {
-  margin-right: 10px;
+.card--mb {
   margin-bottom: 10px; }
 
 .card a {
@@ -7083,7 +7085,7 @@ a {
   border-radius: 5px; }
 
 .classroom-sidebar--min-vh {
-  min-height: 20vh; }
+  min-height: 50vh; }
 
 .custom-file-input ~ .custom-file-label::after {
   content: "Upload Picture"; }

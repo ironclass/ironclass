@@ -21,22 +21,27 @@ socket.on("sendMessage", data => {
 
 socket.on("queueStudent", data => {
   document.querySelector("#call-queue .list-group").innerHTML += `
-    <li id="${data.fullName}" class="list-group-item">${data.fullName}</li>
-  `;
+  <div id="${data.id}" class="alert alert-warning alert-dismissible fade show" role="alert">${
+    data.firstName
+  }<a href="/classroom/queue-tick/${data.id}" class="close"><span>&times;</span></a></div>`;
 });
 
 socket.on("dequeueStudent", () => {
-  console.log("DEBUG");
-  let ul = document.getElementById("call-list");
-  ul.children[0].remove()
+  let list = document.getElementById("call-list");
+  list.children[0].remove()
+});
+socket.on("sudoDequeueStudent", data => {
+  document.getElementById(data.id).remove();
 });
 
 // BOOTSTRAP
 // show filename, when selected for upload
-$('#exampleInputFile').on('change',function(){
+$("#exampleInputFile").on("change", function() {
   //get the file name
   var fileName = $(this).val();
-  var cleanFileName = fileName.replace('C:\\fakepath\\', " ")
+  var cleanFileName = fileName.replace("C:\\fakepath\\", " ");
   //replace the "Choose a file" label
-  $(this).next('.custom-file-label').html(cleanFileName);
+  $(this)
+    .next(".custom-file-label")
+    .html(cleanFileName);
 });

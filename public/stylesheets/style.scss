@@ -32,7 +32,7 @@ a {
   margin-bottom: 15px;
 }
 
-#add-student input, select {
+#add-student input + select {
   margin: 5px;
 }
 
@@ -57,11 +57,13 @@ a {
 .card--margin {
   margin: 10px;
 }
+.card--padding {
+  padding: 10px;
+}
 .card--bigger-font {
   font-size: 1.2em;
 }
-.card--margin-rb {
-  margin-right: 10px;
+.card--mb {
   margin-bottom: 10px;
 }
 
@@ -87,7 +89,7 @@ a {
 }
 
 .classroom-sidebar--min-vh {
-  min-height: 20vh;
+  min-height: 50vh;
 }
 
 .custom-file-input ~ .custom-file-label::after {

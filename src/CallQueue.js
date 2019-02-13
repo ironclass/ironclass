@@ -86,7 +86,7 @@ class CallQueue {
     return this.queue.length === 0 ? true : false;
   }
   enqueue(element) {
-    let queueArray = this.queue.map(obj => obj.toString())
+    let queueArray = this.queue.map(obj => obj.toString());
     if (!queueArray.includes(element._id.toString())) {
       this.queue.unshift(element);
     }
@@ -114,11 +114,9 @@ class CallQueue {
   }
 
   // option, to tick a specific student
-  sudoTick(user, tickedStudent) {
-    if (user.role === "Teacher" || user.role === "TA") {
-      let indexInQueue = this.queue.findIndex(
-        student => student._id.toString() === tickedStudent._id.toString()
-      );
+  sudoTick(user, studentId) {
+    if (user.role === "Teacher" || user.role === "TA" || user._id.toString() === studentId) {
+      let indexInQueue = this.queue.findIndex(student => student._id.toString() === studentId);
       this.queue.splice(indexInQueue, 1);
     }
   }

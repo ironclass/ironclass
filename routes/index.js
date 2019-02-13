@@ -6,7 +6,13 @@ const CallQueue = require("../src/CallQueue");
 const { isConnected } = require("../src/middlewares");
 
 // SOCKET.IO
-const { io, sendMessage, queueStudent, dequeueStudent } = require("../src/socketAPI");
+const {
+  io,
+  sendMessage,
+  queueStudent,
+  dequeueStudent,
+  sudoDequeueStudent
+} = require("../src/socketAPI");
 
 const router = express.Router();
 // HOME PAGE
@@ -17,24 +23,21 @@ router.get("/", (req, res, next) => {
 // ------ C l a s s r o o m ------
 router.get("/classroom", isConnected, (req, res, next) => {
   let _class = req.user._class;
-  Promise.all([User.find(), Class.find({ _id: _class })])
+  Promise.all([
+    User.find(),
+    Class.find({ _id: _class })
+      // .populate("_currentGroups")
+      .populate("_callQueue")
+  ])
     .then(values => {
+      // get students from class to feed "students missing today"
       let students = values[0].filter(user => user.role === "Student");
-      let newMixMyClass = new MixMyClass(values[0], values[1][0]);
-      let newCallQueue = new CallQueue(values[0], values[1][0]);
-      let groups = newMixMyClass.currentGroups;
-      // console.log("TCL: groups", groups);
-      let queue = newCallQueue.queue;
 
-      Class.findByIdAndUpdate(_class, { _callQueue: queue, _currentGroups: groups })
-        .populate("_currentGroups")
-        .populate("_callQueue")
-        .then(classes => {
-          let queueObj = classes._callQueue.reverse();
-          res.render("classroom", { students, groups, queueObj });
-        })
-        .catch(next);
-      // res.send(queue);
+      let groups = values[1][0].currentGroups;
+      let queue = values[1][0]._callQueue;
+      let queueObj = queue.reverse();
+
+      res.render("classroom", { students, groups, queueObj });
     })
     .catch(next);
 });
@@ -51,10 +54,11 @@ router.post("/classroom/create-groups", isConnected, (req, res, next) => {
   let _class = req.user._class;
   Promise.all([User.find(), Class.find({ _id: _class })])
     .then(values => {
-      let students = values[0].filter(user => user.role === "Student");
+      // let students = values[0].filter(user => user.role === "Student");
       let myClass = new MixMyClass(values[0], values[1][0]);
       const { groupSize, notPresent, option } = req.body;
       let groups = myClass.createGroups(groupSize, notPresent, option);
+      // console.log("TCL: groups", groups);
 
       groups.forEach(group => {
         group.forEach(student => {
@@ -68,10 +72,17 @@ router.post("/classroom/create-groups", isConnected, (req, res, next) => {
         });
       });
 
+      Class.findByIdAndUpdate(_class, { currentGroups: groups })
+        .then(() => {
+          console.log("_currentGroups updated!");
+          res.redirect("/classroom");
+        })
+        .catch(next);
+
       // HERE I NEED TO UPDATE _currentGroups ARRAY
       // AND THEN REDIRECT TO /classroom
 
-      res.render("classroom", { students, groups });
+      // res.render("classroom", { students, groups });
     })
     .catch(next);
 });
@@ -100,9 +111,11 @@ router.get("/classroom/queue-wave", isConnected, (req, res, next) => {
         .then(() => {
           console.log("Classes _callQueue updated");
           if (req.user.role === "Student" && !queueBefore.includes(req.user._id.toString())) {
-            let fullName = req.user.firstName + " " + req.user.lastName;
+            // let fullName = req.user.firstName + " " + req.user.lastName;
+            let firstName = req.user.firstName;
+            let id = req.user._id;
             // UPDATE VIA DOM
-            queueStudent(fullName);
+            queueStudent(firstName, id);
           }
           res.redirect("/classroom");
         })
@@ -111,20 +124,24 @@ router.get("/classroom/queue-wave", isConnected, (req, res, next) => {
     })
     .catch(next);
 });
-router.get("/classroom/queue-tick", isConnected, (req, res, next) => {
+router.get("/classroom/queue-tick/:studentId", isConnected, (req, res, next) => {
+  let studentId = req.params.studentId;
+  console.log("TCL: studentId", studentId);
   let _class = req.user._class;
   Promise.all([User.find(), Class.find({ _id: _class })])
     .then(values => {
-      // let students = values[0].filter(user => user.role === "Student");
       let newCallQueue = new CallQueue(values[0], values[1][0]);
-      newCallQueue.tick(req.user);
+      if (studentId === "n-a") {
+        newCallQueue.tick(req.user);
+        dequeueStudent();
+      } else if (req.user.role != "Student" || req.user._id.toString() === studentId) {
+        newCallQueue.sudoTick(req.user, studentId);
+        sudoDequeueStudent(studentId);
+      }
       let queue = newCallQueue.queue;
       Class.findByIdAndUpdate(_class, { _callQueue: queue })
         .then(() => {
           console.log("Classes _callQueue updated");
-          if (req.user.role != "Student") {
-            dequeueStudent();
-          }
           res.redirect("/classroom");
         })
         .catch(next);
