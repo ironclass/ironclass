@@ -7093,14 +7093,34 @@ a {
   max-width: 70px;
   max-height: 70px; }
 
-.classroom-sidebar {
+.classroom {
   margin-bottom: 10px;
   padding: 10px;
   background-color: rgba(32, 53, 98, 0.3);
   border-radius: 5px; }
 
-.classroom-sidebar--min-vh {
+.classroom--min-vh {
   min-height: 30vh; }
+
+h2.h2--no-margin {
+  margin: 0; }
+
+div.alert--little-margin {
+  margin: 2px; }
+
+div.alert--no-margin {
+  margin: 0; }
+
+div.alert--bg-opacity {
+  background-color: rgba(32, 53, 98, 0);
+  border-color: rgba(32, 53, 98, 0);
+  color: #203562; }
+
+.input-group--mt {
+  margin-top: 4px; }
+
+.highlight-shadow {
+  box-shadow: inset 0px 0px 10px 1px rgba(0, 0, 0, 0.6); }
 
 .custom-file-input ~ .custom-file-label::after {
   content: "Upload Picture"; }

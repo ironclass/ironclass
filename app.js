@@ -14,7 +14,8 @@ const MongoStore = require("connect-mongo")(session);
 const flash = require("connect-flash"); // MANAGES ERRORS DURING LOGIN PROCESS
 
 mongoose
-  .connect(process.env.MONGODB_URI, { useNewUrlParser: true })
+  .connect("mongodb://localhost/ironclass", { useNewUrlParser: true })
+  // .connect(process.env.MONGODB_URI, { useNewUrlParser: true })
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`);
   })
@@ -75,8 +76,29 @@ app.use((req, res, next) => {
     res.locals.isAdmin = req.user.admin === true;
   }
 
+  hbs.registerHelper("isCurrentUser", function(value, options) {
+    let fnTrue = options.fn;
+    let fnFalse = options.inverse;
+  
+    return value == req.user._id.toString() ? fnTrue(this) : fnFalse(this);
+  });
+
+  hbs.registerHelper("isCurrentUserOrTA", function(value, options) {
+    let fnTrue = options.fn;
+    let fnFalse = options.inverse;
+  
+    let answer = false;
+  
+    if (value == req.user._id.toString() || req.user.role === "TA" || req.user.role === "Teacher") {
+      answer = true;
+    }
+  
+    return answer ? fnTrue(this) : fnFalse(this);
+  });
+  
   next();
 });
+
 
 // MOUNTPOINT FOR THE ROUTES: if URL is "/..." look for routes in "./routes/..."
 app.use("/", require("./routes/index"));

@@ -26,8 +26,8 @@ socketAPI.sudoDequeueStudent = function(id) {
   io.sockets.emit("sudoDequeueStudent", { id });
 };
 
-socketAPI.sendMessage = function(msg) {
-  io.sockets.emit("sendMessage", { msg });
+socketAPI.updateCourse = function(currentCourse) {
+  io.sockets.emit("updateCourse", { currentCourse });
 };
 
 module.exports = socketAPI;
