@@ -7031,7 +7031,13 @@ a {
   padding: 20px;
   background-color: #e3e8f8; }
 
-#jumbo button, input, select {
+#jumbo button {
+  margin: 5px; }
+
+#jumbo input {
+  margin: 5px; }
+
+#jumbo select {
   margin: 5px; }
 
 #classname {
@@ -7039,9 +7045,6 @@ a {
 
 #add-student {
   margin-bottom: 15px; }
-
-#add-student input + select {
-  margin: 5px; }
 
 #studentslist {
   margin-top: 30px; }
@@ -7051,6 +7054,9 @@ a {
 
 #studentslist span {
   font-size: 1.4em; }
+
+.--mt {
+  margin-top: 10px; }
 
 .nav {
   color: #e3e8f8;
@@ -7071,6 +7077,9 @@ a {
 
 .card a {
   color: #203562; }
+
+.border {
+  border: 1px dashed red; }
 
 .custom-file-input ~ .custom-file-label::after {
   content: "Upload Picture"; }
