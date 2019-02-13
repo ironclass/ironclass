@@ -51,3 +51,20 @@
   - PROS: "unlimited" amount of data included in the body of the form
   - CONS: cannot be shared/sored
 */
+
+{{!-- socket chat --}}
+    {{!-- <div class="socket-chat">
+      <h2>Chat</h2>
+      <ul id="socket-list" class="list-group">
+        {{#each msg}}
+        <li class="list-group-item">{{msg}}</li>
+        {{/each}}
+      </ul>
+      <form action="/classroom" method="POST">
+        <div class="form-group">
+          <label for="msg">Message</label>
+          <textarea class="form-control" name="msg" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Send message</button>
+      </form>

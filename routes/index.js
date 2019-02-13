@@ -20,14 +20,18 @@ router.get("/classroom", isConnected, (req, res, next) => {
   Promise.all([User.find(), Class.find({ _id: _class })])
     .then(values => {
       let students = values[0].filter(user => user.role === "Student");
+      let newMixMyClass = new MixMyClass(values[0], values[1][0]);
       let newCallQueue = new CallQueue(values[0], values[1][0]);
+      let groups = newMixMyClass.currentGroups;
+      // console.log("TCL: groups", groups);
       let queue = newCallQueue.queue;
 
-      Class.findByIdAndUpdate(_class, { _callQueue: queue })
+      Class.findByIdAndUpdate(_class, { _callQueue: queue, _currentGroups: groups })
+        .populate("_currentGroups")
         .populate("_callQueue")
         .then(classes => {
-          let queueObj = classes._callQueue;
-          res.render("classroom", { students, queueObj });
+          let queueObj = classes._callQueue.reverse();
+          res.render("classroom", { students, groups, queueObj });
         })
         .catch(next);
       // res.send(queue);
@@ -44,10 +48,11 @@ router.post("/classroom", isConnected, (req, res, next) => {
 
 // CREATE GROUPS
 router.post("/classroom/create-groups", isConnected, (req, res, next) => {
-  User.find()
-    .then(users => {
-      let students = users.filter(user => user.role === "Student");
-      let myClass = new MixMyClass(users);
+  let _class = req.user._class;
+  Promise.all([User.find(), Class.find({ _id: _class })])
+    .then(values => {
+      let students = values[0].filter(user => user.role === "Student");
+      let myClass = new MixMyClass(values[0], values[1][0]);
       const { groupSize, notPresent, option } = req.body;
       let groups = myClass.createGroups(groupSize, notPresent, option);
 
@@ -56,13 +61,16 @@ router.post("/classroom/create-groups", isConnected, (req, res, next) => {
           User.findByIdAndUpdate(student._id, {
             _workedWith: student._workedWith
           })
-            .then(() => console.log("Student's _workedWith updated"))
+            .then(() => {
+              // console.log("Student's _workedWith updated");
+            })
             .catch(next);
         });
       });
 
-      // res.send(req.body);
-      // res.send(groups);
+      // HERE I NEED TO UPDATE _currentGroups ARRAY
+      // AND THEN REDIRECT TO /classroom
+
       res.render("classroom", { students, groups });
     })
     .catch(next);
@@ -82,13 +90,18 @@ router.get("/classroom/queue-wave", isConnected, (req, res, next) => {
     .then(values => {
       // let students = values[0].filter(user => user.role === "Student");
       let newCallQueue = new CallQueue(values[0], values[1][0]);
+      let queueBefore = newCallQueue.queue.map(obj => obj.toString());
+      // if (!queueBefore.includes(req.user._id.toString())) {
+      //   // UPDATE VIA DB
+      // }
       newCallQueue.wave(req.user);
       let queue = newCallQueue.queue;
       Class.findByIdAndUpdate(_class, { _callQueue: queue })
         .then(() => {
           console.log("Classes _callQueue updated");
-          if (req.user.role === "Student") {
+          if (req.user.role === "Student" && !queueBefore.includes(req.user._id.toString())) {
             let fullName = req.user.firstName + " " + req.user.lastName;
+            // UPDATE VIA DOM
             queueStudent(fullName);
           }
           res.redirect("/classroom");

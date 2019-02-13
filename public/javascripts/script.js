@@ -20,7 +20,7 @@ socket.on("sendMessage", data => {
 });
 
 socket.on("queueStudent", data => {
-  document.querySelector(".call-queue .list-group").innerHTML += `
+  document.querySelector("#call-queue .list-group").innerHTML += `
     <li id="${data.fullName}" class="list-group-item">${data.fullName}</li>
   `;
 });

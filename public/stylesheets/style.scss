@@ -1,10 +1,11 @@
 $main-lighter: #e3e8f8;
 $main-light: #6a99cb;
 $main-dark: #203562;
-$main-darker: #2E3233;
+$main-darker: #2e3233;
 
 //Bootstrap
 $primary: $main-dark;
+$secondary: $main-light;
 $warning: $main-light;
 $danger: #f77754;
 
@@ -51,27 +52,57 @@ a {
 }
 
 .card {
-  margin: 10px;
-  font-size: 1.2em;
   background-color: $main-lighter;
+}
+.card--margin {
+  margin: 10px;
+}
+.card--margin-rb {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.card--bigger-font {
+  font-size: 1.2em;
 }
 
 .card a {
   color: $main-dark;
 }
 
+<<<<<<< HEAD
 .custom-file-input ~ .custom-file-label::after {
   content: "Upload Picture";
+=======
+.card img {
+  margin: 10px 0px;
+  max-width: 70px;
+  max-height: 70px;
+}
+
+// .card li {
+//   font-size: 1em;
+// }
+
+.classroom-sidebar {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: rgba($main-dark, 0.3);
+  border-radius: 5px;
+}
+
+.classroom-sidebar--min-vh {
+  min-height: 20vh;
+>>>>>>> 83eaf379371470e17b19c2486e43a27bc89a13dc
 }
 
 @media screen and (max-width: 1150px) {
-  .carousel-caption { 
-     font-size: 4em; 
+  .carousel-caption {
+    font-size: 4em;
   }
 }
 
 @media screen and (max-width: 850px) {
-  .carousel-caption { 
-     font-size: 2em; 
+  .carousel-caption {
+    font-size: 2em;
   }
 }

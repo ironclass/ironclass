@@ -16,7 +16,7 @@ const userSchema = new Schema(
     password: String,
     role: { type: String, enum: ["Teacher", "TA", "Student"], default: "Student" },
     admin: { type: Boolean, default: false },
-    waving: { type: Boolean, default: false },
+    // waving: { type: Boolean, default: false }, // NOT NEEDED
     _class: { type: Schema.Types.ObjectId, ref: "Class" },
     _workedWith: [{ type: Schema.Types.ObjectId, ref: "User" }]
   },
