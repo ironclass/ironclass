@@ -1,16 +1,55 @@
-<h1>Admin Page</h1>
+<div class="container">
+  <div class="text-center"><h1>Admin Page</h1></div>
+  
 
-<h2>Courses</h2>
-{{#each classes}}
-  <p>{{name}}</p>
-    <a href="/classes/edit/{{_id}}"><button>Edit</button></a>
-    <a href="/classes/delete/{{_id}}"><button>Delete</button></a>
-{{/each}}
+  <div class="row">
+    {{!-- C o u r s e s --}}
+    <div class="col-12 col-lg-6">
+      <div class="jumbotron">
+      <h2>Courses</h2>
+      <hr>
+      <table class="table">
+        {{#each classes}}
+        <div class="row">
+          <div class="col">
+            <p>{{name}}</p>
+          </div>
+          <div class="col">
+          <a href="/classes/edit/{{_id}}"><button class="btn btn-warning"><i class="far fa-edit"></i>  Edit</button></a>
+          <a href="/classes/delete/{{_id}}"><button class="btn btn-danger"><i class="far fa-trash-alt"></i>  Delete</button></a>
+          </div>
+        </div>
+        {{/each}}
+      </table>
+      </div>
+    </div>
 
-<h2>Users</h2>
+    {{!-- S t u d e n t s --}}
 
-{{#each users}}
-  <p>{{firstName}}</p>
-    <a href="/classes/delete/user/{{_id}}"><button>Delete</button></a>
-    <a href="/classes/user/edit/{{_id}}"><button>Edit</button></a>
-{{/each}}
+    <div class="col-12 col-lg-6">
+      <div class="jumbotron">
+      <h2>Users</h2>
+      <hr>
+      <table class="table">
+        {{#each users}}
+        <div class="row">
+          <div class="col">
+            <p>{{firstName}} <strong>{{lastName}}</strong></p>
+          </div>
+          <div class="col-2">
+            <p>{{role}}</p>
+          </div>
+          <div class="col">
+            <a href="/classes/user/edit/{{_id}}"><button class="btn btn-warning"><i class="far fa-edit"></i>  Edit</button></a>
+          {{!-- </div>
+          <div class="col"> --}}
+            <a href="/classes/delete/user/{{_id}}"><button class="btn btn-danger"><i class="far fa-trash-alt"></i>  Delete</button></a>
+          </div>
+        </div>
+        {{/each}}
+      </table>
+      </div>
+    </div>
+  </div>
+</div>
+
