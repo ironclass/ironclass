@@ -1,11 +1,13 @@
 <div class="container">
-  <h1>Admin Page</h1>
+  <div class="text-center"><h1>Admin Page</h1></div>
+  
 
   <div class="row">
     {{!-- C o u r s e s --}}
-    <div class="col-6">
+    <div class="col-12 col-lg-6">
       <div class="jumbotron">
       <h2>Courses</h2>
+      <hr>
       <table class="table">
         {{#each classes}}
         <div class="row">
@@ -24,9 +26,10 @@
 
     {{!-- S t u d e n t s --}}
 
-    <div class="col-6">
+    <div class="col-12 col-lg-6">
       <div class="jumbotron">
       <h2>Users</h2>
+      <hr>
       <table class="table">
         {{#each users}}
         <div class="row">
@@ -38,8 +41,8 @@
           </div>
           <div class="col">
             <a href="/classes/user/edit/{{_id}}"><button class="btn btn-warning"><i class="far fa-edit"></i>  Edit</button></a>
-          </div>
-          <div class="col">
+          {{!-- </div>
+          <div class="col"> --}}
             <a href="/classes/delete/user/{{_id}}"><button class="btn btn-danger"><i class="far fa-trash-alt"></i>  Delete</button></a>
           </div>
         </div>
