@@ -7024,6 +7024,9 @@ body {
   background-color: #6a99cb;
   font-family: "Abel", Helvetica, Arial; }
 
+button {
+  white-space: nowrap; }
+
 a {
   color: #e3e8f8; }
 

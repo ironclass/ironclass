@@ -15,6 +15,10 @@ body {
   font-family: "Abel", Helvetica, Arial;
 }
 
+button {
+  white-space: nowrap;
+}
+
 a {
   color: $main-lighter;
 }
