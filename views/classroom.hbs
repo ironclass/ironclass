@@ -9,28 +9,31 @@
     <div class="col-12 col-md-3">
 
       {{!-- c a l l q u e u e --}}
-      <div id="call-queue"
-        class="classroom-sidebar classroom-sidebar--min-vh d-flex flex-column justify-content-between">
+      <div id="call-queue" class="classroom-sidebar d-flex flex-column justify-content-between">
         <div>
           <h2>CallQueue</h2>
-          <div class="form-group">
-            <ul id="call-list" class="list-group">
-              {{#each queueObj}}
-              <div id="{{id}}" class="alert alert-warning alert-dismissible fade show" role="alert">
-                {{firstName}}
-                <a href="/classroom/queue-tick/{{id}}" class="close"><span>&times;</span></a>
+          <div class="collapse collapseElement show">
+            <div class="classroom-sidebar--min-vh d-flex flex-column justify-content-between">
+              <div class="form-group">
+                <ul id="call-list" class="list-group">
+                  {{#each queueObj}}
+                  <div id="{{id}}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{firstName}}
+                    <a href="/classroom/queue-tick/{{id}}" class="close"><span>&times;</span></a>
+                  </div>
+                  {{/each}}
+                </ul>
               </div>
-              {{!-- <li class="list-group-item">{{firstName}} {{lastName}}</li> --}}
-              {{/each}}
-            </ul>
+              <div class="d-flex flex-wrap justify-content-between">
+                {{#isStudent}}
+                <a href="/classroom/queue-wave" class="btn btn-primary btn-block">Wave</a>
+                {{else}}
+                <a href="/classroom/queue-tick/n-a" class="btn btn-primary btn-block">Tick</a>
+                {{/isStudent}}
+              </div>
+            </div>
+
           </div>
-        </div>
-        <div class="d-flex flex-wrap justify-content-between">
-          {{#isStudent}}
-          <a href="/classroom/queue-wave" class="btn btn-primary btn-block">Wave</a>
-          {{else}}
-          <a href="/classroom/queue-tick/n-a" class="btn btn-primary btn-block">Tick</a>
-          {{/isStudent}}
         </div>
       </div>
 
@@ -60,9 +63,9 @@
           </div>
 
           <div class="form-group">
-            <label for="notPresent" class="btn btn-block" data-toggle="collapse" href="#collapseExample" role="button"
-              aria-expanded="false" aria-controls="collapseExample">Students missing today</label>
-            <div class="collapse" id="collapseExample">
+            <label for="notPresent" class="btn btn-block" data-toggle="collapse" href=".collapseElement" role="button"
+              aria-expanded="false" aria-controls="collapseElement">Students missing today</label>
+            <div class="collapse collapseElement">
               <div class="card card--padding">
                 {{#groupedEach 2 students}}
                 <div class="row">
