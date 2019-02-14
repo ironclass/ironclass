@@ -37,11 +37,17 @@ body {
   height: 80vh;
 }
 
+.h1-landing {
+  font-size: 6em;
+  color: $main-lighter;
+}
+
 .img-landing--width {
   max-width: 400px;
-  // margin-top: 10%;
-  // margin-right: 2%;
-  // width: 80%;
+}
+
+.p-landing {
+  color: $main-lighter;
 }
 
 button {

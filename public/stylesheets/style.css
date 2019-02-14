@@ -7044,8 +7044,15 @@ body {
 .container-landing {
   height: 80vh; }
 
+.h1-landing {
+  font-size: 6em;
+  color: #e3e8f8; }
+
 .img-landing--width {
   max-width: 400px; }
+
+.p-landing {
+  color: #e3e8f8; }
 
 button {
   white-space: nowrap; }
