@@ -84,6 +84,7 @@ router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('ph
               else if (createdUser.role === "TA") addTAToClass(classId, createdUser._id);
             })
             .then(() => {
+              req.flash("success", "New User added");
               res.redirect("/classes/edit/" + classId);
             })
             .catch(err => console.log(err)); // End find Class

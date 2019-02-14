@@ -50,7 +50,13 @@ footer {
 
 .error-message {
   color: red;
-  font-size: 2em;
+  font-size: 1.2em;
+  text-align: center;
+}
+
+.success-message {
+  color: green;
+  font-size: 1.2em;
   text-align: center;
 }
 
