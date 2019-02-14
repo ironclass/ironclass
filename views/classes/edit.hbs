@@ -40,10 +40,10 @@
         </button>
       </div>
       {{/if}}
-  {{!-- Add Student --}}
+  {{!-- Add Member --}}
   <div class="container d-flex flex-column align-items-center">
-    <h3>Add a student to this class</h3>
-    <form action="/users/createStudent/{{oneClass._id}}" method="POST" enctype="multipart/form-data">
+    <h3>Add a member to this class</h3>
+    <form action="/users/createUser/{{oneClass._id}}" method="POST" enctype="multipart/form-data">
       <div class="row">
         <div class="col-sm-6 col-m-5 col-lg-3">
           <input name="firstName" type="text" class="form-control" placeholder="First name">
@@ -87,17 +87,20 @@
       <table class="table">
       {{#each students}}
         <div class="row justify-content-center align-items-center">
-          <div class="col-4 col-sm-3 col-md-2 col-lg-2">
+          <div class="col-3  col-md-2 col-lg-2">
             <span><strong>{{firstName}}</strong></span>
           </div>
-          <div class="col-8 col-sm-3 col-md-2 col-lg-2">
+          <div class="col-3  col-md-2 col-lg-2">
             <span>{{lastName}}</span>
           </div>
-          <div class="col-4 col-sm-2 col-md-2 col-lg-1">
+          <div class="col-6  col-md-3 col-lg-2">
+            <span>[{{username}}]</span>
+          </div>
+          <div class="col-2  col-md-2 col-lg-1">
             <a href="/users/user/edit/{{_id}}"><button class="btn btn-warning"><i class="far fa-edit"></i>
                 Edit</button></a>
           </div>
-          <div class="col-8 col-sm-2 col-md-1 col-lg-1">
+          <div class="col-10  col-md-1 col-lg-1">
             <a href="/users/delete/user/{{_id}}"><button class="btn btn-danger"><i class="far fa-trash-alt"></i>
                 Delete</button></a>
           </div>

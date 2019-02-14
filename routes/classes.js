@@ -102,8 +102,7 @@ router.get("/edit/:id", isConnected, isTA, (req, res, next) => {
       })
     ])
     .then(values => {
-      console.log(values[1]);
-      values[1].sort(dynamicSort("updated_at")).reverse();
+      values[1].sort(dynamicSort("name")).reverse(); //TODO: Optional choice for sort by "updated_at"
       res.render("classes/edit", {
         message: req.flash("message"),
         oneClass: values[0], // the class with this ID

@@ -16,7 +16,7 @@ const {
 
 // ------ C r e a t e   S t u d e n t s  ------
 
-router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
+router.post("/createUser/:classId", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
   // configure Cloudinary
 
   let imgPath, imgName, testImg;
@@ -159,7 +159,7 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
     User.findOne({
       username
     }, (err, user) => {
-      //TODO: check, if username has changed at all; same es in classes
+      //FIXME: check, if username has changed at all; same es in classes
       if (user !== null) {
         console.log(username + " alread exists!");
         req.flash("error", "The User already exists");
