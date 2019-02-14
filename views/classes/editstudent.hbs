@@ -39,9 +39,11 @@
     </form>
   </div>
 
-    {{#if message }}
-      <div class="error-message">{{ message }}</div>
-    {{/if}}
+    <div class="container">
+      {{#if error }}
+      <div class="error-message" role="alert">{{error}}</div>
+      {{/if}}
+    </div>
 
 </div>
 

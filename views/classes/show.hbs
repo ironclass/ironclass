@@ -5,53 +5,43 @@
     <button class="btn btn-lg btn-primary"><i class="fas fa-folder-plus"></i>  Create</button>
     </a>
   </div>
-  {{#if message }}
-    <div class="error-message">{{ message }}</div>
-  {{/if}}
- <div class="container d-flex flex-row flex-wrap justify-content-center">
-  {{#each classes}}
- 
-    <div class="card card--margin card--bigger-font" style="width: 18rem;">
-      {{!-- <img class="card-img-top" src="..." alt="Card image cap"> --}}
-      <div class="card-header">
-        <h5 class="card-title"><strong>{{name}}</strong></h5>
-        <p class="card-text">{{city}}</p>
-      </div>
-      <div class="card-body">
-        <ul class="list-group">
-          <li class="list-group-item"><strong>Teacher: </strong>{{_teacher.firstName}} {{_teacher.lastName}}</li>
-          <li class="list-group-item"><strong>TA: </strong> 
-            {{#each _TA}}
-            {{firstName}} {{lastName}} -
-            {{/each}}
-          </li>
-        </ul>
-      </div>
-      
-      <div class="card-footer d-flex justify-content-center flex-wrap">
-        <a href="/classes/edit/{{_id}}" class="card-link">
-          <button class="btn btn-warning"><i class="far fa-edit"></i>  Edit</button>
-        </a>
-        <a href="/classes/delete/{{_id}}" class="card-link">
-          <button class="btn btn-danger"><i class="far fa-trash-alt"></i>  Delete</button>
-        </a>
-      </div>
-    </div>  
-  {{/each}}
+
+  <div class="container d-flex flex-row flex-wrap justify-content-center">
+    {{#each classes}}
+  
+      <div class="card card--margin card--bigger-font" style="width: 18rem;">
+        <div class="card-header">
+          <h5 class="card-title"><strong>{{name}}</strong></h5>
+          <p class="card-text">{{city}}</p>
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <li class="list-group-item"><strong>Teacher: </strong>{{_teacher.firstName}} {{_teacher.lastName}}</li>
+            <li class="list-group-item"><strong>TA: </strong> 
+              {{#each _TA}}
+              {{firstName}} {{lastName}} -
+              {{/each}}
+            </li>
+          </ul>
+        </div>
+        
+        <div class="card-footer d-flex justify-content-center flex-wrap">
+          <a href="/classes/edit/{{_id}}" class="card-link">
+            <button class="btn btn-warning"><i class="far fa-edit"></i>  Edit</button>
+          </a>
+          <a href="/classes/delete/{{_id}}" class="card-link">
+            <button class="btn btn-danger"><i class="far fa-trash-alt"></i>  Delete</button>
+          </a>
+        </div>
+      </div>  
+    {{/each}}
+
+    <div class="container">
+      {{#if error }}
+      <div class="error-message" role="alert">{{error}}</div>
+      {{/if}}
+    </div>
   </div>
 </div>
-
-
-{{!-- <strong>Name: {{name}}</strong>
-<p>City: {{city}}</p>
-<p>Teacher: {{_teacher.firstName}} {{_teacher.lastName}}</p>
-<p>TAs:
-{{#each _TA}}
-{{firstName}} {{lastName}}, 
-{{/each}}
-</p>
-<a href="/classes/edit/{{_id}}">Edit</a>
-<a href="/classes/delete/{{_id}}">Delete</a>
-<br><br> --}}
 
 
