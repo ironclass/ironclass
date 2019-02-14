@@ -150,7 +150,7 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
         }, (err, oneClass) => {
           if (oneClass !== null) {
             console.log("Name existiert bereits in der Stadt");
-            req.flash("message", "The Classname already exists in this City");
+            req.flash("error", "The Classname already exists in this City");
             res.redirect("/classes/edit/" + classId);
             return;
           } else {

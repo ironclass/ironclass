@@ -27,6 +27,12 @@
     </form>
   </div>
 
+  <div class="container">
+    {{#if error }}
+    <div class="error-message" role="alert">{{error}}</div>
+    {{/if}}
+  </div>
+
   {{!-- Add Student --}}
   <div class="container d-flex flex-column align-items-center">
     <h3>Add a student to this class</h3>
@@ -65,13 +71,6 @@
         </div>
       </div>
     </form>
-  </div>
-
-
-  <div class="container">
-    {{#if error }}
-    <div class="error-message" role="alert">{{error}}</div>
-    {{/if}}
   </div>
   
   <div id="studentslist" class="container jumbotron mt-5">

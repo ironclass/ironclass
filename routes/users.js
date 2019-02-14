@@ -55,7 +55,7 @@ router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('ph
     }, (err, user) => {
       if (user !== null) {
         console.log(username + " alread exists!");
-        req.flash("message", "This User already exists");
+        req.flash("error", "This User already exists");
         res.redirect("/classes/edit/" + classId);
         return;
       }
