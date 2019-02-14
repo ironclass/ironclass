@@ -38,7 +38,7 @@ router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('ph
     birthday,
     role
   } = req.body;
-  let username = (firstName + lastName).toLowerCase();
+  let username = (firstName.replace(/\s/g,'') + lastName.replace(/\s/g,'')).toLowerCase();
 
   let classPassword;
 
@@ -154,7 +154,7 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
       })
       .catch(err => console.log(err));
   } else {
-    let username = (firstName + lastName).toLowerCase();
+    let username = (firstName.replace(/\s/g,'') + lastName.replace(/\s/g,'')).toLowerCase();
     //Check if new Username already exists
     User.findOne({
       username
