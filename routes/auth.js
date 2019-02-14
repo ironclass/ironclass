@@ -4,6 +4,7 @@ const passport = require("passport"); // TO USE PROTECED ROUTES
 const User = require("../models/User");
 const Class = require("../models/Class");
 const {isConnected, isAdmin} = require('../src/middlewares')
+const {dynamicSort}  = require("../src/helpers");
 
 // L O G I N
 router.get("/login", (req, res, next) => {
@@ -26,6 +27,8 @@ router.get("/admin", isConnected, isAdmin, (req, res, next) => {
   // Find all users & classes
   Promise.all([User.find(), Class.find()])
   .then(values => {
+      values[1].sort(dynamicSort("name"));
+      values[0].sort(dynamicSort("firstName"));
     res.render("auth/admin", { users: values[0], classes: values[1], message: req.flash("error") });
   })
   .catch(err => console.log(err));
