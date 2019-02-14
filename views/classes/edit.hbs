@@ -84,23 +84,79 @@
 
       <h1 class="text-center"><strong>Members of {{oneClass.name}}</strong></h1>
       <br>
+      <h4 class="text-center"><em><strong>Students</strong></em></h4>
+      <hr class="style18">
       <table class="table">
       {{#each students}}
         <div class="row justify-content-center align-items-center">
-          <div class="col-3  col-md-2 col-lg-2">
+          <div class="col-3 col-md-2 col-lg-2">
             <span><strong>{{firstName}}</strong></span>
           </div>
-          <div class="col-3  col-md-2 col-lg-2">
+          <div class="col-3 col-md-2 col-lg-2">
             <span>{{lastName}}</span>
           </div>
-          <div class="col-6  col-md-3 col-lg-2">
+          <div class="col-6 col-md-3 col-lg-2">
             <span>[{{username}}]</span>
           </div>
-          <div class="col-2  col-md-2 col-lg-1">
+          <div class="col-2 col-md-2 col-lg-1">
             <a href="/users/user/edit/{{_id}}"><button class="btn btn-warning"><i class="far fa-edit"></i>
                 Edit</button></a>
           </div>
-          <div class="col-10  col-md-1 col-lg-1">
+          <div class="col-10 col-md-1 col-lg-1">
+            <a href="/users/delete/user/{{_id}}"><button class="btn btn-danger"><i class="far fa-trash-alt"></i>
+                Delete</button></a>
+          </div>
+        </div>
+      <hr>
+      {{/each }}
+      </table> 
+
+      <h4 class="text-center"><em><strong>TAs</strong></em></h4>
+      <hr class="style18">
+      <table class="table">
+      {{#each tas}}
+        <div class="row justify-content-center align-items-center">
+          <div class="col-3 col-md-2 col-lg-2">
+            <span><strong>{{firstName}}</strong></span>
+          </div>
+          <div class="col-3 col-md-2 col-lg-2">
+            <span>{{lastName}}</span>
+          </div>
+          <div class="col-6 col-md-3 col-lg-2">
+            <span>[{{username}}]</span>
+          </div>
+          <div class="col-2 col-md-2 col-lg-1">
+            <a href="/users/user/edit/{{_id}}"><button class="btn btn-warning"><i class="far fa-edit"></i>
+                Edit</button></a>
+          </div>
+          <div class="col-10 col-md-1 col-lg-1">
+            <a href="/users/delete/user/{{_id}}"><button class="btn btn-danger"><i class="far fa-trash-alt"></i>
+                Delete</button></a>
+          </div>
+        </div>
+      <hr>
+      {{/each }}
+      </table>  
+
+      <h4 class="text-center"><em><strong>Teacher</strong></em></h4>
+      <hr class="style18">
+      <table class="table">
+      {{#each teacher}}
+        <div class="row justify-content-center align-items-center">
+          <div class="col-3 col-md-2 col-lg-2">
+            <span><strong>{{firstName}}</strong></span>
+          </div>
+          <div class="col-3 col-md-2 col-lg-2">
+            <span>{{lastName}}</span>
+          </div>
+          <div class="col-6 col-md-3 col-lg-2">
+            <span>[{{username}}]</span>
+          </div>
+          <div class="col-2 col-md-2 col-lg-1">
+            <a href="/users/user/edit/{{_id}}"><button class="btn btn-warning"><i class="far fa-edit"></i>
+                Edit</button></a>
+          </div>
+          <div class="col-10 col-md-1 col-lg-1">
             <a href="/users/delete/user/{{_id}}"><button class="btn btn-danger"><i class="far fa-trash-alt"></i>
                 Delete</button></a>
           </div>

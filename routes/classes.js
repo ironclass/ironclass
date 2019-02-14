@@ -98,15 +98,28 @@ router.get("/edit/:id", isConnected, isTA, (req, res, next) => {
   Promise.all([
       Class.findById(req.params.id),
       User.find({
-        _class: mongoose.Types.ObjectId(req.params.id)
-      })
+        _class: mongoose.Types.ObjectId(req.params.id),
+        role: "Student"
+      }),
+      User.find({
+        _class: mongoose.Types.ObjectId(req.params.id),
+        role: "TA"
+      }),
+      User.find({
+        _class: mongoose.Types.ObjectId(req.params.id),
+        role: "Teacher"
+      }),
     ])
     .then(values => {
-      values[1].sort(dynamicSort("name")).reverse(); //TODO: Optional choice for sort by "updated_at"
+      values[1].sort(dynamicSort("name")); //TODO: Optional choice for sort by "updated_at".reverse()
+      values[2].sort(dynamicSort("name"));
+      values[3].sort(dynamicSort("name"));
       res.render("classes/edit", {
         message: req.flash("message"),
         oneClass: values[0], // the class with this ID
-        students: values[1] // all students in it
+        students: values[1], // all students in it
+        tas: values[2],
+        teacher: values[3]
       });
     })
     .catch(err => console.log(err));
