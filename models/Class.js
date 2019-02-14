@@ -8,6 +8,7 @@ const classSchema = new Schema(
     password: { type: String, required: true },
     currentCourse: { type: String, default: "Click me to change" },
     currentGroups: [Object],
+    clientsOnline: { type: Number, default: 0 },
     _callQueue: [{ type: Schema.Types.ObjectId, ref: "User"}],
     _teacher: { type: Schema.Types.ObjectId, ref: "User" },
     _TA: [{ type: Schema.Types.ObjectId, ref: "User" }]

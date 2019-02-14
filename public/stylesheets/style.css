@@ -7024,36 +7024,37 @@ body {
   background-color: #6a99cb;
   font-family: "Abel", Helvetica, Arial; }
 
+button {
+  white-space: nowrap; }
+
 a {
+  color: #e3e8f8; }
+
+footer {
+  position: fixed;
+  height: 100px;
+  bottom: 0;
+  width: 100%;
+  padding: 0 5%;
   color: #e3e8f8; }
 
 #jumbo {
   padding: 20px;
   background-color: #e3e8f8; }
 
-#jumbo button {
-  margin: 5px; }
-
-#jumbo input {
-  margin: 5px; }
-
-#jumbo select {
-  margin: 5px; }
-
 #classname {
   font-weight: bold; }
 
-#add-student {
-  margin-bottom: 15px; }
-
-#studentslist {
-  margin-top: 30px; }
-
-#studentslist .col {
-  max-width: 20%; }
-
 #studentslist span {
   font-size: 1.4em; }
+
+#studentslist hr {
+  width: 60%; }
+
+.error-message {
+  color: red;
+  font-size: 2em;
+  text-align: center; }
 
 .--mt {
   margin-top: 10px; }
@@ -7069,6 +7070,10 @@ a {
   bottom: initial;
   font-size: 11em;
   text-shadow: 2px 2px #2E3233; }
+
+.carousel {
+  width: 1050px;
+  height: 700px; }
 
 .card {
   background-color: #e3e8f8; }
@@ -7089,7 +7094,7 @@ a {
   color: #203562; }
 
 .card img {
-  margin: 10px 0px;
+  margin-right: 10px;
   max-width: 70px;
   max-height: 70px; }
 
@@ -7102,8 +7107,10 @@ a {
 .classroom--min-vh {
   min-height: 30vh; }
 
-h2.h2--no-margin {
-  margin: 0; }
+h2.h2--styled {
+  margin: 0;
+  color: #203562;
+  cursor: pointer; }
 
 div.alert--little-margin {
   margin: 2px; }
@@ -7118,6 +7125,9 @@ div.alert--bg-opacity {
 
 .input-group--mt {
   margin-top: 4px; }
+
+.highlight-shadow {
+  box-shadow: inset 0px 0px 10px 1px rgba(0, 0, 0, 0.6); }
 
 .custom-file-input ~ .custom-file-label::after {
   content: "Upload Picture"; }

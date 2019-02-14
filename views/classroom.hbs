@@ -1,7 +1,7 @@
 {{!-- 
     - socket broadcast only to TA's
-    - students online badge
-    - color user
+    - mouse change over current course
+    - exclude 0!!!
  --}}
 <div class="container">
   <h1>Classroom</h1>
@@ -20,18 +20,20 @@
                 <ul id="call-list" class="list-group">
                   {{#each queueObj}}
                   {{#isCurrentUser _id}}
-                  <div id="{{id}}" class="alert alert-warning alert-dismissible fade show alert--little-margin alert--little-padding font-weight-bold"
+                  <div id="{{id}}"
+                    class="alert alert-warning alert-dismissible fade show alert--little-margin alert--little-padding font-weight-bold"
                     role="alert">
                     {{else}}
-                  <div id="{{id}}" class="alert alert-warning alert-dismissible fade show alert--little-margin alert--little-padding"
-                    role="alert">
-                    {{/isCurrentUser}}
-                    {{firstName}}
-                    {{#isCurrentUserOrTA _id}}
-                    <a href="/classroom/queue-tick/{{id}}" class="close"><span>&times;</span></a>
-                    {{/isCurrentUserOrTA}}
-                  </div>
-                  {{/each}}
+                    <div id="{{id}}"
+                      class="alert alert-warning alert-dismissible fade show alert--little-margin alert--little-padding"
+                      role="alert">
+                      {{/isCurrentUser}}
+                      {{firstName}}
+                      {{#isCurrentUserOrTA _id}}
+                      <a href="/classroom/queue-tick/{{id}}" class="close"><span>&times;</span></a>
+                      {{/isCurrentUserOrTA}}
+                    </div>
+                    {{/each}}
                 </ul>
               </div>
               <div class="d-flex flex-wrap justify-content-between">
@@ -111,9 +113,13 @@
       <div class="row d-flex justify-content-center classroom">
         <div class="col-12">
           <div id="currentCourse">
-            <div id="{{currentCourse}}"
-              class="alert alert-warning alert-dismissible fade show alert--no-margin alert--bg-opacity alert--little-padding" role="alert">
-              <h2 class="h2--no-margin" data-toggle="collapse" href=".collapseInput" role="button" aria-expanded="false" aria-controls="collapseInput">{{currentCourse}}</h2>
+            <div
+              class="alert alert-warning alert-dismissible fade show alert--no-margin alert--bg-opacity alert--little-padding"
+              role="alert">
+              <div data-toggle="collapse" href=".collapseInput" role="button" aria-expanded="false"
+                aria-controls="collapseInput">
+                <h2 class="h2--styled">{{currentCourse}}</h2>
+              </div>
             </div>
             {{#isTA}}
             <form action="/classroom" method="POST" class="collapse collapseInput">
@@ -132,30 +138,35 @@
 
       {{!-- g r o u p s --}}
       <div class="groups">
+
         <div class="d-flex flex-wrap justify-content-around">
+
           {{#each groups as |item|}}
-          <div class="card card--mb" style="width: 10rem;">
-            <div class="d-flex flex-wrap justify-content-around">
-              {{#each item}}
-              <img src="{{imgUrl}}" class="card-img-top" alt="{{username}}">
-              {{/each}}
-            </div>
+          <div class="card card--mb d-flex flex-column justify-content-center" style="width: 10rem;">
+
             <div class="">
-              {{!-- <h5 class="card-title">Group x</h5> --}}
-              <ul class="list-group list-group-flush">
-                {{#each item}}
-                {{#isCurrentUser _id}}
-                <li class="list-group-item font-weight-bold text-primary">{{firstName}}</li>
-                {{else}}
-                <li class="list-group-item">{{firstName}}</li>
-                {{/isCurrentUser}}
-                {{/each}}
-              </ul>
+              {{#each item}}
+              <div class="d-flex align-items-center">
+                <div class="">
+                  <img src="{{imgUrl}}" alt="{{username}}">
+                </div>
+                <div class="">
+                  {{#isCurrentUser _id}}
+                  <div class="font-weight-bold text-primary">{{firstName}}</div>
+                  {{else}}
+                  <div class="">{{firstName}}</div>
+                  {{/isCurrentUser}}
+                </div>
+              </div>
+              {{/each}}
             </div>
           </div>
           {{/each}}
+
         </div>
+
       </div>
     </div>
   </div>
+
 </div>

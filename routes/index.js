@@ -22,17 +22,10 @@ router.get("/", (req, res, next) => {
 // ------ C l a s s r o o m ------
 router.get("/classroom", isConnected, (req, res, next) => {
   let user = req.user;
-	console.log('TCL: user', user)
-  
   let _class = req.user._class;
-  Promise.all([
-    User.find({ _class }),
-    Class.find({ _id: _class })
-      // .populate("_currentGroups")
-      .populate("_callQueue")
-  ])
+
+  Promise.all([User.find({ _class }), Class.find({ _id: _class }).populate("_callQueue")])
     .then(values => {
-      // get students from class to feed "students missing today"
       let students = values[0].filter(user => user.role === "Student");
 
       let groups = values[1][0].currentGroups;
@@ -44,12 +37,13 @@ router.get("/classroom", isConnected, (req, res, next) => {
     })
     .catch(next);
 });
-// update current course
+
+// CURRENT COURSE
 router.post("/classroom", isConnected, (req, res, next) => {
   let _class = req.user._class;
   let currentCourse = req.body.currentCourse;
   if (currentCourse === "") {
-    currentCourse = "Click me!"
+    currentCourse = "Click me!";
   }
   updateCourse(currentCourse);
 
@@ -59,18 +53,6 @@ router.post("/classroom", isConnected, (req, res, next) => {
     })
     .catch(next);
 });
-// delete current course
-// router.get("/classroom/delete-course", isConnected, (req, res, next) => {
-//   let _class = req.user._class;
-//   let currentCourse = ""
-//   updateCourse(currentCourse);
-
-//   Class.findByIdAndUpdate(_class, { currentCourse })
-//     .then(() => {
-//       res.redirect("/classroom");
-//     })
-//     .catch(next);
-// });
 
 // CREATE GROUPS
 router.post("/classroom/create-groups", isConnected, (req, res, next) => {
@@ -122,19 +104,14 @@ router.get("/classroom/queue-wave", isConnected, (req, res, next) => {
   let _class = req.user._class;
   Promise.all([User.find(), Class.find({ _id: _class })])
     .then(values => {
-      // let students = values[0].filter(user => user.role === "Student");
       let newCallQueue = new CallQueue(values[0], values[1][0]);
       let queueBefore = newCallQueue.queue.map(obj => obj.toString());
-      // if (!queueBefore.includes(req.user._id.toString())) {
-      //   // UPDATE VIA DB
-      // }
       newCallQueue.wave(req.user);
       let queue = newCallQueue.queue;
       Class.findByIdAndUpdate(_class, { _callQueue: queue })
         .then(() => {
           console.log("Classes _callQueue updated");
           if (req.user.role === "Student" && !queueBefore.includes(req.user._id.toString())) {
-            // let fullName = req.user.firstName + " " + req.user.lastName;
             let firstName = req.user.firstName;
             let id = req.user._id;
             // UPDATE VIA DOM
@@ -143,7 +120,6 @@ router.get("/classroom/queue-wave", isConnected, (req, res, next) => {
           res.redirect("/classroom");
         })
         .catch(next);
-      // res.send(queue);
     })
     .catch(next);
 });
@@ -168,7 +144,6 @@ router.get("/classroom/queue-tick/:studentId", isConnected, (req, res, next) => 
           res.redirect("/classroom");
         })
         .catch(next);
-      // res.send(queue);
     })
     .catch(next);
 });

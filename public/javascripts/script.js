@@ -21,9 +21,14 @@ socket.on("dequeueStudent", () => {
   let list = document.getElementById("call-list");
   list.children[0].remove();
 });
+
 socket.on("sudoDequeueStudent", data => {
   document.getElementById(data.id).remove();
 });
+
+socket.on("usersOnline", data => {
+  document.getElementById("people-online").innerHTML = `People online: ${data.clients}`
+})
 
 // BOOTSTRAP
 // show filename, when selected for upload

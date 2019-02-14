@@ -15,7 +15,20 @@ body {
   font-family: "Abel", Helvetica, Arial;
 }
 
+button {
+  white-space: nowrap;
+}
+
 a {
+  color: $main-lighter;
+}
+
+footer {
+  position: fixed;
+  height: 100px;
+  bottom: 0;
+  width: 100%;
+  padding: 0 5%;
   color: $main-lighter;
 }
 
@@ -24,34 +37,22 @@ a {
   background-color: $main-lighter;
 }
 
-#jumbo button {
-  margin: 5px;
-}
-#jumbo input {
-  margin: 5px;
-}
-#jumbo select{
-  margin: 5px;
-}
-
 #classname {
   font-weight: bold;
 }
 
-#add-student {
-  margin-bottom: 15px;
-}
-
-#studentslist {
-  margin-top: 30px
-}
-
-#studentslist .col {
-  max-width: 20%;
-}
-
 #studentslist span {
   font-size: 1.4em;
+}
+
+#studentslist hr {
+  width: 60%
+}
+
+.error-message {
+  color: red;
+  font-size: 2em;
+  text-align: center;
 }
 
 .--mt {
@@ -70,6 +71,11 @@ a {
   bottom: initial;
   font-size: 11em;
   text-shadow: 2px 2px $main-darker;
+}
+
+.carousel {
+  width:1050px;
+  height:700px;
 }
 
 .card {
@@ -94,7 +100,8 @@ a {
 }
 
 .card img {
-  margin: 10px 0px;
+  // margin: 10px 0px;
+  margin-right: 10px;
   max-width: 70px;
   max-height: 70px;
 }
@@ -110,8 +117,10 @@ a {
   min-height: 30vh;
 }
 
-h2.h2--no-margin {
+h2.h2--styled {
   margin: 0;
+  color: $main-dark;
+  cursor: pointer;
 }
 
 div.alert--little-margin {
@@ -130,6 +139,10 @@ div.alert--bg-opacity {
 
 .input-group--mt {
   margin-top: 4px;
+}
+
+.highlight-shadow {
+  box-shadow: inset 0px 0px 10px 1px rgba(0, 0, 0, 0.6);
 }
 
 .custom-file-input ~ .custom-file-label::after {
