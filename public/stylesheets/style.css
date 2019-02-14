@@ -7037,6 +7037,12 @@ footer {
   width: 95%;
   color: #e3e8f8; }
 
+a.carousel-control:hover, a.carousel-control.right:hover {
+  background-image: linear-gradient(to right, rgba(250, 0, 0, 0) 0px, rgba(255, 0, 0, 0.5) 100%); }
+
+a.carousel-control.left:hover {
+  background-image: linear-gradient(to left, rgba(250, 0, 0, 0) 0px, rgba(255, 0, 0, 0.5) 100%); }
+
 #jumbo {
   padding: 20px;
   background-color: #e3e8f8; }
