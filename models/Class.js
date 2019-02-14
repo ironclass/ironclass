@@ -6,7 +6,7 @@ const classSchema = new Schema(
     name: { type: String, required: true },
     city: { type: String, required: true },
     password: { type: String, required: true },
-    currentCourse: { type: String, default: "Click me to change" },
+    currentCourse: { type: String, default: "Current course/LAB" },
     currentGroups: [Object],
     clientsOnline: { type: Number, default: 0 },
     _callQueue: [{ type: Schema.Types.ObjectId, ref: "User"}],

@@ -21,15 +21,15 @@
     <ul class="nav justify-content-center ml-auto">
       {{#if isConnected}}
       <li class="nav-item">
-        <a class="nav-link" href="/auth/logout">{{toUpperCase firstName}}</a>
+        <a class="nav-link" href="/classroom">{{toUpperCase firstName}}</a>
       </li>
       {{/if}}
       <li class="nav-item">
         <a href="/"><img src="/images/logo-ironhack.png" width="40px"></a>
       </li>
-      <li class="nav-item">
+      {{!-- <li class="nav-item">
         <a class="nav-link active" href="/">Home</a>
-      </li>
+      </li> --}}
       {{#if isNotConnected}}
       <li class="nav-item">
         <a class="nav-link active" href="/auth/login"><i class="far fa-user"></i> Login</a>

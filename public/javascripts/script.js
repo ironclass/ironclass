@@ -6,7 +6,7 @@ const socket = io();
 socket.on("updateCourse", data => {
   let wrapperDiv = document.getElementById("currentCourse");
   wrapperDiv.innerHTML = `
-    <div id="${currentCourse}" class="alert alert-warning alert-dismissible fade show alert--no-margin alert--bg-opacity" role="alert">
+    <div class="alert alert-warning alert-dismissible fade show alert--no-margin alert--bg-opacity" role="alert">
       <h2 class="h2--no-margin">${data.currentCourse}</h2>
     </div>`;
 });
@@ -29,6 +29,8 @@ socket.on("sudoDequeueStudent", data => {
 socket.on("usersOnline", data => {
   document.getElementById("people-online").innerHTML = `People online: ${data.clients}`
 })
+
+
 
 // BOOTSTRAP
 // show filename, when selected for upload

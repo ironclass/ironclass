@@ -63,14 +63,13 @@ app.use(
 app.use(flash());
 require("./passport")(app);
 
-//
 app.use((req, res, next) => {
   res.locals.isConnected = !!req.user;
   res.locals.isNotConnected = !!!req.user;
 
-  res.locals.error  = req.flash("error");
-  res.locals.success  = req.flash("success");
- 
+  res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
+
   if (!!req.user) {
     res.locals.firstName = req.user.firstName;
     res.locals.isTeacher = req.user.role === "Teacher" || req.user.admin === true;
@@ -83,26 +82,24 @@ app.use((req, res, next) => {
   hbs.registerHelper("isCurrentUser", function(value, options) {
     let fnTrue = options.fn;
     let fnFalse = options.inverse;
-  
+
     return value == req.user._id.toString() ? fnTrue(this) : fnFalse(this);
   });
 
   hbs.registerHelper("isCurrentUserOrTA", function(value, options) {
     let fnTrue = options.fn;
     let fnFalse = options.inverse;
-  
+
     let answer = false;
-  
     if (value == req.user._id.toString() || req.user.role === "TA" || req.user.role === "Teacher") {
       answer = true;
     }
-  
+
     return answer ? fnTrue(this) : fnFalse(this);
   });
-  
+
   next();
 });
-
 
 // MOUNTPOINT FOR THE ROUTES: if URL is "/..." look for routes in "./routes/..."
 app.use("/", require("./routes/index"));
@@ -132,8 +129,9 @@ hbs.registerHelper("groupedEach", function(every, context, options) {
   return out;
 });
 
-hbs.registerHelper('toUpperCase', function(str) {
+hbs.registerHelper("toUpperCase", function(str) {
   return str.toUpperCase();
 });
+
 
 module.exports = app;

@@ -21,19 +21,16 @@ router.get("/", (req, res, next) => {
 
 // ------ C l a s s r o o m ------
 router.get("/classroom", isConnected, (req, res, next) => {
-  let user = req.user;
-  let _class = req.user._class;
+  const user = req.user;
+  const _class = req.user._class;
 
-  Promise.all([User.find({ _class }), Class.find({ _id: _class }).populate("_callQueue")])
-    .then(values => {
-      let students = values[0].filter(user => user.role === "Student");
+  Promise.all([User.find({ _class }), Class.findById(_class).populate("_callQueue")])
+    .then(([users, theClass]) => {
+      const students = users.filter(user => user.role === "Student");
+      const { _callQueue, currentGroups, currentCourse } = theClass;
+      let queueObj = _callQueue.reverse();
 
-      let groups = values[1][0].currentGroups;
-      let queue = values[1][0]._callQueue;
-      let currentCourse = values[1][0].currentCourse;
-      let queueObj = queue.reverse();
-
-      res.render("classroom", { students, groups, queueObj, currentCourse, user });
+      res.render("classroom", { user, queueObj, students, currentCourse, currentGroups });
     })
     .catch(next);
 });
@@ -43,7 +40,7 @@ router.post("/classroom", isConnected, (req, res, next) => {
   let _class = req.user._class;
   let currentCourse = req.body.currentCourse;
   if (currentCourse === "") {
-    currentCourse = "Click me!";
+    currentCourse = "Current course/LAB";
   }
   updateCourse(currentCourse);
 
@@ -56,14 +53,13 @@ router.post("/classroom", isConnected, (req, res, next) => {
 
 // CREATE GROUPS
 router.post("/classroom/create-groups", isConnected, (req, res, next) => {
-  let _class = req.user._class;
-  Promise.all([User.find(), Class.find({ _id: _class })])
-    .then(values => {
-      // let students = values[0].filter(user => user.role === "Student");
-      let myClass = new MixMyClass(values[0], values[1][0]);
+  const _class = req.user._class;
+
+  Promise.all([User.find({ _class }), Class.findById(_class)])
+    .then(([users, theClass]) => {
+      let myClass = new MixMyClass(users, theClass);
       const { groupSize, notPresent, option } = req.body;
       let groups = myClass.createGroups(groupSize, notPresent, option);
-      // console.log("TCL: groups", groups);
 
       groups.forEach(group => {
         group.forEach(student => {
@@ -83,16 +79,16 @@ router.post("/classroom/create-groups", isConnected, (req, res, next) => {
           res.redirect("/classroom");
         })
         .catch(next);
-
-      // HERE I NEED TO UPDATE _currentGroups ARRAY
-      // AND THEN REDIRECT TO /classroom
-
-      // res.render("classroom", { students, groups });
     })
     .catch(next);
 });
 router.get("/classroom/reset-worked-with", isConnected, (req, res, next) => {
-  User.updateMany({}, { $unset: { _workedWith: "" } })
+  const _class = req.user._class;
+
+  Promise.all([
+    User.updateMany({}, { $unset: { _workedWith: "" } }),
+    Class.findByIdAndUpdate(_class, { $unset: { currentGroups: "" } })
+  ])
     .then(() => {
       res.redirect("/classroom");
     })

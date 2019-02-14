@@ -1,9 +1,10 @@
 {{!-- 
-    - socket broadcast only to TA's
+    - socket broadcast only to TA's (nope)
+    - landing page
+    - update index.js
+    - classrom mobile friendly
  --}}
 <div class="container">
-  <h1>Classroom</h1>
-
   <div class="row">
     {{!-- s i d e b a r --}}
     <div class="col-12 col-md-3">
@@ -15,7 +16,7 @@
           <div class="collapse collapseElement show">
             <div class="classroom--min-vh d-flex flex-column justify-content-between">
               <div class="form-group">
-                <ul id="call-list" class="list-group">
+                <ul id="call-list" class="list-group scrollbar">
                   {{#each queueObj}}
                   {{#isCurrentUser _id}}
                   <div id="{{id}}"
@@ -57,7 +58,8 @@
             <div class="col-12 col-lg">
               <div class="form-group">
                 <label for="groupSize">Group size</label>
-                <input type="number" class="form-control" name="groupSize" min="1" value="2" placeholder="Number of people">
+                <input type="number" class="form-control" name="groupSize" min="1" value="2"
+                  placeholder="Number of people">
               </div>
             </div>
 
@@ -74,7 +76,7 @@
 
           <div class="form-group">
             <label for="notPresent" class="btn btn-block" data-toggle="collapse" href=".collapseElement" role="button"
-              aria-expanded="false" aria-controls="collapseElement">Students missing today</label>
+              aria-expanded="false" aria-controls="collapseElement">Click, to select missing students</label>
             <div class="collapse collapseElement">
               <div class="card card--padding">
                 {{#groupedEach 2 students}}
@@ -109,15 +111,11 @@
 
       {{!-- c u r r e n t  c o u r s e --}}
       <div class="row d-flex justify-content-center classroom">
-        <div class="col-12">
+        <div class="col-10">
           <div id="currentCourse">
-            <div
-              class="alert alert-warning alert-dismissible fade show alert--no-margin alert--bg-opacity alert--little-padding"
-              role="alert">
-              <div data-toggle="collapse" href=".collapseInput" role="button" aria-expanded="false"
-                aria-controls="collapseInput">
-                <h2 class="h2--styled">{{currentCourse}}</h2>
-              </div>
+            <div data-toggle="collapse" href=".collapseInput" role="button" aria-expanded="false"
+              aria-controls="collapseInput">
+              <h2 class="h2--styled">{{currentCourse}}</h2>
             </div>
             {{#isTA}}
             <form action="/classroom" method="POST" class="collapse collapseInput">
@@ -132,39 +130,46 @@
             {{/isTA}}
           </div>
         </div>
-      </div>
+        <div class="col-2 d-flex flex-column justify-content-center">
+          <div class="btn-collapse-groups" role="button" data-toggle="collapse" data-target="#collapseGroups"
+            aria-expanded="false" aria-controls="collapseGroups">
+            Show/hide groups
+          </div>
 
-      {{!-- g r o u p s --}}
-      <div class="groups">
+        </div>
+        <div class="collapse show" id="collapseGroups">
+          <div class="groups">
 
-        <div class="d-flex flex-wrap justify-content-around">
+            <div class="d-flex flex-wrap justify-content-around">
 
-          {{#each groups as |item|}}
-          <div class="card card--mb d-flex flex-column justify-content-center" style="width: 10rem;">
+              {{#each currentGroups as |item|}}
+              <div class="card card--mb d-flex flex-column justify-content-center" style="width: 10rem;">
 
-            <div class="">
-              {{#each item}}
-              <div class="d-flex align-items-center">
                 <div class="">
-                  <img src="{{imgUrl}}" alt="{{username}}">
-                </div>
-                <div class="">
-                  {{#isCurrentUser _id}}
-                  <div class="font-weight-bold text-primary">{{firstName}}</div>
-                  {{else}}
-                  <div class="">{{firstName}}</div>
-                  {{/isCurrentUser}}
+                  {{#each item}}
+                  <div class="d-flex align-items-center">
+                    <div class="">
+                      <img src="{{imgUrl}}" alt="{{username}}">
+                    </div>
+                    <div class="">
+                      {{#isCurrentUser _id}}
+                      <div class="font-weight-bold text-primary">{{firstName}}</div>
+                      {{else}}
+                      <div class="">{{firstName}}</div>
+                      {{/isCurrentUser}}
+                    </div>
+                  </div>
+                  {{/each}}
                 </div>
               </div>
               {{/each}}
             </div>
           </div>
-          {{/each}}
-
         </div>
+
+
 
       </div>
     </div>
   </div>
-
 </div>

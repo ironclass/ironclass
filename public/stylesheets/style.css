@@ -7023,11 +7023,29 @@ a.text-dark:hover, a.text-dark:focus {
 body {
   background-color: #6a99cb;
   font-family: "Abel", Helvetica, Arial;
-  height: 95vh;
+  height: calc(100vh - 50px);
   background-image: url("../images/logo-ironhack-rotated-o20.png");
   background-size: 45%;
   background-repeat: no-repeat;
-  background-position: right -20% bottom -100%; }
+  background-position: right -10vw top 20vh;
+  background-attachment: fixed; }
+
+::-webkit-scrollbar {
+  width: 10px; }
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: #6a99cb; }
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #203562; }
+
+.container-landing {
+  height: 80vh; }
+
+.img-landing--width {
+  max-width: 400px; }
 
 button {
   white-space: nowrap; }
@@ -7072,7 +7090,7 @@ footer {
 .nav {
   color: #e3e8f8;
   font-size: 1.2em;
-  margin: 10px 0 40px 0; }
+  margin: 25px 0 25px 0; }
 
 .carousel-caption {
   top: 50%;
@@ -7115,11 +7133,11 @@ footer {
   border-radius: 5px; }
 
 .classroom--min-vh {
-  min-height: 30vh; }
+  height: 45vh;
+  overflow-y: auto; }
 
 h2.h2--styled {
   margin: 0;
-  color: #203562;
   cursor: pointer; }
 
 div.alert--little-margin {
@@ -7136,8 +7154,12 @@ div.alert--bg-opacity {
 .input-group--mt {
   margin-top: 4px; }
 
-.highlight-shadow {
-  box-shadow: inset 0px 0px 10px 1px rgba(0, 0, 0, 0.6); }
+.btn-collapse-groups {
+  line-height: 1.2;
+  cursor: pointer; }
+
+.groups {
+  margin-top: 40px; }
 
 .custom-file-input ~ .custom-file-label::after {
   content: "Upload Picture"; }
