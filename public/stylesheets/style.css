@@ -7022,7 +7022,12 @@ a.text-dark:hover, a.text-dark:focus {
 
 body {
   background-color: #6a99cb;
-  font-family: "Abel", Helvetica, Arial; }
+  font-family: "Abel", Helvetica, Arial;
+  height: 95vh;
+  background-image: url("../images/logo-ironhack-rotated-o20.png");
+  background-size: 45%;
+  background-repeat: no-repeat;
+  background-position: right -20% bottom -100%; }
 
 button {
   white-space: nowrap; }
@@ -7033,15 +7038,10 @@ a {
 footer {
   position: fixed;
   height: 100px;
-  bottom: 0;
-  width: 95%;
+  bottom: 0px;
+  width: 100%;
+  padding: 0 5%;
   color: #e3e8f8; }
-
-a.carousel-control:hover, a.carousel-control.right:hover {
-  background-image: linear-gradient(to right, rgba(250, 0, 0, 0) 0px, rgba(255, 0, 0, 0.5) 100%); }
-
-a.carousel-control.left:hover {
-  background-image: linear-gradient(to left, rgba(250, 0, 0, 0) 0px, rgba(255, 0, 0, 0.5) 100%); }
 
 #jumbo {
   padding: 20px;
@@ -7079,7 +7079,7 @@ a.carousel-control.left:hover {
   transform: translateY(-50%);
   bottom: initial;
   font-size: 11em;
-  text-shadow: 2px 2px #2E3233; }
+  text-shadow: 2px 2px #2e3233; }
 
 .carousel {
   width: 1050px;
@@ -7104,7 +7104,7 @@ a.carousel-control.left:hover {
   color: #203562; }
 
 .card img {
-  margin: 10px 0px;
+  margin-right: 10px;
   max-width: 70px;
   max-height: 70px; }
 
@@ -7117,8 +7117,10 @@ a.carousel-control.left:hover {
 .classroom--min-vh {
   min-height: 30vh; }
 
-h2.h2--no-margin {
-  margin: 0; }
+h2.h2--styled {
+  margin: 0;
+  color: #203562;
+  cursor: pointer; }
 
 div.alert--little-margin {
   margin: 2px; }
@@ -7156,7 +7158,7 @@ div.alert--bg-opacity {
   border: 0 !important; }
 
 input:focus {
-  outline: 0 0 0 0  !important;
+  outline: 0 0 0 0 !important;
   box-shadow: 0 0 0 0 !important; }
 
 .remember {
@@ -7236,10 +7238,10 @@ input:focus {
   -ms-flex-pack: center;
   justify-content: center;
   width: 100%;
-  -webkit-transition: -webkit-transform .5s;
-  transition: -webkit-transform .5s;
-  transition: transform .5s;
-  transition: transform .5s, -webkit-transform .5s; }
+  -webkit-transition: -webkit-transform 0.5s;
+  transition: -webkit-transform 0.5s;
+  transition: transform 0.5s;
+  transition: transform 0.5s, -webkit-transform 0.5s; }
 
 .stack-container {
   position: relative;
@@ -7249,14 +7251,14 @@ input:focus {
   transition: width 1s, height 1s; }
 
 .pokeup {
-  -webkit-transition: all .3s ease;
-  transition: all .3s ease; }
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease; }
 
 .pokeup:hover {
   -webkit-transform: translateY(-10px);
   transform: translateY(-10px);
-  -webkit-transition: .3s ease;
-  transition: .3s ease; }
+  -webkit-transition: 0.3s ease;
+  transition: 0.3s ease; }
 
 .error2 {
   width: 400px;
@@ -7280,16 +7282,16 @@ input:focus {
   perspective: 1000px; }
 
 .writeLine {
-  -webkit-animation: writeLine .4s linear forwards;
-  animation: writeLine .4s linear forwards; }
+  -webkit-animation: writeLine 0.4s linear forwards;
+  animation: writeLine 0.4s linear forwards; }
 
 .explode {
-  -webkit-animation: explode .5s ease-in-out forwards;
-  animation: explode .5s ease-in-out forwards; }
+  -webkit-animation: explode 0.5s ease-in-out forwards;
+  animation: explode 0.5s ease-in-out forwards; }
 
 .card-error {
-  -webkit-animation: tiltcard .5s ease-in-out 1s forwards;
-  animation: tiltcard .5s ease-in-out 1s forwards;
+  -webkit-animation: tiltcard 0.5s ease-in-out 1s forwards;
+  animation: tiltcard 0.5s ease-in-out 1s forwards;
   position: absolute; }
 
 @-webkit-keyframes tiltcard {
@@ -7368,7 +7370,8 @@ input:focus {
   width: 130px;
   /*Contrall play with javascript*/ }
 
-.error .clip:nth-of-type(1) .shadow, .error .clip:nth-of-type(3) .shadow {
+.error .clip:nth-of-type(1) .shadow,
+.error .clip:nth-of-type(3) .shadow {
   width: 250px;
   /*Contrall*/ }
 
@@ -7418,7 +7421,8 @@ input:focus {
   position: relative;
   box-shadow: inset 20px 0px 20px -15px rgba(150, 150, 150, 0.8), 20px 0px 20px -15px rgba(150, 150, 150, 0.8); }
 
-.error .clip:nth-of-type(3) .shadow:after, .error .clip:nth-of-type(1) .shadow:after {
+.error .clip:nth-of-type(3) .shadow:after,
+.error .clip:nth-of-type(1) .shadow:after {
   content: "";
   position: absolute;
   right: -8px;
@@ -7436,7 +7440,7 @@ input:focus {
   position: relative;
   top: 8%;
   color: white;
-  background: #07B3F9;
+  background: #07b3f9;
   border-radius: 50%;
   display: inline-block;
   transform: skew(45deg); }
@@ -7451,7 +7455,7 @@ input:focus {
   left: -20%; }
 
 .error h2 {
-  color: #A2A2A2;
+  color: #a2a2a2;
   font-weight: bold;
   padding-bottom: 20px; }
 
@@ -7460,7 +7464,7 @@ input:focus {
   z-index: 9999;
   display: block;
   background: #535353;
-  color: #A2A2A2;
+  color: #a2a2a2;
   border-radius: 50%;
   font-style: italic; }
 
@@ -7481,7 +7485,8 @@ input:focus {
   .error .clip:nth-of-type(2) .shadow {
     width: 80px;
     /*Contrall play with javascript*/ }
-  .error .clip:nth-of-type(1) .shadow, .error .clip:nth-of-type(3) .shadow {
+  .error .clip:nth-of-type(1) .shadow,
+  .error .clip:nth-of-type(3) .shadow {
     width: 100px;
     /*Contrall*/ }
   .error .digit {
@@ -7522,7 +7527,7 @@ input:focus {
 
 /*done*/
 .item-bg-color {
-  background: #EAEAEA; }
+  background: #eaeaea; }
 
 /*done*/
 /* Padding Section*/
