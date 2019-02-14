@@ -32,7 +32,7 @@ router.post("/createclass", isConnected, isTA, (req, res, next) => {
   // DATA VALIDATION AND AFTER SUCCESS CLASS CREATION
   if (name === "" || city === "Choose city..." || password === "") {
     res.render("classes/create", {
-      message: "Indicate name, city and password"
+      error: "Indicate name, city and password"
     });
     return;
   }
@@ -47,7 +47,7 @@ router.post("/createclass", isConnected, isTA, (req, res, next) => {
     if (oneClass !== null) {
       console.log(oneClass.name + " already exists");
       res.render("classes/create", {
-        message: "The Classname already exists"
+        error: "The Classname already exists"
       });
       return;
     }
@@ -65,7 +65,7 @@ router.post("/createclass", isConnected, isTA, (req, res, next) => {
       })
       .catch(err => {
         res.render("classes/create", {
-          message: "Something went wrong"
+          error: "Something went wrong"
         });
       });
   });
@@ -80,6 +80,8 @@ router.get("/", isConnected, isTA, (req, res, next) => {
     .populate("_teacher")
     .populate("_TA")
     .then(classes => {
+      //TODO: Sort Array
+      console.log(classes);
       res.render("classes/show", {
         classes
       });
@@ -124,7 +126,7 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
   // check if minimum credentials are provided
   if (name === "" || city === "Choose city...") {
     res.render("classes/edit", {
-      message: "Indicate name and city"
+      error: "Indicate name and city"
     });
     return;
   }
