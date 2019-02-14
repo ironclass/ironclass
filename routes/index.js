@@ -24,13 +24,13 @@ router.get("/classroom", isConnected, (req, res, next) => {
   let user = req.user;
   let _class = req.user._class;
 
-  Promise.all([User.find({ _class }), Class.find({ _id: _class }).populate("_callQueue")])
-    .then(values => {
-      let students = values[0].filter(user => user.role === "Student");
+  Promise.all([User.find({ _class }), Class.findById(_class).populate("_callQueue")])
+    .then(([users,theClass]) => {
+      let students = users.filter(user => user.role === "Student");
 
-      let groups = values[1][0].currentGroups;
-      let queue = values[1][0]._callQueue;
-      let currentCourse = values[1][0].currentCourse;
+      let groups = theClass.currentGroups;
+      let queue = theClass._callQueue;
+      let currentCourse = theClass.currentCourse;
       let queueObj = queue.reverse();
 
       res.render("classroom", { students, groups, queueObj, currentCourse, user });

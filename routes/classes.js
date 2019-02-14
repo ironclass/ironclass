@@ -37,38 +37,33 @@ router.post("/createclass", isConnected, isTA, (req, res, next) => {
     return;
   }
 
-  Class.findOne({
-    $and: [{
-      name
-    }, {
-      city
-    }]
-  }, (err, oneClass) => {
-    if (oneClass !== null) {
-      console.log(oneClass.name + " already exists");
-      res.render("classes/create", {
-        error: "The Classname already exists"
-      });
-      return;
-    }
+  Class.findOne({ name, city })
+    .then(oneClass => {
+      if (oneClass !== null) {
+        console.log(oneClass.name + " already exists");
+        res.render("classes/create", {
+          error: "The Classname already exists"
+        });
+        return;
+      }
 
-    const salt = bcrypt.genSaltSync(bcryptRounds);
-    const hashPass = bcrypt.hashSync(password, salt);
+      const salt = bcrypt.genSaltSync(bcryptRounds);
+      const hashPass = bcrypt.hashSync(password, salt);
 
-    Class.create({
+      return Class.create({
         name: name,
         city: city,
         password: hashPass
       })
-      .then(newClass => {
-        res.redirect("/classes/edit/" + newClass._id);
-      })
-      .catch(err => {
-        res.render("classes/create", {
-          error: "Something went wrong"
-        });
+    })
+    .then(newClass => {
+      res.redirect("/classes/edit/" + newClass._id);
+    })
+    .catch(err => {
+      res.render("classes/create", {
+        error: "Something went wrong"
       });
-  });
+    });
 });
 
 // ###########
