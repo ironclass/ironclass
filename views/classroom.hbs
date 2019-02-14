@@ -1,7 +1,5 @@
 {{!-- 
     - socket broadcast only to TA's
-    - mouse change over current course
-    - exclude 0!!!
  --}}
 <div class="container">
   <h1>Classroom</h1>
@@ -59,7 +57,7 @@
             <div class="col-12 col-lg">
               <div class="form-group">
                 <label for="groupSize">Group size</label>
-                <input type="number" class="form-control" name="groupSize" value="2" placeholder="Number of people">
+                <input type="number" class="form-control" name="groupSize" min="1" value="2" placeholder="Number of people">
               </div>
             </div>
 
