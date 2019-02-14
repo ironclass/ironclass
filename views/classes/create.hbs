@@ -1,39 +1,35 @@
-{{!-- /********************** 
-******** TO DO ********
-**********************/
-// Upload Picture Button 
-// --}}
+<div class="container">
 
-
-<h2>Create Classes</h2>
-
-<form action="/classes/createclass" method="POST">
-  <div class="form-group">
-    <input type="text" name="name" class="form-control" id="classname" placeholder="Class Name">
-    <input type="password" name="password" class="form-control" id="password" placeholder="Password for Students">
+  <div id="jumbo" class="jumbotron container d-flex flex-column align-items-center">
+    <h1>Create Class</h1>
+    <form action="/classes/createclass" method="POST">
+      <div class="form-group row justify-content-center">
+        <input type="text" name="name" class="form-control my-2" id="classname" placeholder="Classname">
+        <input type="password" name="password" class="form-control" id="password"
+          placeholder="Password">
+        <select name="city" class="form-control form-control-lg my-2" value="Munich">
+          <option selected hidden>Choose city...</option>
+          <option value="Barcelona">Barcelona</option>
+          <option value="Amsterdam">Amsterdam</option>
+          <option value="Berlin">Berlin</option>
+          <option value="Bogotá">Bogotá</option>
+          <option value="Lisbon">Lisbon</option>
+          <option value="Madrid">Madrid</option>
+          <option value="Mexico City">Mexico City</option>
+          <option value="Miami">Miami</option>
+          <option value="Munich">Munich</option>
+          <option value="Paris">Paris</option>
+          <option value="São Paulo">São Paulo</option>
+        </select>
+        <button type="submit" class="btn btn-lg btn-primary mt-2">Create</button>
+      </div>
+    </form>
   </div>
-  <select name="city" class="form-control form-control-lg">
-  <option selected hidden>Choose city...</option>
-  <option>Berlin</option>
-  <option>Barcelona</option>
-  <option>Amsterdam</option>
-  <option>Bogotá</option>
-  <option>Lisbon</option>
-  <option>Madrid</option>
-  <option>Mexico City</option>
-  <option>Miami</option>
-  <option>Munich</option>
-  <option>Paris</option>
-  <option>São Paulo</option>
-  </select>
-  <br>
-  <button type="submit" class="btn btn-primary">Create</button>
-</form>
 
+  <div class="container">
+    {{#if error }}
+    <div class="error-message" role="alert">{{error}}</div>
+    {{/if}}
+  </div>
 
-
-  {{#if message }}
-  <div class="error-message text-center">{{ message }}</div>
-  {{/if}}
-
-  <a href="/classes"></a>
+</div>

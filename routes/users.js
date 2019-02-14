@@ -43,8 +43,8 @@ router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('ph
   let classPassword;
 
   // data validation and after success: user creation
-  if (firstName === "") {
-    req.flash("message", "Indicate first name");
+  if (firstName === "" || lastName === "") {
+    req.flash("error", "Indicate full name");
     res.redirect("/classes/edit/" + classId);
     return;
   }
@@ -138,9 +138,16 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
   if (firstName === "" || lastName === "" || birthday === null || birthday === "") {
     User.findById(req.params.id)
       .then(user => {
+        let birthday;
+        if (user.birthday !== null) {
+          birthday = user.birthday.toISOString().substr(0, 10);
+        } else {
+          birthday = new Date().toISOString().substr(0, 10);
+        }
         res.render("classes/editstudent", {
           user,
-          message: "Indicate full name and birthday"
+          birthday,
+          error: "Indicate full name and birthday"
         });
         return;
       })
