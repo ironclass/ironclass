@@ -7030,6 +7030,13 @@ button {
 a {
   color: #e3e8f8; }
 
+footer {
+  position: fixed;
+  height: 100px;
+  bottom: 0;
+  width: 95%;
+  color: #e3e8f8; }
+
 #jumbo {
   padding: 20px;
   background-color: #e3e8f8; }

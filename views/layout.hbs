@@ -19,7 +19,7 @@
   <ul class="nav justify-content-center ml-auto">
     {{#if isConnected}}
     <li class="nav-item">
-      <a class="nav-link" href="/auth/logout">WELCOME {{firstName}}</a>
+      <a class="nav-link" href="/auth/logout">{{toUpperCase firstName}}</a>
     </li>
     {{/if}}
     <li class="nav-item">
@@ -55,25 +55,13 @@
 
 </nav>
 
-  {{!-- <nav>
-    <a href="/">Home</a>
-    {{#if isNotConnected}}
-    <a href="/auth/login">Login</a>
-    {{/if}}
-
-    {{#if isConnected}}
-    {{#if isTA}}
-    <a href="/classes/">Classes</a>
-    {{#if isAdmin}}
-    <a href="/auth/admin">Admin</a>
-    {{/if}}
-    {{/if}}
-    <a href="/classroom/">Classroom</a>
-    <a href="/auth/logout">Logout</a>
-    {{/if}}
-  </nav> --}}
-
   {{{body}}}
+
+<footer class ="d-none d-xl-block">
+  <div class="footer-copyright text-right py-3">
+    <a href="https://github.com/ironclass/ironclass"> by André Sebastian & Malte Felmy</a>
+  </div>
+</footer>
 
   {{!-- SOCKET.IO --}}
   <script src="/socket.io/socket.io.js"></script>

@@ -23,6 +23,14 @@ a {
   color: $main-lighter;
 }
 
+footer {
+  position: fixed;
+  height: 100px;
+  bottom: 0;
+  width: 95%;
+  color: $main-lighter;
+}
+
 #jumbo {
   padding: 20px;
   background-color: $main-lighter;

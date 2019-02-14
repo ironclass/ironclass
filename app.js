@@ -108,4 +108,8 @@ hbs.registerHelper("groupedEach", function(every, context, options) {
   return out;
 });
 
+hbs.registerHelper('toUpperCase', function(str) {
+  return str.toUpperCase();
+});
+
 module.exports = app;
