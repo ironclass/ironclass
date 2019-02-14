@@ -38,7 +38,7 @@ router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('ph
     birthday,
     role
   } = req.body;
-  let username = (firstName + lastName[0]).toLowerCase();
+  let username = (firstName + lastName).toLowerCase();
 
   let classPassword;
 
@@ -51,11 +51,11 @@ router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('ph
 
   // check if user alread exists
   User.findOne({
-      username
+    username
     }, (err, user) => {
       if (user !== null) {
         console.log(username + " alread exists!");
-        req.flash("message", "The User already exists");
+        req.flash("message", "This User already exists");
         res.redirect("/classes/edit/" + classId);
         return;
       }
@@ -146,43 +146,55 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
       })
       .catch(err => console.log(err));
   } else {
-    let username = (firstName + lastName[0]).toLowerCase();
-    
-    User.findById(req.params.id)
-    .then ((user) => {
-      let oldRole = user.role;
-      User.findByIdAndUpdate(req.params.id, {
-          firstName,
-          lastName,
-          birthday,
-          role,
-          username,
-          imgUrl: imgPath,
-          imgName
-      })
-      .then(() => {
+    let username = (firstName + lastName).toLowerCase();
+    //Check if new Username already exists
+    User.findOne({
+      username
+    }, (err, user) => {
+      if (user !== null) {
+        console.log(username + " alread exists!");
+        req.flash("error", "The User already exists");
+        res.redirect("/users/user/edit/" + req.params.id);
+        return;
+      } else {
+        //if new Username does not exist, update
         User.findById(req.params.id)
-          .then(user => {
-            if (oldRole === "TA" && user.role !== "TA"){
-              removeTAfromClass (user._class, user._id);
-              if (user.role === "Teacher") addTeacherToClass (user._class, user._id);
-            
-            } else if (oldRole === "Teacher" && user.role !== "Teacher") {
-              removeTeacherfromClass (user._class);
-              if (user.role === "TA") addTAToClass (user._class, user._id);
-            } else {
-            if (user.role === "Teacher") {
-              addTeacherToClass (user._class, user._id);
-            } else if (user.role === "TA") addTAToClass (user._class, user._id);
-            }
+        .then ((user) => {
+          let oldRole = user.role;
+          User.findByIdAndUpdate(req.params.id, {
+              firstName,
+              lastName,
+              birthday,
+              role,
+              username,
+              imgUrl: imgPath,
+              imgName
           })
-          .catch(err => console.log(err));
-      })
-      .then(user => {
-        res.redirect(backURL);
-      })
-      .catch(err => console.log(err));
-    }).catch(err => console.log(err));
+          .then(() => {
+            User.findById(req.params.id)
+              .then(user => {
+                if (oldRole === "TA" && user.role !== "TA"){
+                  removeTAfromClass (user._class, user._id);
+                  if (user.role === "Teacher") addTeacherToClass (user._class, user._id);
+                
+                } else if (oldRole === "Teacher" && user.role !== "Teacher") {
+                  removeTeacherfromClass (user._class);
+                  if (user.role === "TA") addTAToClass (user._class, user._id);
+                } else {
+                if (user.role === "Teacher") {
+                  addTeacherToClass (user._class, user._id);
+                } else if (user.role === "TA") addTAToClass (user._class, user._id);
+                }
+              })
+              .catch(err => console.log(err));
+          })
+          .then(user => {
+            res.redirect(backURL);
+          })
+          .catch(err => console.log("Creation error: "+err));
+        }).catch(err => console.log(err));
+      }
+    });
   }
 });
 
