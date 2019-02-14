@@ -7,8 +7,7 @@ const { isConnected } = require("../src/middlewares");
 
 // SOCKET.IO
 const {
-  io,
-  sendMessage,
+  updateCourse,
   queueStudent,
   dequeueStudent,
   sudoDequeueStudent
@@ -22,9 +21,12 @@ router.get("/", (req, res, next) => {
 
 // ------ C l a s s r o o m ------
 router.get("/classroom", isConnected, (req, res, next) => {
+  let user = req.user;
+	console.log('TCL: user', user)
+  
   let _class = req.user._class;
   Promise.all([
-    User.find(),
+    User.find({ _class }),
     Class.find({ _id: _class })
       // .populate("_currentGroups")
       .populate("_callQueue")
@@ -35,19 +37,40 @@ router.get("/classroom", isConnected, (req, res, next) => {
 
       let groups = values[1][0].currentGroups;
       let queue = values[1][0]._callQueue;
+      let currentCourse = values[1][0].currentCourse;
       let queueObj = queue.reverse();
 
-      res.render("classroom", { students, groups, queueObj });
+      res.render("classroom", { students, groups, queueObj, currentCourse, user });
     })
     .catch(next);
 });
-// SENDMESSAGE NEEDS TO BE IMPLEMENTED ON CLICK EVENT
+// update current course
 router.post("/classroom", isConnected, (req, res, next) => {
-  let msg = req.body.msg;
-  sendMessage(msg);
-  // res.redirect("/classroom");
-  // setTimeout(() => sendMessage(msg), 500);
+  let _class = req.user._class;
+  let currentCourse = req.body.currentCourse;
+  if (currentCourse === "") {
+    currentCourse = "Click me!"
+  }
+  updateCourse(currentCourse);
+
+  Class.findByIdAndUpdate(_class, { currentCourse })
+    .then(() => {
+      res.redirect("/classroom");
+    })
+    .catch(next);
 });
+// delete current course
+// router.get("/classroom/delete-course", isConnected, (req, res, next) => {
+//   let _class = req.user._class;
+//   let currentCourse = ""
+//   updateCourse(currentCourse);
+
+//   Class.findByIdAndUpdate(_class, { currentCourse })
+//     .then(() => {
+//       res.redirect("/classroom");
+//     })
+//     .catch(next);
+// });
 
 // CREATE GROUPS
 router.post("/classroom/create-groups", isConnected, (req, res, next) => {

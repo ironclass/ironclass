@@ -3,32 +3,23 @@ console.log("Hello from the script.js");
 // SOCKET.IO
 const socket = io();
 
-// // send event "testerEvent" from server to client
-// socket.on("testerEvent", data => {
-//   document.write(data.description);
-// });
-
-// // emit event "clientEvent" from client to server
-// socket.emit("clientEvent", "Sent an event from the client");
-
-socket.on("sendMessage", data => {
-  let ul = document.getElementById("socket-list");
-  let li = document.createElement("pre");
-  li.setAttribute("class", "list-group-item");
-  li.innerHTML = data.msg;
-  ul.appendChild(li);
+socket.on("updateCourse", data => {
+  let wrapperDiv = document.getElementById("currentCourse");
+  wrapperDiv.innerHTML = `
+    <div id="${currentCourse}" class="alert alert-warning alert-dismissible fade show alert--no-margin alert--bg-opacity" role="alert">
+      <h2 class="h2--no-margin">${data.currentCourse}</h2>
+    </div>`;
 });
 
 socket.on("queueStudent", data => {
   document.querySelector("#call-queue .list-group").innerHTML += `
-  <div id="${data.id}" class="alert alert-warning alert-dismissible fade show" role="alert">${
-    data.firstName
-  }<a href="/classroom/queue-tick/${data.id}" class="close"><span>&times;</span></a></div>`;
+  <div id="${data.id}" class="alert alert-warning alert-dismissible fade show alert--little-margin" role="alert">${data.firstName}
+  <a href="/classroom/queue-tick/${data.id}" class="close"><span>&times;</span></a></div>`;
 });
 
 socket.on("dequeueStudent", () => {
   let list = document.getElementById("call-list");
-  list.children[0].remove()
+  list.children[0].remove();
 });
 socket.on("sudoDequeueStudent", data => {
   document.getElementById(data.id).remove();
@@ -45,4 +36,3 @@ $("#exampleInputFile").on("change", function() {
     .next(".custom-file-label")
     .html(cleanFileName);
 });
-

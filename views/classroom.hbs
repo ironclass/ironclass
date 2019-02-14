@@ -1,5 +1,7 @@
 {{!-- 
+    - socket broadcast only to TA's
     - students online badge
+    - color user
  --}}
 <div class="container">
   <h1>Classroom</h1>
@@ -9,17 +11,25 @@
     <div class="col-12 col-md-3">
 
       {{!-- c a l l q u e u e --}}
-      <div id="call-queue" class="classroom-sidebar d-flex flex-column justify-content-between">
+      <div id="call-queue" class="classroom d-flex flex-column justify-content-between">
         <div>
-          <h2>CallQueue</h2>
+          <h3>CallQueue</h3>
           <div class="collapse collapseElement show">
-            <div class="classroom-sidebar--min-vh d-flex flex-column justify-content-between">
+            <div class="classroom--min-vh d-flex flex-column justify-content-between">
               <div class="form-group">
                 <ul id="call-list" class="list-group">
                   {{#each queueObj}}
-                  <div id="{{id}}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                  {{#isCurrentUser _id}}
+                  <div id="{{id}}" class="alert alert-warning alert-dismissible fade show alert--little-margin alert--little-padding font-weight-bold"
+                    role="alert">
+                    {{else}}
+                  <div id="{{id}}" class="alert alert-warning alert-dismissible fade show alert--little-margin alert--little-padding"
+                    role="alert">
+                    {{/isCurrentUser}}
                     {{firstName}}
+                    {{#isCurrentUserOrTA _id}}
                     <a href="/classroom/queue-tick/{{id}}" class="close"><span>&times;</span></a>
+                    {{/isCurrentUserOrTA}}
                   </div>
                   {{/each}}
                 </ul>
@@ -38,9 +48,9 @@
       </div>
 
       {{!-- c r e a t e  g r o u p s --}}
-      <div id="create-groups" class="classroom-sidebar">
-        {{#isTA}}
-        <h2>Create groups</h2>
+      {{#isTA}}
+      <div id="create-groups" class="classroom">
+        <h3>Create groups</h3>
         {{!-- input form to set parameters for createGroups --}}
         <form action="/classroom/create-groups" method="POST">
           <div class="row">
@@ -90,17 +100,39 @@
             <a href="/classroom/reset-worked-with" class="btn btn-secondary btn-block">Reset partners</a>
           </div>
         </form>
-        {{/isTA}}
-
-
       </div>
+      {{/isTA}}
     </div>
 
     {{!-- m a i n  a r e a --}}
     <div class="col-12 col-md">
-      {{!-- output to show groups --}}
+
+      {{!-- c u r r e n t  c o u r s e --}}
+      <div class="row d-flex justify-content-center classroom">
+        <div class="col-12">
+          <div id="currentCourse">
+            <div id="{{currentCourse}}"
+              class="alert alert-warning alert-dismissible fade show alert--no-margin alert--bg-opacity alert--little-padding" role="alert">
+              <h2 class="h2--no-margin" data-toggle="collapse" href=".collapseInput" role="button" aria-expanded="false" aria-controls="collapseInput">{{currentCourse}}</h2>
+            </div>
+            {{#isTA}}
+            <form action="/classroom" method="POST" class="collapse collapseInput">
+              <div class="input-group input-group--mt">
+                <input class="form-control" name="currentCourse"
+                  placeholder="Please, enter title of current course/LAB here..."></input>
+                <div class="input-group-append">
+                  <button class="btn btn-secondary" type="submit">Update</button>
+                </div>
+              </div>
+            </form>
+            {{/isTA}}
+          </div>
+        </div>
+      </div>
+
+      {{!-- g r o u p s --}}
       <div class="groups">
-        <div class="d-flex flex-wrap justify-content-center">
+        <div class="d-flex flex-wrap justify-content-around">
           {{#each groups as |item|}}
           <div class="card card--mb" style="width: 10rem;">
             <div class="d-flex flex-wrap justify-content-around">
@@ -112,7 +144,11 @@
               {{!-- <h5 class="card-title">Group x</h5> --}}
               <ul class="list-group list-group-flush">
                 {{#each item}}
+                {{#isCurrentUser _id}}
+                <li class="list-group-item font-weight-bold text-primary">{{firstName}}</li>
+                {{else}}
                 <li class="list-group-item">{{firstName}}</li>
+                {{/isCurrentUser}}
                 {{/each}}
               </ul>
             </div>
