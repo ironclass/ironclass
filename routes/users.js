@@ -159,6 +159,7 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
     User.findOne({
       username
     }, (err, user) => {
+      //TODO: check, if username has changed at all; same es in classes
       if (user !== null) {
         console.log(username + " alread exists!");
         req.flash("error", "The User already exists");
