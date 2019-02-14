@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const mongoose = require('mongoose');
 const passport = require("passport"); // TO USE PROTECED ROUTES
-const {changePassword}  = require("../src/helpers");
+const {changePassword, dynamicSort}  = require("../src/helpers");
 const User = require("../models/User");
 const Class = require("../models/Class");
 const {
@@ -80,8 +80,7 @@ router.get("/", isConnected, isTA, (req, res, next) => {
     .populate("_teacher")
     .populate("_TA")
     .then(classes => {
-      //TODO: Sort Array
-      console.log(classes);
+      classes.sort(dynamicSort("name"));
       res.render("classes/show", {
         classes
       });
@@ -103,6 +102,8 @@ router.get("/edit/:id", isConnected, isTA, (req, res, next) => {
       })
     ])
     .then(values => {
+      console.log(values[1]);
+      values[1].sort(dynamicSort("updated_at")).reverse();
       res.render("classes/edit", {
         message: req.flash("message"),
         oneClass: values[0], // the class with this ID
