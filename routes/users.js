@@ -146,7 +146,8 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
       })
       .catch(err => console.log(err));
   } else {
-    let username = (firstName + lastName).toLowerCase();
+    let username = (firstName + lastName[0]).toLowerCase();
+    
     User.findById(req.params.id)
     .then ((user) => {
       let oldRole = user.role;
