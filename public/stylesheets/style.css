@@ -7040,6 +7040,9 @@ a {
 #studentslist span {
   font-size: 1.4em; }
 
+#studentslist hr {
+  width: 60%; }
+
 .error-message {
   color: red;
   font-size: 2em;

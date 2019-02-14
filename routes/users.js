@@ -38,7 +38,7 @@ router.post("/createStudent/:classId", isConnected, isTA, uploadCloud.single('ph
     birthday,
     role
   } = req.body;
-  let username = (firstName + lastName).toLowerCase();
+  let username = (firstName + lastName[0]).toLowerCase();
 
   let classPassword;
 
