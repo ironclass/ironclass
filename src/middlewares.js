@@ -4,7 +4,7 @@ module.exports = {
     if (req.user) {
       next();
     } else {
-      res.redirect("/auth/login");
+      res.redirect("/");
     }
   },
   isTA: function(req, res, next) {
