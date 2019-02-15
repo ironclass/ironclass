@@ -7027,7 +7027,7 @@ body {
   background-image: url("../images/logo-ironhack-rotated-o20.png");
   background-size: 45%;
   background-repeat: no-repeat;
-  background-position: right -10vw top 20vh;
+  background-position: right -10vw bottom -5vh;
   background-attachment: fixed; }
 
 ::-webkit-scrollbar {
@@ -7051,7 +7051,9 @@ body {
 .h5-landing {
   color: #203562; }
 
-.img-landing--width {
+.img-landing {
+  margin: 5px 0;
+  height: auto;
   max-width: 350px; }
 
 .p-landing {
@@ -7128,6 +7130,9 @@ footer {
 .card--mb {
   margin-bottom: 10px; }
 
+.card-groups {
+  width: 10rem; }
+
 .card a {
   color: #203562; }
 
@@ -7195,7 +7200,12 @@ div.alert--bg-opacity {
   .carousel-caption {
     font-size: 2em; }
   .h1-landing {
-    font-size: 4em; } }
+    font-size: 4em; }
+  .card-groups {
+    width: 8rem; }
+  .card img {
+    max-width: 50px;
+    max-height: 50px; } }
 
 /* Login Page */
 .input-group-prepend span {
