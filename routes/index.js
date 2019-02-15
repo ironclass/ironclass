@@ -3,7 +3,7 @@ const User = require("../models/User");
 const Class = require("../models/Class");
 const MixMyClass = require("../src/MixMyClass");
 const CallQueue = require("../src/CallQueue");
-const {dynamicSort}  = require("../src/helpers");
+const { dynamicSort } = require("../src/helpers");
 const { isConnected } = require("../src/middlewares");
 
 // SOCKET.IO
@@ -15,9 +15,19 @@ const {
 } = require("../src/socketAPI");
 
 const router = express.Router();
+
 // HOME PAGE
 router.get("/", (req, res, next) => {
-  res.render("index");
+  if (req.user) {
+    res.render("welcome");
+  } else {
+    //FIXME: be able to move landing.html to views folder
+    res.sendFile("landing.html", { root: __dirname });
+  }
+});
+
+router.get("/welcome", isConnected, (req, res, next) => {
+  res.render("welcome");
 });
 
 // ------ C l a s s r o o m ------
