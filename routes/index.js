@@ -16,7 +16,9 @@ const {
 const router = express.Router();
 // HOME PAGE
 router.get("/", (req, res, next) => {
-  res.render("index");
+  // res.render("index");
+  //FIXME: be able to move landing.html to views folder
+  res.sendFile('landing.html', {root: __dirname });
 });
 
 // ------ C l a s s r o o m ------

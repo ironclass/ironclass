@@ -1,0 +1,116 @@
+$main-lighter: #e3e8f8;
+$main-light: #6a99cb;
+$main-dark: #203562;
+$main-darker: #2e3233;
+
+//Bootstrap
+$primary: $main-dark;
+$warning: $main-light;
+$danger: #f77754;
+
+@import "node_modules/bootstrap/scss/bootstrap";
+
+body {
+  background-color: $main-lighter;
+  font-family: "Abel", Helvetica, Arial;
+}
+
+.carousel-caption {
+  top: 35%;
+  transform: translateY(-50%);
+  bottom: initial;
+}
+
+.carousel-caption brand {
+  font-size: 11em;
+  text-shadow: 2px 2px $main-darker;
+}
+
+.carousel-caption a {
+  font-size: 2em;
+  color: white;
+}
+
+.carousel {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+
+.carousel .carousel-inner {
+  height: 100vh;
+}
+
+.input-group-prepend span {
+  width: 50px;
+  background-color: $main-dark;
+  color: $main-lighter;
+  border: 0 !important;
+}
+
+input:focus {
+  outline: 0 0 0 0 !important;
+  box-shadow: 0 0 0 0 !important;
+}
+
+.remember {
+  color: white;
+}
+
+.remember input {
+  width: 20px;
+  height: 20px;
+  margin-left: 15px;
+  margin-right: 5px;
+}
+
+.login_btn {
+  color: $main-lighter;
+  background-color: $main-dark;
+  width: 100px;
+}
+
+.login_btn:hover {
+  color: $main-dark;
+  background-color: $main-light;
+}
+
+.login-container {
+  color: $main-dark;
+}
+
+@media screen and (max-width: 1200px) {
+  .carousel-caption brand {
+    font-size: 6em;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  .carousel-caption brand {
+    font-size: 4em;
+  }
+
+  .carousel-caption a {
+    font-size: 1em;
+  }
+
+}
+
+@media screen and (min-width: 850px) {
+
+  .login-container {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: 60%;
+  }
+
+  .card {
+    background-color: $main-lighter;
+    width: 18rem;
+    position: relative;
+    left: -50%;
+  }
+
+}

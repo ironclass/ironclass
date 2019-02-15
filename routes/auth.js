@@ -8,7 +8,6 @@ const {dynamicSort}  = require("../src/helpers");
 
 // L O G I N
 router.get("/login", (req, res, next) => {
-  // res.send("/views/landing.html")
   res.render("auth/login", { message: req.flash("error") });
 });
 
