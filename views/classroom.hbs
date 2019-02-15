@@ -1,10 +1,3 @@
-{{!-- 
-    - socket broadcast only to TA's (nope)
-    - add shadow
-    - landing page
-    - update index.js
-    - classroom mobile friendly
- --}}
 <div class="container">
   <div class="row">
     {{!-- s i d e b a r --}}
@@ -16,26 +9,37 @@
           <h3>CallQueue</h3>
           <div class="collapse collapseElement show">
             <div class="classroom--min-vh d-flex flex-column justify-content-between">
+
               <div class="form-group">
+
                 <ul id="call-list" class="list-group scrollbar">
                   {{#each queueObj}}
+
                   {{#isCurrentUser _id}}
+
                   <div id="{{id}}"
-                    class="alert alert-warning alert-dismissible fade show alert--little-margin alert--little-padding font-weight-bold"
+                    class="alert alert-warning alert-dismissible fade show alert--little-margin alert--little-padding font-weight-bold{{#if @first}} next-student{{/if}}"
                     role="alert">
-                    {{else}}
-                    <div id="{{id}}"
-                      class="alert alert-warning alert-dismissible fade show alert--little-margin alert--little-padding"
-                      role="alert">
-                      {{/isCurrentUser}}
-                      {{firstName}}
-                      {{#isCurrentUserOrTA _id}}
-                      <a href="/classroom/queue-tick/{{id}}" class="close"><span>&times;</span></a>
-                      {{/isCurrentUserOrTA}}
-                    </div>
-                    {{/each}}
+                    {{firstName}}
+                    <a href="/classroom/queue-tick/{{id}}" class="close"><span>&times;</span></a>
+                  </div>
+
+                  {{else}}
+
+
+                  <div id="{{id}}"
+                    class="alert alert-warning alert-dismissible fade show alert--little-margin alert--little-padding{{#if @first}} next-student{{/if}}"
+                    role="alert">
+                    {{firstName}}
+                    <a href="/classroom/queue-tick/{{id}}" class="close"><span>&times;</span></a>
+                  </div>
+
+                  {{/isCurrentUser}}
+                  {{/each}}
                 </ul>
-              </div>
+
+              </div> {{!-- form-group --}}
+
               <div class="d-flex flex-wrap justify-content-between">
                 {{#isStudent}}
                 <a href="/classroom/queue-wave" class="btn btn-primary btn-block">Wave</a>
@@ -43,6 +47,7 @@
                 <a href="/classroom/queue-tick/n-a" class="btn btn-primary btn-block">Tick</a>
                 {{/isStudent}}
               </div>
+
             </div>
 
           </div>
@@ -111,64 +116,66 @@
     <div class="col-12 col-md">
 
       {{!-- c u r r e n t  c o u r s e --}}
-      <div class="row d-flex justify-content-center classroom">
-        <div class="col-10">
-          <div id="currentCourse">
-            <div data-toggle="collapse" href=".collapseInput" role="button" aria-expanded="false"
-              aria-controls="collapseInput">
-              <h2 class="h2--styled">{{currentCourse}}</h2>
-            </div>
-            {{#isTA}}
-            <form action="/classroom" method="POST" class="collapse collapseInput">
-              <div class="input-group input-group--mt">
-                <input class="form-control" name="currentCourse"
-                  placeholder="Please, enter title of current course/LAB here..."></input>
-                <div class="input-group-append">
-                  <button class="btn btn-secondary" type="submit">Update</button>
-                </div>
+      <div class="classroom">
+        <div class="row">
+          <div class="col-md-10">
+            <div id="currentCourse">
+              <div data-toggle="collapse" href=".collapseInput" role="button" aria-expanded="false"
+                aria-controls="collapseInput">
+                <h2 class="h2--styled d-inline">{{currentCourse}}</h2>
               </div>
-            </form>
-            {{/isTA}}
-          </div>
-        </div>
-        <div class="col-2 d-flex flex-column justify-content-center">
-          <div class="btn-collapse-groups" role="button" data-toggle="collapse" data-target="#collapseGroups"
-            aria-expanded="false" aria-controls="collapseGroups">
-            Show/hide groups
-          </div>
-
-        </div>
-        <div class="collapse show" id="collapseGroups">
-          <div class="groups">
-
-            <div class="d-flex flex-wrap justify-content-around">
-
-              {{#each currentGroups as |item|}}
-              <div class="card card--mb d-flex flex-column justify-content-center" style="width: 10rem;">
-
-                <div class="">
-                  {{#each item}}
-                  <div class="d-flex align-items-center">
-                    <div class="">
-                      <img src="{{imgUrl}}" alt="{{username}}">
-                    </div>
-                    <div class="">
-                      {{#isCurrentUser _id}}
-                      <div class="font-weight-bold text-primary">{{firstName}}</div>
-                      {{else}}
-                      <div class="">{{firstName}}</div>
-                      {{/isCurrentUser}}
-                    </div>
+              {{#isTA}}
+              <form action="/classroom" method="POST" class="collapse collapseInput">
+                <div class="input-group input-group--mt">
+                  <input class="form-control" name="currentCourse"
+                    placeholder="Please, enter title of current course/LAB here..."></input>
+                  <div class="input-group-append">
+                    <button class="btn btn-secondary" type="submit">Update</button>
                   </div>
-                  {{/each}}
                 </div>
+              </form>
+              {{/isTA}}
+            </div>
+          </div>
+          <div class="col-md d-flex flex-column justify-content-center">
+            <div class="btn-collapse-groups" role="button" data-toggle="collapse" data-target="#collapseGroups"
+              aria-expanded="false" aria-controls="collapseGroups">
+              Show/hide groups
+            </div>
+
+          </div>
+
+          {{!-- c u r r e n t  g r o u p s --}}
+          <div class="collapse show" id="collapseGroups">
+            <div class="groups">
+
+              <div class="d-flex flex-wrap justify-content-around">
+
+                {{#each currentGroups as |item|}}
+                <div class="card card--mb d-flex flex-column justify-content-center" style="width: 10rem;">
+
+                  <div class="">
+                    {{#each item}}
+                    <div class="d-flex align-items-center">
+                      <div class="">
+                        <img class="rounded" src="{{imgUrl}}" alt="{{username}}">
+                      </div>
+                      <div class="">
+                        {{#isCurrentUser _id}}
+                        <div class="font-weight-bold text-primary">{{firstName}}</div>
+                        {{else}}
+                        <div class="">{{firstName}}</div>
+                        {{/isCurrentUser}}
+                      </div>
+                    </div>
+                    {{/each}}
+                  </div>
+                </div>
+                {{/each}}
               </div>
-              {{/each}}
             </div>
           </div>
         </div>
-
-
 
       </div>
     </div>

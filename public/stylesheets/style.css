@@ -7049,7 +7049,7 @@ body {
   color: #e3e8f8; }
 
 .img-landing--width {
-  max-width: 400px; }
+  max-width: 350px; }
 
 .p-landing {
   color: #e3e8f8; }
@@ -7158,6 +7158,9 @@ div.alert--bg-opacity {
   border-color: rgba(32, 53, 98, 0);
   color: #203562; }
 
+.next-student {
+  background-color: #d4edda; }
+
 .input-group--mt {
   margin-top: 4px; }
 
@@ -7166,18 +7169,23 @@ div.alert--bg-opacity {
   cursor: pointer; }
 
 .groups {
-  margin-top: 40px; }
+  margin-top: 40px;
+  padding: 0 15px; }
 
 .custom-file-input ~ .custom-file-label::after {
   content: "Upload Picture"; }
 
 @media screen and (max-width: 1150px) {
   .carousel-caption {
-    font-size: 4em; } }
+    font-size: 4em; }
+  .h1-landing {
+    font-size: 5em; } }
 
 @media screen and (max-width: 850px) {
   .carousel-caption {
-    font-size: 2em; } }
+    font-size: 2em; }
+  .h1-landing {
+    font-size: 4em; } }
 
 /* Login Page */
 .input-group-prepend span {

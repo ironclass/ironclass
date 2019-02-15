@@ -3,6 +3,7 @@ const User = require("../models/User");
 const Class = require("../models/Class");
 const MixMyClass = require("../src/MixMyClass");
 const CallQueue = require("../src/CallQueue");
+const {dynamicSort}  = require("../src/helpers");
 const { isConnected } = require("../src/middlewares");
 
 // SOCKET.IO
@@ -26,7 +27,8 @@ router.get("/classroom", isConnected, (req, res, next) => {
 
   Promise.all([User.find({ _class }), Class.findById(_class).populate("_callQueue")])
     .then(([users, theClass]) => {
-      const students = users.filter(user => user.role === "Student");
+      let students = users.filter(user => user.role === "Student");
+      students.sort(dynamicSort("firstName"));
       const { _callQueue, currentGroups, currentCourse } = theClass;
       let queueObj = _callQueue.reverse();
 
