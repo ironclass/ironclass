@@ -164,13 +164,10 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
           }]
         }, (err, oneClass) => {
           if (oneClass !== null) {
-            console.log("Name existiert bereits in der Stadt");
             req.flash("error", "The Classname already exists in this City");
             res.redirect("/classes/edit/" + classId);
             return;
           } else {
-            console.log("Name existiert nicht in der Stadt, bekommt daher Update");
-
             // Update password, if new one is provided
             if (password !== "") {
               changePassword(password, classId);
@@ -187,8 +184,6 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
           }
         }).catch(err => console.log(err));
       } else {
-        console.log("Name ist der gleiche, daher Update");
-
         // Update password, if new one is provided
         if (password !== "") {
           changePassword(password, classId);

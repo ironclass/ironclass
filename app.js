@@ -14,8 +14,8 @@ const MongoStore = require("connect-mongo")(session);
 const flash = require("connect-flash"); // MANAGES ERRORS DURING LOGIN PROCESS
 
 mongoose
-  .connect(process.env.MONGODB_URI, { useNewUrlParser: true })
-  // .connect("mongodb://localhost/ironclass", { useNewUrlParser: true })
+  // .connect(process.env.MONGODB_URI, { useNewUrlParser: true })
+  .connect("mongodb://localhost/ironclass", { useNewUrlParser: true })
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`);
   })
