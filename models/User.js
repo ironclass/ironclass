@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
+const {addTeacherToClass, addTAToClass, removeTeacherfromClass, removeTAfromClass, }  = require("../src/helpers");
 const Schema = mongoose.Schema;
+
 
 const userSchema = new Schema(
   {

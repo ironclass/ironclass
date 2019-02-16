@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const mongoose = require('mongoose');
-const {changePassword, dynamicSort}  = require("../src/helpers");
+const {dynamicSort}  = require("../src/helpers");
 const User = require("../models/User");
 const Class = require("../models/Class");
 const {
