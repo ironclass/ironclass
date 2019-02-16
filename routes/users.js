@@ -51,7 +51,7 @@ router.post("/createUser/:classId", isConnected, isTA, uploadCloud.single('photo
 router.get("/user/edit/:id", isConnected, isTA, (req, res, next) => {
   User.findById(req.params.id)
     .then(user => {
-      let birthday = User.setBirthday(user);
+      let birthday = User.setBirthday(user); // if null, set empty to render correctly with hbs
       res.render("classes/editstudent", { user, birthday });
     }).catch(err => console.log(err));
 });
@@ -62,15 +62,13 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
   // get Data from form and URL
   const { firstName, lastName, birthday, role } = req.body;
   const userId = req.params.id;
-  console.log("Type of UserId grabbed from params: " + typeof(userId))
   const img = setImageData(req);  // Cloudinary
 
   // data validation and after success: user update
-  if (firstName === "" || lastName === "" || birthday === null || birthday === "") {
+  if (firstName === "" || lastName === "") {
     
     User.findById(userId)
     .then(user => {
-      let birthday = User.setBirthday(user);
       req.flash("error", "Indicate full name and birthday");
       res.render("classes/editstudent", { user, birthday });
       return;

@@ -82,7 +82,7 @@ userSchema.statics.updateUser = function updateUser(userId, newUserObj, res) {
 
 userSchema.statics.setBirthday = function setBirthday(user) {
   if (user.birthday !== null) return user.birthday.toISOString().substr(0, 10);
-  else return new Date().toISOString().substr(0, 10);
+  else return "";
 };
 
 const User = mongoose.model("User", userSchema);
