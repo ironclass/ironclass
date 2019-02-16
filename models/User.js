@@ -28,5 +28,40 @@ const userSchema = new Schema(
   }
 );
 
+userSchema.statics.checkIfUserExists = function checkIfUserExists (user, backURL, req, res) {
+  if (user !== null) {
+    req.flash("error", "This User already exists");
+    res.redirect(backURL);
+    return true;
+  } else return false;
+};
+
+userSchema.statics.updateUser = function updateUser(userId, newUserObj, res) {
+  User.findById(userId)
+  .then ((user) => {
+    let oldRole = user.role;
+    User.findByIdAndUpdate(userId, newUserObj)
+    .then(() => {
+      User.findById(userId)
+      .then(user => {
+        if (oldRole === "TA" && user.role !== "TA") {
+          removeTAfromClass (user._class, user._id);
+          if (user.role === "Teacher") addTeacherToClass (user._class, user._id);
+        } else if (oldRole === "Teacher" && user.role !== "Teacher") {
+          removeTeacherfromClass (user._class);
+          if (user.role === "TA") addTAToClass (user._class, user._id);
+        } else {
+          if (user.role === "Teacher") {
+            addTeacherToClass (user._class, user._id);
+          } else if (user.role === "TA") addTAToClass (user._class, user._id);
+        }
+      }).catch(err => console.log(err));
+    })
+    .then(user => {
+      res.redirect(backURL);
+    }).catch(err => console.log("Creation error: "+err));
+  }).catch(err => console.log(err));
+}
+
 const User = mongoose.model("User", userSchema);
 module.exports = User;

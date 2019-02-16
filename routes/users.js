@@ -18,7 +18,6 @@ const {
 
 router.post("/createUser/:classId", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
   backURL = req.header('Referer') || '/';
-	console.log('TCL: backURL', backURL)
   // configure Cloudinary
 
   let imgPath, imgName;
@@ -47,47 +46,35 @@ router.post("/createUser/:classId", isConnected, isTA, uploadCloud.single('photo
   }
 
   // check if user alread exists
-  User.findOne({
-    username
-    }, (err, user) => {
-      if (user !== null) {
-        console.log(username + " alread exists!");
-        req.flash("error", "This User already exists");
-        res.redirect(backURL);
-        return;
-      }
-    })
+  User.findOne({username})
+  .then((user) => User.checkIfUserExists(user, backURL, req, res))
+  .then(() => {
+    // if user does not exist, find the current Class-Password
+    Class.findById(classId)
+    .then(oneClass => classPassword = oneClass.password)
     .then(() => {
-      // if user does not exist, find the current Class-Password
-      Class.findById(classId)
-        .then(oneClass => {
-          classPassword = oneClass.password;
-        })
-        .then(() => {
-          // Create user
-          User.create({
-              firstName,
-              lastName,
-              username,
-              birthday,
-              role,
-              imgName,
-              imgUrl: imgPath,
-              password: classPassword,
-              _class: classId
-            })
-            .then((createdUser) => {
-              if (createdUser.role === "Teacher") addTeacherToClass(classId, createdUser._id);
-              else if (createdUser.role === "TA") addTAToClass(classId, createdUser._id);
-            })
-            .then(() => {
-              req.flash("success", "New User added");
-              res.redirect(backURL);
-            })
-            .catch(err => console.log(err)); // End find Class
-        })
-        .catch(err => console.log(err)); // End find user
-    });
+      // Create user
+      User.create({
+          firstName,
+          lastName,
+          username,
+          birthday,
+          role,
+          imgName,
+          imgUrl: imgPath,
+          password: classPassword,
+          _class: classId
+      })
+      .then((createdUser) => {
+        if (createdUser.role === "Teacher") addTeacherToClass(classId, createdUser._id);
+        else if (createdUser.role === "TA") addTAToClass(classId, createdUser._id);
+      })
+      .then(() => {
+          req.flash("success", "New User added");
+          res.redirect(backURL);
+      }).catch(err => console.log(err)); // End find Class and create User
+    }).catch(err => console.log(err)); // End find user
+  });
 });
 
 // ###########
@@ -166,48 +153,15 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
         User.findOne({
           username
         })
-        .then (user => {
-          if (user !== null) {
-            req.flash("error", "The User already exists");
-            res.redirect(backURL);
-            return;
-          } 
-        }).catch(err => console.log(err));
+        .then (user => User.checkIfUserExists(user, backURL, req, res))
+        .catch(err => console.log(err));
       } 
 
-    updateUser(req.params.id, newUserObj, res);
+    User.updateUser(req.params.id, newUserObj, res);
       
     }).catch(err => console.log(err));
   }
 });
-//TODO: Create a function
-
-function updateUser(userId, newUserObj, res) {
-  User.findById(userId)
-  .then ((user) => {
-    let oldRole = user.role;
-    User.findByIdAndUpdate(userId, newUserObj)
-    .then(() => {
-      User.findById(userId)
-      .then(user => {
-        if (oldRole === "TA" && user.role !== "TA") {
-          removeTAfromClass (user._class, user._id);
-          if (user.role === "Teacher") addTeacherToClass (user._class, user._id);
-        } else if (oldRole === "Teacher" && user.role !== "Teacher") {
-          removeTeacherfromClass (user._class);
-          if (user.role === "TA") addTAToClass (user._class, user._id);
-        } else {
-          if (user.role === "Teacher") {
-            addTeacherToClass (user._class, user._id);
-          } else if (user.role === "TA") addTAToClass (user._class, user._id);
-        }
-      }).catch(err => console.log(err));
-    })
-    .then(user => {
-      res.redirect(backURL);
-    }).catch(err => console.log("Creation error: "+err));
-  }).catch(err => console.log(err));
-}
 
 // ###########
 // D E L E T E
