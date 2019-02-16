@@ -28,6 +28,8 @@ const userSchema = new Schema(
   }
 );
 
+// M E T H O D S 
+
 userSchema.statics.checkIfUserExists = function checkIfUserExists (user, backURL, req, res) {
   if (user !== null) {
     req.flash("error", "This User already exists");
@@ -35,6 +37,19 @@ userSchema.statics.checkIfUserExists = function checkIfUserExists (user, backURL
     return true;
   } else return false;
 };
+userSchema.statics.createNewUserInClass = function createNewUserInClass (newUserObj, classId, req, res, backURL) {
+  User.create(newUserObj)
+      .then((createdUser) => {
+        if (createdUser.role === "Teacher") addTeacherToClass(classId, createdUser._id);
+        else if (createdUser.role === "TA") addTAToClass(classId, createdUser._id);
+      })
+      .then(() => {
+          req.flash("success", "New User added");
+          res.redirect(backURL);
+  }).catch(err => console.log(err)); 
+};
+
+
 
 userSchema.statics.updateUser = function updateUser(userId, newUserObj, res) {
   User.findById(userId)
@@ -61,7 +76,12 @@ userSchema.statics.updateUser = function updateUser(userId, newUserObj, res) {
       res.redirect(backURL);
     }).catch(err => console.log("Creation error: "+err));
   }).catch(err => console.log(err));
-}
+};
+
+userSchema.statics.setBirthday = function setBirthday(user) {
+  if (user.birthday !== null) return user.birthday.toISOString().substr(0, 10);
+  else return new Date().toISOString().substr(0, 10);
+};
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

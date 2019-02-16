@@ -68,5 +68,9 @@ module.exports = {
         let result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
         return result * sortOrder;
     };
+  },
+  setImageData: function (req) {
+    if (req.file) return {url: req.file.url, name: req.file.originalname };
+    else return {url: "https://www.axiumradonmitigations.com/wp-content/uploads/2015/01/icon-user-default.png", name: "default"};
   }
 };
