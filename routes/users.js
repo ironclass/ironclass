@@ -19,7 +19,7 @@ const {
 router.post("/createUser/:classId", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
   // configure Cloudinary
 
-  let imgPath, imgName, testImg;
+  let imgPath, imgName;
   if (req.file) {
     imgPath = req.file.url;
     imgName = req.file.originalname;
@@ -32,13 +32,8 @@ router.post("/createUser/:classId", isConnected, isTA, uploadCloud.single('photo
   const classId = req.params.classId;
 
   // get Data from form
-  const {
-    firstName,
-    lastName,
-    birthday,
-    role
-  } = req.body;
-  let username = (firstName.replace(/\s/g,'') + lastName.replace(/\s/g,'')).toLowerCase();
+  const { firstName, lastName, birthday, role } = req.body;
+  let username = (firstName + lastName).replace(/\s/g,'').toLowerCase();
 
   let classPassword;
 
@@ -126,7 +121,6 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
 
   // configure Cloudinary
   let imgPath, imgName;
-  console.log('TCL: req.file', req.file)
   if (req.file) {
     imgPath = req.file.url;
     imgName = req.file.originalname;
@@ -135,7 +129,6 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
     imgName = "default";
   }
 
-  
   // data validation and after success: user update
   if (firstName === "" || lastName === "" || birthday === null || birthday === "") {
     
@@ -156,108 +149,69 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
     }) .catch(err => console.log(err));
 
   } else {
+    let username = (firstName + lastName).replace(/\s/g,'').toLowerCase(); // remove all blank spaces from username
+    let newUserObj = {
+      firstName,
+      lastName,
+      birthday,
+      role,
+      username,
+      imgUrl: imgPath,
+      imgName
+    };
 
-    let username = (firstName.replace(/\s/g,'') + lastName.replace(/\s/g,'')).toLowerCase();
-    //Check if new Username already exists
     User.findById(req.params.id)
     .then(user => {
+      // check if Username has changed at all
       if (user.username !== username) {
-        console.log("Username geändert");
+        //if changed, check if it alread exists in DB
         User.findOne({
           username
-        }, (err, user) => {
-          //FIXME: check, if username has changed at all; same es in classes
+        })
+        .then (user => {
           if (user !== null) {
-            console.log("Username geändert, exisitiert aber bereits!");
-            console.log(username + " alread exists!");
             req.flash("error", "The User already exists");
             res.redirect("/users/user/edit/" + req.params.id);
             return;
-          } else {
-            console.log("Username geändert, exisitiert nicht, daher update!");
-            //if new Username does not exist, update
-            User.findById(req.params.id)
-            .then ((user) => {
-              let oldRole = user.role;
-              User.findByIdAndUpdate(req.params.id, {
-                  firstName,
-                  lastName,
-                  birthday,
-                  role,
-                  username,
-                  imgUrl: imgPath,
-                  imgName
-              })
-              .then(() => {
-                User.findById(req.params.id)
-                .then(user => {
-                  if (oldRole === "TA" && user.role !== "TA"){
-                    removeTAfromClass (user._class, user._id);
-                    if (user.role === "Teacher") addTeacherToClass (user._class, user._id);
-                  
-                  } else if (oldRole === "Teacher" && user.role !== "Teacher") {
-                    removeTeacherfromClass (user._class);
-                    if (user.role === "TA") addTAToClass (user._class, user._id);
-                  } else {
-                  if (user.role === "Teacher") {
-                    addTeacherToClass (user._class, user._id);
-                  } else if (user.role === "TA") addTAToClass (user._class, user._id);
-                  }
-                })
-                .catch(err => console.log(err));
-              })
-              .then(user => {
-                res.redirect(backURL);
-              })
-              .catch(err => console.log("Creation error: "+err));
-            }).catch(err => console.log(err));
-          }
-        });
-      } else {
-        console.log("Username NICHT geändert, daher update");
-        User.findById(req.params.id)
-            .then ((user) => {
-              let oldRole = user.role;
-              User.findByIdAndUpdate(req.params.id, {
-                  firstName,
-                  lastName,
-                  birthday,
-                  role,
-                  username,
-                  imgUrl: imgPath,
-                  imgName
-              })
-              .then(() => {
-                User.findById(req.params.id)
-                .then(user => {
-                  if (oldRole === "TA" && user.role !== "TA"){
-                    removeTAfromClass (user._class, user._id);
-                    if (user.role === "Teacher") addTeacherToClass (user._class, user._id);
-                  
-                  } else if (oldRole === "Teacher" && user.role !== "Teacher") {
-                    removeTeacherfromClass (user._class);
-                    if (user.role === "TA") addTAToClass (user._class, user._id);
-                  } else {
-                  if (user.role === "Teacher") {
-                    addTeacherToClass (user._class, user._id);
-                  } else if (user.role === "TA") addTAToClass (user._class, user._id);
-                  }
-                })
-                .catch(err => console.log(err));
-              })
-              .then(user => {
-                res.redirect(backURL);
-              })
-              .catch(err => console.log("Creation error: "+err));
-            }).catch(err => console.log(err));
-      }
+          } 
+        }).catch(err => console.log(err));
+      } 
+
+    updateUser(req.params.id, newUserObj, res);
+      
     }).catch(err => console.log(err));
     
     
   }
 });
 //TODO: Create a function
-// function updateUser() 
+
+function updateUser(userId, newUserObj, res) {
+  User.findById(userId)
+  .then ((user) => {
+    let oldRole = user.role;
+    User.findByIdAndUpdate(userId, newUserObj)
+    .then(() => {
+      User.findById(userId)
+      .then(user => {
+        if (oldRole === "TA" && user.role !== "TA") {
+          removeTAfromClass (user._class, user._id);
+          if (user.role === "Teacher") addTeacherToClass (user._class, user._id);
+        } else if (oldRole === "Teacher" && user.role !== "Teacher") {
+          removeTeacherfromClass (user._class);
+          if (user.role === "TA") addTAToClass (user._class, user._id);
+        } else {
+          if (user.role === "Teacher") {
+            addTeacherToClass (user._class, user._id);
+          } else if (user.role === "TA") addTAToClass (user._class, user._id);
+        }
+      }).catch(err => console.log(err));
+    })
+    .then(user => {
+      res.redirect(backURL);
+    }).catch(err => console.log("Creation error: "+err));
+  }).catch(err => console.log(err));
+}
 
 // ###########
 // D E L E T E
