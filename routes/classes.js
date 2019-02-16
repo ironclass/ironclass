@@ -123,18 +123,15 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
         Class.findOne({ name, city })
         .then(oneClass => {
           if (oneClass !== null) {
-            console.log("Geänderter Name existiert bereits, abbruch")
             req.flash("error", "The Classname already exists in this City");
             res.redirect("/classes");
             return;
           } else {
-              console.log("Geänderter Name existiert NICHT, also update")
-              Class.classUpdate(classId, newClassObj, res);   
+              Class.classUpdate(classId, newClassObj, req, res);   
           }
         }).catch(err => console.log(err));
       } else {
-        console.log("Name hat sich nicht geändert, also Update!")
-        Class.classUpdate(classId, newClassObj, res);
+        Class.classUpdate(classId, newClassObj, req, res);
       }
     }).catch(err => console.log(err));
   }

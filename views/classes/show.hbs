@@ -6,6 +6,15 @@
     </a>
   </div>
 
+    <div class="container">
+      {{#if error }}
+      <div class="error-message" role="alert">{{error}}</div>
+      {{/if}}
+      {{#if success }}
+      <div class="success-message" role="alert">{{success}}</div>
+      {{/if}}
+    </div>
+
   <div class="container d-flex flex-row flex-wrap justify-content-center">
     {{#each classes}}
   
@@ -35,12 +44,7 @@
         </div>
       </div>  
     {{/each}}
-
-    <div class="container">
-      {{#if error }}
-      <div class="error-message" role="alert">{{error}}</div>
-      {{/if}}
-    </div>
+ 
   </div>
 </div>
 

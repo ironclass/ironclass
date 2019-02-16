@@ -30,7 +30,7 @@ router.post("/createUser/:classId", isConnected, isTA, uploadCloud.single('photo
   // check if user alread exists
   let username = (firstName + lastName).replace(/\s/g,'').toLowerCase();
   User.findOne({username})
-  .then((user) => User.checkIfUserExists(user, backURL, req, res))
+  .then((user) => User.checkIfUserExists(user, backURL, req, res)) //TODO: avoid console error
     // if user does not exist, find the current Class-Password and create User
   .then(() => {
       let newUserObj = { firstName, lastName, birthday, role, username, 
@@ -62,6 +62,7 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
   // get Data from form and URL
   const { firstName, lastName, birthday, role } = req.body;
   const userId = req.params.id;
+  console.log("Type of UserId grabbed from params: " + typeof(userId))
   const img = setImageData(req);  // Cloudinary
 
   // data validation and after success: user update

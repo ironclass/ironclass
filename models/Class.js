@@ -22,21 +22,15 @@ const classSchema = new Schema(
 );
 // M E T H O D S 
 
-classSchema.statics.checkIfClassExists = function checkIfClassExists (oneClass, backURL, req, res) {
-  console.log("checkIfClassExists called")
-  if (oneClass !== null) {
-    req.flash("error", "The Classname already exists in this City");
-    res.redirect("/classes");
-    return true;
-  } else return false;
-};
-
-classSchema.statics.classUpdate = function classUpdate(classId, newClassObj, res) {
+classSchema.statics.classUpdate = function classUpdate(classId, newClassObj, req, res) {
   // Update password, if new one is provided
   if (newClassObj.password !== "") changePassword(newClassObj.password, classId);
 
   Class.findByIdAndUpdate(classId, newClassObj)
-  .then(newClass => res.redirect("/classes"))
+  .then(newClass => {
+    req.flash("success", "Class successfully updated");    
+    res.redirect("/classes");
+  })
   .catch(err => console.log(err));
 };
 

@@ -71,7 +71,11 @@ userSchema.statics.updateUser = function updateUser(userId, newUserObj, res) {
         }
       }).catch(err => console.log(err));
     })
-    .then(user => res.redirect(backURL))
+    .then(user => {
+        User.findById(userId)
+        .then((user) => res.redirect("/classes/edit/"+user._class))
+        .catch(err => console.log(err)); 
+    })
     .catch(err => console.log("Creation error: "+err));
   }).catch(err => console.log(err));
 };
