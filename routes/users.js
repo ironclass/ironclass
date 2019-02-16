@@ -17,6 +17,8 @@ const {
 // ------ C r e a t e   S t u d e n t s  ------
 
 router.post("/createUser/:classId", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
+  backURL = req.header('Referer') || '/';
+	console.log('TCL: backURL', backURL)
   // configure Cloudinary
 
   let imgPath, imgName;
@@ -40,7 +42,7 @@ router.post("/createUser/:classId", isConnected, isTA, uploadCloud.single('photo
   // data validation and after success: user creation
   if (firstName === "" || lastName === "") {
     req.flash("error", "Indicate full name");
-    res.redirect("/classes/edit/" + classId);
+    res.redirect(backURL);
     return;
   }
 
@@ -51,7 +53,7 @@ router.post("/createUser/:classId", isConnected, isTA, uploadCloud.single('photo
       if (user !== null) {
         console.log(username + " alread exists!");
         req.flash("error", "This User already exists");
-        res.redirect("/classes/edit/" + classId);
+        res.redirect(backURL);
         return;
       }
     })
@@ -80,7 +82,7 @@ router.post("/createUser/:classId", isConnected, isTA, uploadCloud.single('photo
             })
             .then(() => {
               req.flash("success", "New User added");
-              res.redirect("/classes/edit/" + classId);
+              res.redirect(backURL);
             })
             .catch(err => console.log(err)); // End find Class
         })
@@ -111,13 +113,9 @@ router.get("/user/edit/:id", isConnected, isTA, (req, res, next) => {
 });
 
 router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
-  const {
-    firstName,
-    lastName,
-    birthday,
-    role
-  } = req.body;
+  const { firstName, lastName, birthday, role } = req.body;
   backURL = req.header('Referer') || '/';
+	console.log('TCL: backURL', backURL)
 
   // configure Cloudinary
   let imgPath, imgName;
@@ -171,7 +169,7 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
         .then (user => {
           if (user !== null) {
             req.flash("error", "The User already exists");
-            res.redirect("/users/user/edit/" + req.params.id);
+            res.redirect(backURL);
             return;
           } 
         }).catch(err => console.log(err));
@@ -180,8 +178,6 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
     updateUser(req.params.id, newUserObj, res);
       
     }).catch(err => console.log(err));
-    
-    
   }
 });
 //TODO: Create a function
