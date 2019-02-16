@@ -2,7 +2,7 @@
 
   <div id="jumbo" class="jumbotron container d-flex flex-column align-items-center">
     <h1>Create Class</h1>
-    <form action="/classes/createclass" method="POST">
+    <form action="/classes/create" method="POST">
       <div class="form-group row justify-content-center">
         <input type="text" name="name" class="form-control my-2" id="classname" placeholder="Classname">
         <input type="password" name="password" class="form-control" id="password"
@@ -26,10 +26,10 @@
     </form>
   </div>
 
-  <div class="container">
-    {{#if error }}
-    <div class="error-message" role="alert">{{error}}</div>
-    {{/if}}
-  </div>
+    <div class="container">
+      {{#if error }}
+      <div class="error-message" role="alert">{{error}}</div>
+      {{/if}}
+    </div>
 
 </div>

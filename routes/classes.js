@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const mongoose = require('mongoose');
-const passport = require("passport"); // TO USE PROTECED ROUTES
 const {changePassword, dynamicSort}  = require("../src/helpers");
 const User = require("../models/User");
 const Class = require("../models/Class");
@@ -22,53 +21,30 @@ router.get("/create", isConnected, isTA, (req, res, next) => {
   res.render("classes/create");
 });
 
-router.post("/createclass", isConnected, isTA, (req, res, next) => {
-  const {
-    name,
-    city,
-    password
-  } = req.body;
+router.post("/create", isConnected, isTA, (req, res, next) => {
+  backURL = req.header('Referer') || '/';
+  const { name, city, password } = req.body;
+  const salt = bcrypt.genSaltSync(bcryptRounds);
+  const hashPass = bcrypt.hashSync(password, salt);
 
   // DATA VALIDATION AND AFTER SUCCESS CLASS CREATION
   if (name === "" || city === "Choose city..." || password === "") {
-    res.render("classes/create", {
-      error: "Indicate name, city and password"
-    });
+    req.flash("error", "Indicate name, city and password");
+    res.redirect(backURL);
     return;
   }
 
-  Class.findOne({
-    $and: [{
-      name
-    }, {
-      city
-    }]
-  }, (err, oneClass) => {
+  Class.findOne({$and: [{ name }, { city }] })
+  .then (oneClass => {
     if (oneClass !== null) {
-      console.log(oneClass.name + " already exists");
-      res.render("classes/create", {
-        error: "The Classname already exists"
-      });
+      req.flash("error", "The Classname already exists in this City");
+      res.redirect("/classes");
       return;
-    }
-
-    const salt = bcrypt.genSaltSync(bcryptRounds);
-    const hashPass = bcrypt.hashSync(password, salt);
-
-    Class.create({
-        name: name,
-        city: city,
-        password: hashPass
-      })
-      .then(newClass => {
-        res.redirect("/classes/edit/" + newClass._id);
-      })
-      .catch(err => {
-        res.render("classes/create", {
-          error: "Something went wrong"
-        });
-      });
-  });
+    } 
+    Class.create({name, city, password: hashPass})
+    .then((newClass) => res.redirect("/classes/edit/" + newClass._id))
+    .catch(err => console.log(err));
+  }).catch(err => console.log(err));
 });
 
 // ###########
@@ -81,11 +57,8 @@ router.get("/", isConnected, isTA, (req, res, next) => {
     .populate("_TA")
     .then(classes => {
       classes.sort(dynamicSort("name"));
-      res.render("classes/show", {
-        classes
-      });
-    })
-    .catch(err => console.log(err));
+      res.render("classes/show", { classes });
+    }).catch(err => console.log(err));
 });
 
 // ###########
@@ -94,113 +67,78 @@ router.get("/", isConnected, isTA, (req, res, next) => {
 
 // ------ E d i t  C l a s s e s  ------
 router.get("/edit/:id", isConnected, isTA, (req, res, next) => {
+  let classId = req.params.id;
   // find current Class and all students in it
   Promise.all([
-      Class.findById(req.params.id),
-      User.find({
-        _class: mongoose.Types.ObjectId(req.params.id),
-        role: "Student"
-      }),
-      User.find({
-        _class: mongoose.Types.ObjectId(req.params.id),
-        role: "TA"
-      }),
-      User.find({
-        _class: mongoose.Types.ObjectId(req.params.id),
-        role: "Teacher"
-      }),
-    ])
-    .then(values => {
-      values[1].sort(dynamicSort("firstName")); //TODO: Optional choice for sort by "updated_at".reverse()
-      values[2].sort(dynamicSort("firstName"));
-      values[3].sort(dynamicSort("firstName"));
-      res.render("classes/edit", {
-        message: req.flash("message"),
-        oneClass: values[0], // the class with this ID
-        students: values[1], // all students in it
-        tas: values[2],
-        teacher: values[3]
-      });
+    Class.findById(classId),
+    User.find({
+      _class: mongoose.Types.ObjectId(classId),
+      role: "Student"
+    }),
+    User.find({
+      _class: mongoose.Types.ObjectId(classId),
+      role: "TA"
+    }),
+    User.find({
+      _class: mongoose.Types.ObjectId(classId),
+      role: "Teacher"
     })
-    .catch(err => console.log(err));
+  ])
+  .then(values => {
+    values[1].sort(dynamicSort("firstName")); //TODO: Optional choice for sort by "updated_at".reverse()
+    values[2].sort(dynamicSort("firstName")); //TODO: values.sort works? Combine sort?
+    values[3].sort(dynamicSort("firstName"));
+    res.render("classes/edit", {
+      oneClass: values[0], // the class with this ID
+      students: values[1], // all students in it
+      tas: values[2],
+      teacher: values[3]
+    });
+  }).catch(err => console.log(err));
 });
 
 router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
-  // get ID of current Class
+  backURL = req.header('Referer') || '/';
   const classId = req.params.id;
-
-  // get Info from Post-Body
-  const {
-    name,
-    city,
-    password
-  } = req.body;
+  const { name, city, password } = req.body;
 
   // check if minimum credentials are provided
   if (name === "" || city === "Choose city...") {
-    res.render("classes/edit", {
-      error: "Indicate name and city"
-    });
+    req.flash("error", "Please indicate name and city");
+    res.render("classes/edit");
     return;
-  }
+  } else {
+  // If the Classname sent by the form has NOT changed,
+  // update the Class with the provided data.
 
-  // get Name of current Class
-  Class.findById(classId)
+  // If the Classname send by the form HAS changed,
+  // check if the new Classname already exists in the
+  // current city. If so, throw error-message. If not,
+  // update the Class with the provided data.
+    let newClassObj = { name, city, password }; 
+    Class.findById(classId)
     .then(oneClass => {
-      // If the Classname sent by the form has NOT changed,
-      // update the Class with the provided data.
-
-      // If the Classname send by the form HAS changed,
-      // check if the new Classname already exists in the
-      // current city. If so, throw error-message. If not,
-      // update the Class with the provided data
-
       if (oneClass.name !== name) {
-        Class.findOne({
-          $and: [{
-            name
-          }, {
-            city
-          }]
-        }, (err, oneClass) => {
+        console.log("Name hat sich geändert, also Prüfung")
+        Class.findOne({ name, city })
+        .then(oneClass => {
           if (oneClass !== null) {
+            console.log("Geänderter Name existiert bereits, abbruch")
             req.flash("error", "The Classname already exists in this City");
-            res.redirect("/classes/edit/" + classId);
+            res.redirect("/classes");
             return;
           } else {
-            // Update password, if new one is provided
-            if (password !== "") {
-              changePassword(password, classId);
-            } // End of Update Password
-
-            Class.findByIdAndUpdate(classId, {
-                name,
-                city
-              })
-              .then(newClass => {
-                res.redirect("/classes");
-              })
-              .catch(err => console.log(err));
+              console.log("Geänderter Name existiert NICHT, also update")
+              Class.classUpdate(classId, newClassObj, res);   
           }
         }).catch(err => console.log(err));
-      } else {
-        // Update password, if new one is provided
-        if (password !== "") {
-          changePassword(password, classId);
-        }
-
-        Class.findByIdAndUpdate(classId, {
-            name,
-            city
-          })
-          .then(newClass => {
-            res.redirect("/classes");
-          })
-          .catch(err => console.log(err));
-      } // end of if (oneClass.name !== name)
-    })
-    .catch(err => console.log(err)); // end of Class.findById
-}); // end of router.post("/edit/:id")
+      } else {
+        console.log("Name hat sich nicht geändert, also Update!")
+        Class.classUpdate(classId, newClassObj, res);
+      }
+    }).catch(err => console.log(err));
+  }
+});
 
 // ###########
 // D E L E T E

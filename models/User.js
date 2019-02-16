@@ -37,19 +37,18 @@ userSchema.statics.checkIfUserExists = function checkIfUserExists (user, backURL
     return true;
   } else return false;
 };
+
 userSchema.statics.createNewUserInClass = function createNewUserInClass (newUserObj, classId, req, res, backURL) {
   User.create(newUserObj)
-      .then((createdUser) => {
-        if (createdUser.role === "Teacher") addTeacherToClass(classId, createdUser._id);
-        else if (createdUser.role === "TA") addTAToClass(classId, createdUser._id);
-      })
-      .then(() => {
-          req.flash("success", "New User added");
-          res.redirect(backURL);
+  .then((createdUser) => {
+    if (createdUser.role === "Teacher") addTeacherToClass(classId, createdUser._id);
+    else if (createdUser.role === "TA") addTAToClass(classId, createdUser._id);
+  })
+  .then(() => {
+      req.flash("success", "New User added");
+      res.redirect(backURL);
   }).catch(err => console.log(err)); 
 };
-
-
 
 userSchema.statics.updateUser = function updateUser(userId, newUserObj, res) {
   User.findById(userId)
@@ -72,9 +71,8 @@ userSchema.statics.updateUser = function updateUser(userId, newUserObj, res) {
         }
       }).catch(err => console.log(err));
     })
-    .then(user => {
-      res.redirect(backURL);
-    }).catch(err => console.log("Creation error: "+err));
+    .then(user => res.redirect(backURL))
+    .catch(err => console.log("Creation error: "+err));
   }).catch(err => console.log(err));
 };
 

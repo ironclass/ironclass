@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const cloudinary = require('cloudinary');
 const uploadCloud = require('../config/cloudinary.js');
-const {addTeacherToClass, addTAToClass, setImageData }  = require("../src/helpers");
+const { setImageData, getClassPassword }  = require("../src/helpers");
 const User = require("../models/User");
 const Class = require("../models/Class");
 const { isConnected, isTA } = require("../src/middlewares");
@@ -16,14 +15,10 @@ const { isConnected, isTA } = require("../src/middlewares");
 router.post("/createUser/:classId", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
   backURL = req.header('Referer') || '/';
 
-  // configure Cloudinary
-  let img = setImageData(req);
-
-  // get ID of current Class
-  const classId = req.params.classId;
-
-  // get Data from form
+  // get Data from form and URL
   const { firstName, lastName, birthday, role } = req.body;
+  const classId = req.params.classId;
+  const img = setImageData(req);  // Cloudinary
 
   // data validation and after success: user creation
   if (firstName === "" || lastName === "") {
@@ -45,14 +40,8 @@ router.post("/createUser/:classId", isConnected, isTA, uploadCloud.single('photo
         _class: classId 
       };
       User.createNewUserInClass (newUserObj, classId, req, res, backURL);
-  });
+  }).catch(err => console.log(err));
 });
-
-function getClassPassword(classId) {
-  Class.findById(classId)
-  .then(oneClass => {return oneClass.password;})
-  .catch(err => console.log(err));
-}
 
 // ###########
 //   E D I T
@@ -68,16 +57,17 @@ router.get("/user/edit/:id", isConnected, isTA, (req, res, next) => {
 });
 
 router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (req, res, next) => {
-  const { firstName, lastName, birthday, role } = req.body;
   backURL = req.header('Referer') || '/';
 
-  // configure Cloudinary
-  let img = setImageData(req);
+  // get Data from form and URL
+  const { firstName, lastName, birthday, role } = req.body;
+  const userId = req.params.id;
+  const img = setImageData(req);  // Cloudinary
 
   // data validation and after success: user update
   if (firstName === "" || lastName === "" || birthday === null || birthday === "") {
     
-    User.findById(req.params.id)
+    User.findById(userId)
     .then(user => {
       let birthday = User.setBirthday(user);
       req.flash("error", "Indicate full name and birthday");
@@ -89,15 +79,15 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
     let username = (firstName + lastName).replace(/\s/g,'').toLowerCase(); // remove all blank spaces from username
     let newUserObj = { firstName, lastName, birthday, role, username, imgUrl: img.url, imgName: img.name };
 
-    User.findById(req.params.id)
+    User.findById(userId)
     .then(user => {
       // if username hast changed, check if new username alread exists
       if (user.username !== username) {
         User.findOne({username})
-        .then (user => User.checkIfUserExists(user, backURL, req, res))
+        .then (user => User.checkIfUserExists(user, backURL, req, res)) //TODO: avoid console error
         .catch(err => console.log(err));
       } 
-      User.updateUser(req.params.id, newUserObj, res);
+      User.updateUser(userId, newUserObj, res);
     }).catch(err => console.log(err));
   }
 });
@@ -110,9 +100,7 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
 router.get("/delete/user/:id", isConnected, isTA, (req, res, next) => {
   backURL = req.header("Referer") || "/";
   User.findByIdAndDelete(req.params.id)
-    .then(() => {
-      res.redirect(backURL);
-    })
+    .then(() => res.redirect(backURL))
     .catch(err => {
       console.log(err);
       next();
