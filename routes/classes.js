@@ -118,8 +118,8 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
     let newClassObj = { name, city, password }; 
     Class.findById(classId)
     .then(oneClass => {
-      if (oneClass.name !== name) {
-        console.log("Name hat sich geändert, also Prüfung")
+      if (oneClass.name !== name || oneClass.city !== city) {
+        console.log("Name oder Stadt hat sich geändert, also Prüfung")
         Class.findOne({ name, city })
         .then(oneClass => {
           if (oneClass !== null) {
