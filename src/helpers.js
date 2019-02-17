@@ -73,9 +73,54 @@ module.exports = {
     if (req.file) return {url: req.file.url, name: req.file.originalname };
     else return {url: "https://www.axiumradonmitigations.com/wp-content/uploads/2015/01/icon-user-default.png", name: "default"};
   },
-  getClassPassword: function(classId) {
-    Class.findById(classId)
-    .then(oneClass => {return oneClass.password;})
-    .catch(err => console.log(err));
-  }
+  checkIfUserExists: function checkIfUserExists (user, backURL, req, res) {
+    if (user !== null) {
+      req.flash("error", "This User already exists");
+      res.redirect(backURL);
+      return true;
+    } else return false;
+  },
+  setBirthday: function setBirthday(user) {
+    if (user.birthday !== null) return user.birthday.toISOString().substr(0, 10);
+    else return "";
+  },
+  // updateUser: function (userId, newUserObj, res) {
+  //   User.findById(userId)
+  //   .then ((user) => {
+  //     let oldRole = user.role;
+  //     User.findByIdAndUpdate(userId, newUserObj)
+  //     .then(() => {
+  //       User.findById(userId)
+  //       .then(user => {        
+  //         if (oldRole === "TA" && user.role !== "TA") {
+  //           removeTAfromClass (user._class, user._id);
+  //           if (user.role === "Teacher") {
+  //             // TODO: remove old Teacher role first
+  //             addTeacherToClass (user._class, user._id); 
+  //           }
+  //         } else if (oldRole === "Teacher" && user.role !== "Teacher") {
+  //           //FIXME: 
+  //           removeTeacherfromClass (user._class); 
+  //           if (user.role === "TA") {
+  //             addTAToClass (user._class, user._id);
+  //           }
+  //         } else {
+  //           if (user.role === "Teacher") {
+  //             // TODO: remove old Teacher role first
+  //             addTeacherToClass (user._class, user._id);
+  //           } else if (user.role === "TA") {
+  //             addTAToClass (user._class, user._id);
+  //           }
+  //         }
+  //       }).catch(err => console.log(err));
+  //     })
+  //     .then(user => {
+  //         User.findById(userId)
+  //         .then((user) => res.redirect("/classes/edit/"+user._class))
+  //         .catch(err => console.log(err)); 
+  //     })
+  //     .catch(err => console.log("Creation error: "+err));
+  //   }).catch(err => console.log(err));
+  // }
+  
 };

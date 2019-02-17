@@ -2,13 +2,10 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const mongoose = require('mongoose');
-const {dynamicSort}  = require("../src/helpers");
+const {dynamicSort, changePassword}  = require("../src/helpers");
 const User = require("../models/User");
 const Class = require("../models/Class");
-const {
-  isConnected,
-  isTA
-} = require("../src/middlewares");
+const { isConnected, isTA } = require("../src/middlewares");
 const bcryptRounds = 10;
 
 // ###########
@@ -101,6 +98,9 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
   backURL = req.header('Referer') || '/';
   const classId = req.params.id;
   const { name, city, password } = req.body;
+  if (password !== "") changePassword(password, classId);
+
+
 
   // check if minimum credentials are provided
   if (name === "" || city === "Choose city...") {
@@ -115,7 +115,7 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
   // check if the new Classname already exists in the
   // current city. If so, throw error-message. If not,
   // update the Class with the provided data.
-    let newClassObj = { name, city, password }; 
+    let newClassObj = { name, city }; 
     Class.findById(classId)
     .then(oneClass => {
       if (oneClass.name !== name || oneClass.city !== city) {
@@ -127,10 +127,12 @@ router.post("/edit/:id", isConnected, isTA, (req, res, next) => {
             res.redirect("/classes");
             return;
           } else {
+              if (password !== "") changePassword(password, classId);
               Class.classUpdate(classId, newClassObj, req, res);   
           }
         }).catch(err => console.log(err));
       } else {
+        if (password !== "") changePassword(password, classId); 
         Class.classUpdate(classId, newClassObj, req, res);
       }
     }).catch(err => console.log(err));
@@ -171,5 +173,23 @@ router.get("/delete/user/:id", isConnected, isTA, (req, res, next) => {
       next();
     });
 });
+
+// function changePassword (password, classId) {
+//   console.log("Called Passwordchange");
+//   const salt = bcrypt.genSaltSync(bcryptRounds);
+//   const hashPass = bcrypt.hashSync(password, salt);
+//   Class.findByIdAndUpdate(classId, {
+//       password: hashPass
+//     })
+//     .then(() => {
+//       User.updateMany({
+//         // Update all Students in this class
+//         _class: mongoose.Types.ObjectId(classId)
+//       }, {
+//         password: hashPass // give new Password to them
+//       }).catch(err => console.log(err));
+//     })
+//     .catch(err => console.log(err));
+// }
 
 module.exports = router;

@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const uploadCloud = require('../config/cloudinary.js');
-const { setImageData, getClassPassword }  = require("../src/helpers");
+const { setImageData, setBirthday, checkIfUserExists }  = require("../src/helpers");
+const { createNewUserInClass, updateUser }  = require("../src/userhelpers");
 const User = require("../models/User");
 const Class = require("../models/Class");
 const { isConnected, isTA } = require("../src/middlewares");
@@ -26,20 +27,22 @@ router.post("/createUser/:classId", isConnected, isTA, uploadCloud.single('photo
     res.redirect(backURL);
     return;
   }
-
   // check if user alread exists
   let username = (firstName + lastName).replace(/\s/g,'').toLowerCase();
   User.findOne({username})
-  .then((user) => User.checkIfUserExists(user, backURL, req, res)) //TODO: avoid console error
+  .then((user) => checkIfUserExists(user, backURL, req, res)) //TODO: avoid console error
     // if user does not exist, find the current Class-Password and create User
   .then(() => {
+    Class.findById(classId)
+    .then(oneClass => {
       let newUserObj = { firstName, lastName, birthday, role, username, 
         imgUrl: img.url, 
         imgName: img.name, 
-        password: getClassPassword(classId),
+        password: oneClass.password,
         _class: classId 
       };
-      User.createNewUserInClass (newUserObj, classId, req, res, backURL);
+      createNewUserInClass (newUserObj, classId, req, res, backURL);
+    }).catch(err => console.log(err));
   }).catch(err => console.log(err));
 });
 
@@ -51,7 +54,7 @@ router.post("/createUser/:classId", isConnected, isTA, uploadCloud.single('photo
 router.get("/user/edit/:id", isConnected, isTA, (req, res, next) => {
   User.findById(req.params.id)
     .then(user => {
-      let birthday = User.setBirthday(user); // if null, set empty to render correctly with hbs
+      let birthday = setBirthday(user); // if null, set empty to render correctly with hbs
       res.render("classes/editstudent", { user, birthday });
     }).catch(err => console.log(err));
 });
@@ -83,10 +86,10 @@ router.post("/user/edit/:id", isConnected, isTA, uploadCloud.single('photo'), (r
       // if username hast changed, check if new username alread exists
       if (user.username !== username) {
         User.findOne({username})
-        .then (user => User.checkIfUserExists(user, backURL, req, res)) //TODO: avoid console error
+        .then (user => checkIfUserExists(user, backURL, req, res)) //TODO: avoid console error
         .catch(err => console.log(err));
       } 
-      User.updateUser(userId, newUserObj, res);
+      updateUser(userId, newUserObj, res);
     }).catch(err => console.log(err));
   }
 });

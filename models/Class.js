@@ -1,3 +1,4 @@
+// const { changePassword }  = require("../src/helpers");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -23,9 +24,6 @@ const classSchema = new Schema(
 // M E T H O D S 
 
 classSchema.statics.classUpdate = function classUpdate(classId, newClassObj, req, res) {
-  // Update password, if new one is provided
-  if (newClassObj.password !== "") changePassword(newClassObj.password, classId);
-
   Class.findByIdAndUpdate(classId, newClassObj)
   .then(newClass => {
     req.flash("success", "Class successfully updated");    
@@ -33,6 +31,14 @@ classSchema.statics.classUpdate = function classUpdate(classId, newClassObj, req
   })
   .catch(err => console.log(err));
 };
+
+// classSchema.statics.getClassPassword = function getClassPassword(classId) {
+//   Class.findById(classId)
+//   .then(oneClass => {
+//     return oneClass.password;
+//   })
+//   .catch(err => console.log(err));
+// };
 
 const Class = mongoose.model("Class", classSchema);
 module.exports = Class;

@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
-const {addTeacherToClass, addTAToClass, removeTeacherfromClass, removeTAfromClass, }  = require("../src/helpers");
 const Schema = mongoose.Schema;
-
 
 const userSchema = new Schema(
   {
@@ -30,62 +28,35 @@ const userSchema = new Schema(
   }
 );
 
-// M E T H O D S 
-
-userSchema.statics.checkIfUserExists = function checkIfUserExists (user, backURL, req, res) {
-  if (user !== null) {
-    req.flash("error", "This User already exists");
-    res.redirect(backURL);
-    return true;
-  } else return false;
-};
-
-userSchema.statics.createNewUserInClass = function createNewUserInClass (newUserObj, classId, req, res, backURL) {
-  User.create(newUserObj)
-  .then((createdUser) => {
-    if (createdUser.role === "Teacher") addTeacherToClass(classId, createdUser._id);
-    else if (createdUser.role === "TA") addTAToClass(classId, createdUser._id);
-  })
-  .then(() => {
-      req.flash("success", "New User added");
-      res.redirect(backURL);
-  }).catch(err => console.log(err)); 
-};
-
-userSchema.statics.updateUser = function updateUser(userId, newUserObj, res) {
-  User.findById(userId)
-  .then ((user) => {
-    let oldRole = user.role;
-    User.findByIdAndUpdate(userId, newUserObj)
-    .then(() => {
-      User.findById(userId)
-      .then(user => {
-        if (oldRole === "TA" && user.role !== "TA") {
-          removeTAfromClass (user._class, user._id);
-          if (user.role === "Teacher") addTeacherToClass (user._class, user._id);
-        } else if (oldRole === "Teacher" && user.role !== "Teacher") {
-          removeTeacherfromClass (user._class);
-          if (user.role === "TA") addTAToClass (user._class, user._id);
-        } else {
-          if (user.role === "Teacher") {
-            addTeacherToClass (user._class, user._id);
-          } else if (user.role === "TA") addTAToClass (user._class, user._id);
-        }
-      }).catch(err => console.log(err));
-    })
-    .then(user => {
-        User.findById(userId)
-        .then((user) => res.redirect("/classes/edit/"+user._class))
-        .catch(err => console.log(err)); 
-    })
-    .catch(err => console.log("Creation error: "+err));
-  }).catch(err => console.log(err));
-};
-
-userSchema.statics.setBirthday = function setBirthday(user) {
-  if (user.birthday !== null) return user.birthday.toISOString().substr(0, 10);
-  else return "";
-};
-
 const User = mongoose.model("User", userSchema);
 module.exports = User;
+
+// // M E T H O D S 
+
+// userSchema.statics.checkIfUserExists = function checkIfUserExists (user, backURL, req, res) {
+//   if (user !== null) {
+//     req.flash("error", "This User already exists");
+//     res.redirect(backURL);
+//     return true;
+//   } else return false;
+// };
+
+// userSchema.statics.createNewUserInClass = function createNewUserInClass (newUserObj, classId, req, res, backURL) {
+//   User.create(newUserObj)
+//   .then((createdUser) => {
+//     if (createdUser.role === "Teacher") addTeacherToClass(classId, createdUser._id);
+//     else if (createdUser.role === "TA") addTAToClass(classId, createdUser._id);
+//   })
+//   .then(() => {
+//       req.flash("success", "New User added");
+//       res.redirect(backURL);
+//   }).catch(err => console.log(err)); 
+// };
+
+// userSchema.statics.setBirthday = function setBirthday(user) {
+//   if (user.birthday !== null) return user.birthday.toISOString().substr(0, 10);
+//   else return "";
+// };
+
+// const User = mongoose.model("User", userSchema);
+// module.exports = User;
