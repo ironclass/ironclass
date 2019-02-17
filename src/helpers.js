@@ -64,14 +64,6 @@ module.exports = {
     if (req.file) return {url: req.file.url, name: req.file.originalname };
     else return {url: "https://www.axiumradonmitigations.com/wp-content/uploads/2015/01/icon-user-default.png", name: "default"};
   },
-
-  checkIfUserExists: function checkIfUserExists (user, backURL, req, res) {
-    if (user !== null) {
-      req.flash("error", "This User already exists");
-      res.redirect(backURL);
-      return true;
-    } else return false;
-  },
   
   setBirthday: function setBirthday(user) {
     if (user.birthday !== null) return user.birthday.toISOString().substr(0, 10);
