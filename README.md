@@ -25,10 +25,10 @@ Please use these credential to see a demo:
   username: ...coming soon...
   password: ...coming soon...
 
-Or you can clone the project like this:
+Or you can clone the project like this in your terminal:
 
 ```
-git clone https://github.com/ironclass/ironclass.git in your terminal
+git clone https://github.com/ironclass/ironclass.git 
 cd ironclass
 npm start
 ```
