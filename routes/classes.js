@@ -165,22 +165,4 @@ router.get("/delete/user/:id", isConnected, isTA, (req, res, next) => {
     });
 });
 
-// function changePassword (password, classId) {
-//   console.log("Called Passwordchange");
-//   const salt = bcrypt.genSaltSync(bcryptRounds);
-//   const hashPass = bcrypt.hashSync(password, salt);
-//   Class.findByIdAndUpdate(classId, {
-//       password: hashPass
-//     })
-//     .then(() => {
-//       User.updateMany({
-//         // Update all Students in this class
-//         _class: mongoose.Types.ObjectId(classId)
-//       }, {
-//         password: hashPass // give new Password to them
-//       }).catch(err => console.log(err));
-//     })
-//     .catch(err => console.log(err));
-// }
-
 module.exports = router;
