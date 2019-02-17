@@ -68,28 +68,19 @@ router.get("/edit/:id", isConnected, isTA, (req, res, next) => {
   // find current Class and all students in it
   Promise.all([
     Class.findById(classId),
-    User.find({
-      _class: mongoose.Types.ObjectId(classId),
-      role: "Student"
-    }),
-    User.find({
-      _class: mongoose.Types.ObjectId(classId),
-      role: "TA"
-    }),
-    User.find({
-      _class: mongoose.Types.ObjectId(classId),
-      role: "Teacher"
-    })
+    User.find({_class: mongoose.Types.ObjectId(classId), role: "Student"}),
+    User.find({_class: mongoose.Types.ObjectId(classId), role: "TA"}),
+    User.find({_class: mongoose.Types.ObjectId(classId), role: "Teacher"})
   ])
   .then(values => {
-    values[1].sort(dynamicSort("firstName")); //TODO: Optional choice for sort by "updated_at".reverse()
-    values[2].sort(dynamicSort("firstName")); //TODO: values.sort works? Combine sort?
-    values[3].sort(dynamicSort("firstName"));
+    for (let i = 1 ; i < values.length; i++){  // Loop through the Promise Values and Sort
+      values[i].sort(dynamicSort("lastName")); //TODO: Optional choice for sort by "updated_at".reverse()
+    }
     res.render("classes/edit", {
       oneClass: values[0], // the class with this ID
       students: values[1], // all students in it
-      tas: values[2],
-      teacher: values[3]
+      tas: values[2], // all TAst
+      teacher: values[3] // all Teachers in it
     });
   }).catch(err => console.log(err));
 });
