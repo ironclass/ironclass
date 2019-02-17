@@ -1,6 +1,8 @@
 # Welcome to IRONCLASS ![](https://img.shields.io/badge/Project-%232-blue.svg)
-## 2st Ironhack Project - a tool for improving learning experience and a smoother flow in classroom
+## 2st Ironhack Project - a tool to improve learning experience and provide a smooth flow in your classroom
 ### by André Sebastian & Malte Felmy
+
+![](http://i67.tinypic.com/2qxyl3n.png)
 
 **Introduction**
 
@@ -33,7 +35,7 @@ npm start
 
 ---
 
-![] Screenshot coming soon
+
 
 
 **Coding process**
