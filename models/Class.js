@@ -32,13 +32,5 @@ classSchema.statics.classUpdate = function classUpdate(classId, newClassObj, req
   .catch(err => console.log(err));
 };
 
-// classSchema.statics.getClassPassword = function getClassPassword(classId) {
-//   Class.findById(classId)
-//   .then(oneClass => {
-//     return oneClass.password;
-//   })
-//   .catch(err => console.log(err));
-// };
-
 const Class = mongoose.model("Class", classSchema);
 module.exports = Class;

@@ -9,8 +9,7 @@ module.exports = {
   addTeacherToClass: function (classId, userId) {
     Class.findByIdAndUpdate(classId, {
       _teacher: mongoose.Types.ObjectId(userId)
-    })
-    .catch(err => console.log(err));
+    }).catch(err => console.log(err));
   },
 
   removeTeacherfromClass: function (classId) {
@@ -22,25 +21,22 @@ module.exports = {
     .then(() => {
       Class.findByIdAndUpdate(classId, {
         _teacher: undefined
-      })
-      .catch(err => console.log(err));
-    })
-    .catch(err => console.log(err));
+      }).catch(err => console.log(err));
+    }).catch(err => console.log(err));
   },
 
   addTAToClass: function (classId, userId) {
     Class.findByIdAndUpdate(classId, {
       $push: { _TA: mongoose.Types.ObjectId(userId) }
-    })
-    .catch(err => console.log(err));
+    }).catch(err => console.log(err));
   },
 
   removeTAfromClass: function (classId, userId) {
     Class.findByIdAndUpdate(classId, {
       $pullAll: { _TA: [mongoose.Types.ObjectId(userId)] }
-    })
-    .catch(err => console.log(err));
+    }).catch(err => console.log(err));
   },
+
   changePassword: function (password, classId) {
     console.log("Called Passwordchange");
     const salt = bcrypt.genSaltSync(bcryptRounds);
@@ -55,9 +51,9 @@ module.exports = {
         }, {
           password: hashPass // give new Password to them
         }).catch(err => console.log(err));
-      })
-      .catch(err => console.log(err));
+      }).catch(err => console.log(err));
   },
+
   dynamicSort: function (property) {
     let sortOrder = 1;
     if(property[0] === "-") {
@@ -69,10 +65,12 @@ module.exports = {
         return result * sortOrder;
     };
   },
+
   setImageData: function (req) {
     if (req.file) return {url: req.file.url, name: req.file.originalname };
     else return {url: "https://www.axiumradonmitigations.com/wp-content/uploads/2015/01/icon-user-default.png", name: "default"};
   },
+
   checkIfUserExists: function checkIfUserExists (user, backURL, req, res) {
     if (user !== null) {
       req.flash("error", "This User already exists");
@@ -80,47 +78,10 @@ module.exports = {
       return true;
     } else return false;
   },
+  
   setBirthday: function setBirthday(user) {
     if (user.birthday !== null) return user.birthday.toISOString().substr(0, 10);
     else return "";
-  },
-  // updateUser: function (userId, newUserObj, res) {
-  //   User.findById(userId)
-  //   .then ((user) => {
-  //     let oldRole = user.role;
-  //     User.findByIdAndUpdate(userId, newUserObj)
-  //     .then(() => {
-  //       User.findById(userId)
-  //       .then(user => {        
-  //         if (oldRole === "TA" && user.role !== "TA") {
-  //           removeTAfromClass (user._class, user._id);
-  //           if (user.role === "Teacher") {
-  //             // TODO: remove old Teacher role first
-  //             addTeacherToClass (user._class, user._id); 
-  //           }
-  //         } else if (oldRole === "Teacher" && user.role !== "Teacher") {
-  //           //FIXME: 
-  //           removeTeacherfromClass (user._class); 
-  //           if (user.role === "TA") {
-  //             addTAToClass (user._class, user._id);
-  //           }
-  //         } else {
-  //           if (user.role === "Teacher") {
-  //             // TODO: remove old Teacher role first
-  //             addTeacherToClass (user._class, user._id);
-  //           } else if (user.role === "TA") {
-  //             addTAToClass (user._class, user._id);
-  //           }
-  //         }
-  //       }).catch(err => console.log(err));
-  //     })
-  //     .then(user => {
-  //         User.findById(userId)
-  //         .then((user) => res.redirect("/classes/edit/"+user._class))
-  //         .catch(err => console.log(err)); 
-  //     })
-  //     .catch(err => console.log("Creation error: "+err));
-  //   }).catch(err => console.log(err));
-  // }
-  
+  }
+
 };

@@ -5,15 +5,23 @@
     <button class="btn btn-lg btn-primary"><i class="fas fa-folder-plus"></i>  Create</button>
     </a>
   </div>
-
-    <div class="container">
-      {{#if error }}
-      <div class="error-message" role="alert">{{error}}</div>
-      {{/if}}
-      {{#if success }}
-      <div class="success-message" role="alert">{{success}}</div>
-      {{/if}}
+  <br>
+  <div class="container">
+    {{#if success }}
+    <div class="alert alert-success alert-dismissible success-message" role="alert">{{success}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+      </button>
     </div>
+    {{/if}}
+    {{#if error }}
+    <div class="alert alert-warning alert-dismissible error-message" role="alert">{{error}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {{/if}}
+  </div>
 
   <div class="container d-flex flex-row flex-wrap justify-content-center">
     {{#each classes}}
