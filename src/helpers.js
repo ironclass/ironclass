@@ -14,14 +14,8 @@ module.exports = {
 
   removeTeacherfromClass: function (classId) {
     console.log("Remove Teacher from Class called")
-    User.findOneAndUpdate(
-      {$and: [{"_class": mongoose.Types.ObjectId(classId)},{"role": "Teacher"}] }, // find current Teacher in Class
-      {role: "Student"} // and set back the role to Student
-    )
-    .then(() => {
-      Class.findByIdAndUpdate(classId, {
-        _teacher: undefined
-      }).catch(err => console.log(err));
+    Class.findByIdAndUpdate(classId, {
+      _teacher: undefined
     }).catch(err => console.log(err));
   },
 
