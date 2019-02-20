@@ -2,7 +2,7 @@
 ## 2st Ironhack Project - a tool to improve learning experience and provide a smooth flow in your classroom
 ### by André Sebastian & Malte Felmy
 
-![](http://i67.tinypic.com/2qxyl3n.png)
+![](https://github.com/ironclass/ironclass/blob/master/public/images/Screenshot%20Title.png)
 
 **Introduction**
 
@@ -19,13 +19,12 @@ You know which student needs help next and you can concentrate on providing it w
 
 **Setup**
 
-You can use IronClass here: https://ironclass.herokuapp.com/welcome/
+Visit www.ironhack.org!
+Because IronClass and the connected database is actually used by Ironhack right now, we provide a demo mirror.
 
-Please use these credential to see a demo:
-  
-    username: ...coming soon...
-  
-    password: ...coming soon...
+You can visit IronClass here: https://ironclass-demo.herokuapp.com/
+
+Please ask for credentials via Email, if you would like to take a peek => ironclass@posteo.de
 
 Or you can clone the project like this in your terminal:
 
@@ -37,9 +36,5 @@ npm start
 
 ---
 
-
-
-
-**Coding process**
-
-...coming soon...
+![](https://github.com/ironclass/ironclass/blob/master/public/images/Screenshot2.png)
+![](https://github.com/ironclass/ironclass/blob/master/public/images/Screenshot3.png)
