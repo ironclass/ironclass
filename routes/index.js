@@ -41,7 +41,6 @@ router.get("/classroom", isConnected, (req, res, next) => {
       students.sort(dynamicSort("firstName"));
       const { _callQueue, currentGroups, currentCourse } = theClass;
       let queueObj = _callQueue.reverse();
-
       res.render("classroom", { user, queueObj, students, currentCourse, currentGroups });
     })
     .catch(next);
