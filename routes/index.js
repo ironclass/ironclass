@@ -11,7 +11,8 @@ const {
   updateCourse,
   queueStudent,
   dequeueStudent,
-  sudoDequeueStudent
+  sudoDequeueStudent,
+  wave
 } = require("../src/socketAPI");
 
 const router = express.Router();
@@ -123,7 +124,10 @@ router.get("/classroom/queue-wave", isConnected, (req, res, next) => {
             let id = req.user._id;
             // UPDATE VIA DOM
             queueStudent(firstName, id);
+            // SEND NOTIFICATION
+            wave(firstName)
           }
+          
           res.redirect("/classroom");
         })
         .catch(next);

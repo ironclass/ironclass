@@ -36,4 +36,8 @@ socketAPI.updateCourse = currentCourse => {
   io.sockets.emit("updateCourse", { currentCourse });
 };
 
+socketAPI.wave = firstName => {
+  io.sockets.emit("waved", { firstName });
+};
+
 module.exports = socketAPI;

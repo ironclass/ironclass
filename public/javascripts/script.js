@@ -12,6 +12,7 @@ socket.on("updateCourse", data => {
 });
 
 socket.on("queueStudent", data => {
+  // console.log() //TODO: Only notfiy, when user is TA?
   let ul = document.querySelector("#call-queue .list-group");
   ul.innerHTML += `
   <div id="${
@@ -21,6 +22,14 @@ socket.on("queueStudent", data => {
   }
   <a href="/classroom/queue-tick/${data.id}" class="close"><span>&times;</span></a></div>`;
   ul.children[0].className += " next-student";
+});
+
+socket.on("waved", data => {
+  axios.get("/users/ista")
+  .then(res => {
+    if (res.data.result === true) sendDesktopNotification(data.firstName + " waved!")  
+  }).catch(err => console.log(err))
+  
 });
 
 socket.on("dequeueStudent", () => {
@@ -49,3 +58,41 @@ $("#exampleInputFile").on("change", function() {
     .next(".custom-file-label")
     .html(cleanFileName);
 });
+
+function requestPermission() {
+  return new Promise(function(resolve, reject) {
+    const permissionResult = Notification.requestPermission(function(result) {
+      // Handling deprecated version with callback.
+      resolve(result);
+    });
+
+    if (permissionResult) {
+      permissionResult.then(resolve, reject);
+    }
+  })
+  .then(function(permissionResult) {
+    if (permissionResult !== 'granted') {
+      throw new Error('Permission not granted.');
+    }
+  });
+}
+
+Notification.requestPermission();
+
+sendDesktopNotification = function(text) {
+  let notification = new Notification('IronClass', {
+    icon: 'https://res.cloudinary.com/djyjdargg/image/upload/v1555355805/Ironclass/favicon.png',
+    body: text,
+    tag: 'soManyNotification'
+  });
+  //'tag' handles muti tab scenario i.e when multiple tabs are 
+  // open then only one notification is sent
+//3. handle notification events and set timeout 
+notification.onclick = function() {
+    parent.focus();
+    window.focus(); //just in case, older browsers
+    this.close();
+  };
+  // setTimeout(notification.close.bind(notification), 5000);
+}
+

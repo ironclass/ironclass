@@ -7,6 +7,11 @@ const User = require("../models/User");
 const Class = require("../models/Class");
 const { isConnected, isTA } = require("../src/middlewares");
 
+router.get("/ista", isConnected, isTA, (req, res, next) => {
+  if (req.user.role === "Teacher" || req.user.role === "TA") res.send(200, {"result": true})
+  else res.send(200, {"result": false})
+});
+
 // ###########
 // C R E A T E
 // ########### 
