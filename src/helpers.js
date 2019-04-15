@@ -61,7 +61,7 @@ module.exports = {
   },
 
   setImageData: function (req) {
-    if (req.file) return {url: req.file.url, name: req.file.originalname };
+    if (req.file) return {url: req.file.secure_url, name: req.file.originalname };
     else return {url: "https://www.axiumradonmitigations.com/wp-content/uploads/2015/01/icon-user-default.png", name: "default"};
   },
   
