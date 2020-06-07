@@ -1,4 +1,5 @@
 # Welcome to IRONCLASS ![](https://img.shields.io/badge/Project-%232-blue.svg)
+A tool to improve learning experience and provide a smooth flow in your classroom. Fullstack website using Node.js, Express, MongoDB and Socket.io.
 ## 2st Ironhack Project - a tool to improve learning experience and provide a smooth flow in your classroom
 ### by André Sebastian & Malte Felmy
 
