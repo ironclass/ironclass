@@ -1,5 +1,5 @@
 const cloudinary = require('cloudinary');
-const cloudinaryStorage = require('multer-storage-cloudinary');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
 
 cloudinary.config({
@@ -8,7 +8,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET
 });
 
-var storage = cloudinaryStorage({
+let storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   folder: 'Ironclass', // The name of the folder in cloudinary
   allowedFormats: ['jpg', 'png'],
